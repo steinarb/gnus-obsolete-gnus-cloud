@@ -125,6 +125,7 @@
 	   '((title . eww-tag-title)
 	     (form . eww-tag-form)
 	     (input . eww-tag-input)
+	     (textarea . eww-tag-textarea)
 	     (body . eww-tag-body)
 	     (select . eww-tag-select))))
       (shr-insert-document document)
@@ -296,6 +297,21 @@
     (unless (eq (car widget) 'hidden)
       (apply 'widget-create widget)
       (put-text-property start (point) 'eww-widget widget))))
+
+(defun eww-tag-textarea (cont)
+  (let* ((start (point))
+	 (widget
+	  (list 'editable-field
+		:size (string-to-number
+		       (or (cdr (assq :cols cont))
+			   "40"))
+		:value (or (cdr (assq 'text cont)) "")
+		:action 'eww-submit
+		:name (cdr (assq :name cont))
+		:eww-form eww-form)))
+    (nconc eww-form (list widget))
+    (apply 'widget-create widget)
+    (put-text-property start (point) 'eww-widget widget)))
 
 (defun eww-tag-select (cont)
   (shr-ensure-paragraph)
