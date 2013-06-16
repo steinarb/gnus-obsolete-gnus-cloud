@@ -2,6 +2,8 @@
 
 	* shr.el (shr-dom-to-xml): (shr-dom-to-xml): New function.
 	(shr-tag-svg): Add support for the SVG tag.
+	(shr-bullet): New custom variable.
+	(shr-tag-li): Support custom bullet in unordered lists.
 
 2013-06-16  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 

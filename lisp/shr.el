@@ -83,6 +83,14 @@ used."
 		 (const   :tag "Use the width of the window" nil))
   :group 'shr)
 
+(defcustom shr-bullet "* "
+  "Bullet used for unordered lists.
+Alternative suggestions are:
+- \"  \"
+- \"  \""
+  :type 'string
+  :group 'shr)
+
 (defvar shr-content-function nil
   "If bound, this should be a function that will return the content.
 This is used for cid: URLs, and the function is called with the
@@ -1128,7 +1136,7 @@ ones, in case fg and bg are nil."
 	      (prog1
 		  (format "%d " shr-list-mode)
 		(setq shr-list-mode (1+ shr-list-mode)))
-	    "* "))
+	    shr-bullet))
 	 (shr-indentation (+ shr-indentation (length bullet))))
     (insert bullet)
     (shr-generic cont)))
