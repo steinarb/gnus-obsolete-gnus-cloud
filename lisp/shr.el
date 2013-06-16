@@ -1131,7 +1131,7 @@ ones, in case fg and bg are nil."
   (shr-ensure-paragraph))
 
 (defun shr-tag-li (cont)
-  (shr-ensure-paragraph)
+  (shr-ensure-newline)
   (shr-indent)
   (let* ((bullet
 	  (if (numberp shr-list-mode)
