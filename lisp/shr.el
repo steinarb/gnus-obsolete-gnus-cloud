@@ -493,6 +493,9 @@ size, and full-buffer size."
     (not failed)))
 
 (defun shr-parse-base (url)
+  ;; Always chop off anchors.
+  (when (string-match "#.*" url)
+    (setq url (substring url 0 (match-beginning 0))))
   (let* ((parsed (url-generic-parse-url url))
 	 (local (url-filename parsed)))
     (setf (url-filename parsed) "")
