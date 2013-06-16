@@ -1410,6 +1410,13 @@ ones, in case fg and bg are nil."
     widths))
 
 (defun shr-make-table (cont widths &optional fill)
+  (or (cadr (assoc (list cont widths fill) shr-content-cache))
+      (let ((data (shr-make-table-1 cont widths fill)))
+	(push (list (list cont widths fill) data)
+	      shr-content-cache)
+	data)))
+
+(defun shr-make-table-1 (cont widths &optional fill)
   (let ((trs nil))
     (dolist (row cont)
       (when (eq (car row) 'tr)
@@ -1443,32 +1450,16 @@ ones, in case fg and bg are nil."
 	(setq style (nconc (list (cons 'color fgcolor)) style)))
       (when style
 	(setq shr-stylesheet (append style shr-stylesheet)))
-      (let ((cache (cdr (assoc (cons width cont) shr-content-cache))))
-	(if cache
-	    (progn
-	      (insert (car cache))
-	      (let ((end (length (car cache))))
-		(dolist (overlay (cadr cache))
-		  (let ((new-overlay
-			 (shr-make-overlay (1+ (- end (nth 0 overlay)))
-					   (1+ (- end (nth 1 overlay)))))
-			(properties (nth 2 overlay)))
-		    (while properties
-		      (overlay-put new-overlay
-				   (pop properties) (pop properties)))))))
-	  (let ((shr-width width)
-		(shr-indentation 0))
-	    (shr-descend (cons 'td cont)))
-	  ;; Delete padding at the bottom of the TDs.
-	  (delete-region
-	   (point)
-	   (progn
-	     (skip-chars-backward " \t\n")
-	     (end-of-line)
-	     (point)))
-	  (push (list (cons width cont) (buffer-string)
-		      (shr-overlays-in-region (point-min) (point-max)))
-		shr-content-cache)))
+      (let ((shr-width width)
+	    (shr-indentation 0))
+	(shr-descend (cons 'td cont)))
+      ;; Delete padding at the bottom of the TDs.
+      (delete-region
+       (point)
+       (progn
+	 (skip-chars-backward " \t\n")
+	 (end-of-line)
+	 (point)))
       (goto-char (point-min))
       (let ((max 0))
 	(while (not (eobp))
