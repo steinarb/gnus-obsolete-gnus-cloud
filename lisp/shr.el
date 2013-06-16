@@ -920,7 +920,7 @@ ones, in case fg and bg are nil."
     (dolist (sub (cdr dom))
       (cond
        ((listp (cdr sub))
-        (setq text (concat text (dom-to-text sub))))
+        (setq text (concat text (shr-dom-to-xml sub))))
        ((eq (car sub) 'text)
         (setq text (concat text (cdr sub))))
        (t
