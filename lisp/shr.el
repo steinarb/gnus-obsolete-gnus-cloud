@@ -905,8 +905,31 @@ ones, in case fg and bg are nil."
 (defun shr-tag-comment (cont)
   )
 
+(defun shr-dom-to-xml (dom)
+  "Convert DOM into a string containing the xml representation."
+  (let ((arg " ")
+        (text ""))
+    (dolist (sub (cdr dom))
+      (cond
+       ((listp (cdr sub))
+        (setq text (concat text (dom-to-text sub))))
+       ((eq (car sub) 'text)
+        (setq text (concat text (cdr sub))))
+       (t
+        (setq arg (concat arg (format "%s=\"%s\" "
+                                      (substring (symbol-name (car sub)) 1)
+                                      (cdr sub)))))))
+    (format "<%s%s>%s</%s>"
+            (car dom)
+            (substring arg 0 (1- (length arg)))
+            text
+            (car dom))))
+
 (defun shr-tag-svg (cont)
-  )
+  (when (image-type-available-p 'svg)
+    (funcall shr-put-image-function
+             (shr-dom-to-xml (cons 'svg cont))
+             "SVG Image")))
 
 (defun shr-tag-sup (cont)
   (let ((start (point)))
