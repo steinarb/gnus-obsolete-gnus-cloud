@@ -330,22 +330,22 @@
 			  (plist-get (cdr elem) :value))
 		    values)
 	      (setq rest nil))))))
-    (debug values)
-    (let ((shr-base eww-current-url))
-      (if (and (stringp (cdr (assq :method form)))
-	       (equal (downcase (cdr (assq :method form))) "post"))
-	  (let ((url-request-method "POST")
-		(url-request-extra-headers
-		 '(("Content-Type" . "application/x-www-form-urlencoded")))
-		(url-request-data (mm-url-encode-www-form-urlencoded values)))
-	    (eww-browse-url (shr-expand-url (cdr (assq :action form)))))
-	(eww-browse-url
-	 (concat
-	  (if (cdr (assq :action form))
-	      (shr-expand-url (cdr (assq :action form)))
-	    eww-current-url)
-	  "?"
-	  (mm-url-encode-www-form-urlencoded values)))))))
+    (if (and (stringp (cdr (assq :method form)))
+	     (equal (downcase (cdr (assq :method form))) "post"))
+	(let ((url-request-method "POST")
+	      (url-request-extra-headers
+	       '(("Content-Type" . "application/x-www-form-urlencoded")))
+	      (url-request-data (mm-url-encode-www-form-urlencoded values)))
+	  (eww-browse-url (shr-expand-url (cdr (assq :action form))
+					  eww-current-url)))
+      (eww-browse-url
+       (concat
+	(if (cdr (assq :action form))
+	    (shr-expand-url (cdr (assq :action form))
+			    eww-current-url)
+	  eww-current-url)
+	"?"
+	(mm-url-encode-www-form-urlencoded values))))))
 
 (defun eww-convert-widgets ()
   (let ((start (point-min))

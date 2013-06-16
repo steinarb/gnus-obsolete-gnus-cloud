@@ -1,3 +1,10 @@
+2013-06-16  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* eww.el (eww-submit): Pass the base in to `shr-expand-url'.
+
+	* shr.el (shr-parse-base): New function.
+	(shr-expand-url): Use it to expand relative URLs reliably.
+
 2013-06-15  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* auth-source.el (auth-source-search-collection): Fix docstring.

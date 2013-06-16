@@ -484,31 +484,37 @@ size, and full-buffer size."
 	 (forward-char 1))))
     (not failed)))
 
-(defun shr-expand-url (url)
-  (if (or (not url)
-	  (string-match "\\`[a-z]*:" url)
-	  (not shr-base))
-      ;; Absolute URL.
-      url
-    (let ((base shr-base))
-      ;; Chop off query string.
-      (when (string-match "\\`\\([^?]+\\)[?]" base)
-	(setq base (match-string 1 base)))
-      ;; Chop off the bit after the last slash.
-      (when (string-match "\\`\\(.*\\)[/][^/]+" base)
-	(setq base (match-string 1 base)))
-      (cond
-       ((and (string-match "\\`//" url)
-	     (string-match "\\`[a-z]*:" base))
-	(concat (match-string 0 base) url))
-       ((and (not (string-match "/\\'" base))
-	     (not (string-match "\\`/" url)))
-	(concat base "/" url))
-       ((and (string-match "\\`/" url)
-	     (string-match "\\(\\`[^:]*://[^/]+\\)/" base))
-	(concat (match-string 1 base) url))
-       (t
-	(concat base url))))))
+(defun shr-parse-base (url)
+  (let* ((parsed (url-generic-parse-url url))
+	 (local (url-filename parsed)))
+    (setf (url-filename parsed) "")
+    ;; Chop off query string.
+    (when (string-match "\\`\\([^?]+\\)[?]" local)
+      (setq local (match-string 1 local)))
+    ;; Always make the local bit end with a slash.
+    (when (and (not (zerop (length local)))
+	       (not (eq (aref local (1- (length local))) ?/)))
+      (setq local (concat local "/")))
+    (cons (url-recreate-url parsed)
+	  local)))
+
+(defun shr-expand-url (url &optional base)
+  (setq base
+	(if base
+	    (shr-parse-base base)
+	  ;; Bound by the parser.
+	  shr-base))
+  (cond ((or (not url)
+	     (not base)
+	     (string-match "\\`[a-z]*:" url))
+	 ;; Absolute URL.
+	 (or url (car base)))
+	((eq (aref url 0) ?/)
+	 ;; Just use the host name part.
+	 (concat (car base) url))
+	(t
+	 ;; Totally relative.
+	 (concat (car base) (cdr base) url))))
 
 (defun shr-ensure-newline ()
   (unless (zerop (current-column))
@@ -965,7 +971,7 @@ ones, in case fg and bg are nil."
       plist)))
 
 (defun shr-tag-base (cont)
-  (setq shr-base (cdr (assq :href cont)))
+  (setq shr-base (shr-parse-base (cdr (assq :href cont))))
   (shr-generic cont))
 
 (defun shr-tag-a (cont)
