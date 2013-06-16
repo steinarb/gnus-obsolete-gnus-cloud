@@ -311,18 +311,21 @@ size, and full-buffer size."
 	(shr-stylesheet shr-stylesheet)
 	(start (point)))
     (when style
-      (if (string-match "color" style)
+      (if (string-match "color\\|display" style)
 	  (setq shr-stylesheet (nconc (shr-parse-style style)
 				      shr-stylesheet))
 	(setq style nil)))
-    (if (fboundp function)
-	(funcall function (cdr dom))
-      (shr-generic (cdr dom)))
-    ;; If style is set, then this node has set the color.
-    (when style
-      (shr-colorize-region start (point)
-			   (cdr (assq 'color shr-stylesheet))
-			   (cdr (assq 'background-color shr-stylesheet))))))
+    ;; If we have a display:none, then just ignore this part of the
+    ;; DOM.
+    (unless (equal (cdr (assq 'display shr-stylesheet)) "none")
+      (if (fboundp function)
+	  (funcall function (cdr dom))
+	(shr-generic (cdr dom)))
+      ;; If style is set, then this node has set the color.
+      (when style
+	(shr-colorize-region start (point)
+			     (cdr (assq 'color shr-stylesheet))
+			     (cdr (assq 'background-color shr-stylesheet)))))))
 
 (defun shr-generic (cont)
   (dolist (sub cont)

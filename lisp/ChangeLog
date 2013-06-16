@@ -4,6 +4,7 @@
 	browsers don't.
 	(shr-expand-url): Respect #anchor links.
 	(shr-parse-base): Chop off the anchor before using.
+	(shr-descend): Respect display: none.
 
 	* eww.el (eww-tag-textarea): Use `text' instead of `editable-field'.
 
