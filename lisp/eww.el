@@ -72,6 +72,9 @@
     (when redirect
       (setq url redirect)))
   (let* ((headers (eww-parse-headers))
+	 (shr-target-id
+	  (and (string-match "#\\(.*\\)" url)
+	       (match-string 1 url)))
 	 (content-type
 	  (mail-header-parse-content-type
 	   (or (cdr (assoc "content-type" headers))
@@ -92,8 +95,14 @@
 	    (eww-display-image))
 	   (t
 	    (eww-display-raw charset)))
-	  (when point
-	    (goto-char point)))
+	  (cond
+	   (point
+	    (goto-char point))
+	   (shr-target-id
+	    (let ((point (next-single-property-change
+			  (point-min) 'shr-target-id)))
+	      (when point
+		(goto-char (1+ point)))))))
       (kill-buffer data-buffer))))
 
 (defun eww-parse-headers ()

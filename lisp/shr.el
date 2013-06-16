@@ -123,6 +123,7 @@ cid: URL as the argument.")
 (defvar shr-base nil)
 (defvar shr-ignore-cache nil)
 (defvar shr-external-rendering-functions nil)
+(defvar shr-target-id nil)
 
 (defvar shr-map
   (let ((map (make-sparse-keymap)))
@@ -321,6 +322,9 @@ size, and full-buffer size."
       (if (fboundp function)
 	  (funcall function (cdr dom))
 	(shr-generic (cdr dom)))
+      (when (and shr-target-id
+		 (equal (cdr (assq :id (cdr dom))) shr-target-id))
+	(put-text-property start (1+ start) 'shr-target-id shr-target-id))
       ;; If style is set, then this node has set the color.
       (when style
 	(shr-colorize-region start (point)

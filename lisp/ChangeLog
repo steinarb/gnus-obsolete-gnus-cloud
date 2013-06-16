@@ -1,10 +1,14 @@
 2013-06-16  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* eww.el (eww-render): Go to the correct ID when given URLs ending with
+	#id.
+
 	* shr.el (shr-tag-li): Don't require a new paragraph, since other
 	browsers don't.
 	(shr-expand-url): Respect #anchor links.
 	(shr-parse-base): Chop off the anchor before using.
 	(shr-descend): Respect display: none.
+	(shr-descend): Allow marking elements that have certain IDs.
 
 	* eww.el (eww-tag-textarea): Use `text' instead of `editable-field'.
 
