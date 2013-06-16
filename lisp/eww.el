@@ -105,10 +105,33 @@
 	  (shr-external-rendering-functions
 	   '((form . eww-tag-form)
 	     (input . eww-tag-input)
+	     (body . eww-tag-body)
 	     (select . eww-tag-select))))
       (shr-insert-document document)
       (eww-convert-widgets))
     (goto-char (point-min))))
+
+(defun eww-tag-body (cont)
+  (let* ((start (point))
+	 (fgcolor (cdr (or (assq :fgcolor cont)
+                           (assq :text cont))))
+	 (bgcolor (cdr (assq :bgcolor cont)))
+	 (shr-stylesheet (list (cons 'color fgcolor)
+			       (cons 'background-color bgcolor))))
+    (shr-generic cont)
+    (eww-colorize-region start (point) fgcolor bgcolor)))
+
+(defun eww-colorize-region (start end fg &optional bg)
+  (when (or fg bg)
+    (let ((new-colors (shr-color-check fg bg)))
+      (when new-colors
+	(when fg
+	  (eww-put-color start end :foreground (cadr new-colors)))
+	(when bg
+	  (eww-put-color start end :background (car new-colors)))))))
+
+(defun eww-put-color (start end type color)
+  (shr-put-color-1 start end type color))
 
 (defun eww-display-raw (charset)
   (let ((data (buffer-substring (point) (point-max))))
