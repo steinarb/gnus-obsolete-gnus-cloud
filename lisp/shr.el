@@ -505,7 +505,8 @@ size, and full-buffer size."
       (setq local (concat local "/")))
     (list (url-recreate-url parsed)
 	  local
-	  (url-type parsed))))
+	  (url-type parsed)
+	  url)))
 
 (defun shr-expand-url (url &optional base)
   (setq base
@@ -527,6 +528,9 @@ size, and full-buffer size."
 	     (concat (nth 2 base) ":" url)
 	   ;; Just use the host name part.
 	   (concat (car base) url)))
+	((eq (aref url 0) ?#)
+	 ;; A link to an anchor.
+	 (concat (nth 3 base) url))
 	(t
 	 ;; Totally relative.
 	 (concat (car base) (cadr base) url))))

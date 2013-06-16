@@ -2,6 +2,7 @@
 
 	* shr.el (shr-tag-li): Don't require a new paragraph, since other
 	browsers don't.
+	(shr-expand-url): Respect #anchor links.
 
 	* eww.el (eww-tag-textarea): Use `text' instead of `editable-field'.
 
