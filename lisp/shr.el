@@ -488,8 +488,8 @@ size, and full-buffer size."
   (let* ((parsed (url-generic-parse-url url))
 	 (local (url-filename parsed)))
     (setf (url-filename parsed) "")
-    ;; Chop off query string.
-    (when (string-match "\\`\\([^?]+\\)[?]" local)
+    ;; Chop off the bit after the last slash.
+    (when (string-match "\\`\\(.*/\\)[^/]+\\'" local)
       (setq local (match-string 1 local)))
     ;; Always make the local bit end with a slash.
     (when (and (not (zerop (length local)))
