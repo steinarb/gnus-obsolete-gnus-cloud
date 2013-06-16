@@ -53,6 +53,9 @@
 	     (match-string 1)))))
 
 (defun eww-render (status url &optional point)
+  (let ((redirect (plist-get status :redirect)))
+    (when redirect
+      (setq url redirect)))
   (let* ((headers (eww-parse-headers))
 	 (content-type
 	  (mail-header-parse-content-type

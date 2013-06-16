@@ -1,7 +1,11 @@
 2013-06-16  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* shr.el (shr-expand-url): Respect // URLs.
+
 	* eww.el (eww-tag-body): Override the shr body rendering so that we can
 	put a background colour onto the entire buffer.
+	(eww-render): When being redirected, use the redirect URL as the new
+	base URL.
 
 	* shr.el (shr-parse-base): Fix parsing error.
 

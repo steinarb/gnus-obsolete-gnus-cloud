@@ -495,8 +495,9 @@ size, and full-buffer size."
     (when (and (not (zerop (length local)))
 	       (not (eq (aref local (1- (length local))) ?/)))
       (setq local (concat local "/")))
-    (cons (url-recreate-url parsed)
-	  local)))
+    (list (url-recreate-url parsed)
+	  local
+	  (url-type parsed))))
 
 (defun shr-expand-url (url &optional base)
   (setq base
@@ -510,11 +511,15 @@ size, and full-buffer size."
 	 ;; Absolute URL.
 	 (or url (car base)))
 	((eq (aref url 0) ?/)
-	 ;; Just use the host name part.
-	 (concat (car base) url))
+	 (if (and (> (length url) 1)
+		  (eq (aref url 1) ?/))
+	     ;; //host...; just use the protocol
+	     (concat (nth 2 base) ":" url)
+	   ;; Just use the host name part.
+	   (concat (car base) url)))
 	(t
 	 ;; Totally relative.
-	 (concat (car base) (cdr base) url))))
+	 (concat (car base) (cadr base) url))))
 
 (defun shr-ensure-newline ()
   (unless (zerop (current-column))
