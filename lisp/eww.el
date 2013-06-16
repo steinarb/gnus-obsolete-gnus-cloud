@@ -29,7 +29,22 @@
 (require 'url)
 (require 'mm-url)
 
+(defgroup eww nil
+  "Emacs Web Wowser"
+  :version "24.4"
+  :group 'hypermedia
+  :prefix "eww-")
+
+(defcustom eww-header-line-format "%t: %u"
+  "Header line format.
+- %t is replaced by the title.
+- %u is replaced by the URL."
+  :group 'eww
+  :type 'string)
+
 (defvar eww-current-url nil)
+(defvar eww-current-title ""
+  "Title of current page.")
 (defvar eww-history nil)
 
 ;;;###autoload
@@ -104,15 +119,31 @@
 	  (libxml-parse-html-region (point) (point-max)))))
     (eww-setup-buffer)
     (setq eww-current-url url)
+    (eww-update-header-line-format)
     (let ((inhibit-read-only t)
 	  (shr-external-rendering-functions
-	   '((form . eww-tag-form)
+	   '((title . eww-tag-title)
+	     (form . eww-tag-form)
 	     (input . eww-tag-input)
 	     (body . eww-tag-body)
 	     (select . eww-tag-select))))
       (shr-insert-document document)
       (eww-convert-widgets))
     (goto-char (point-min))))
+
+(defun eww-update-header-line-format ()
+  (if eww-header-line-format
+      (setq header-line-format (format-spec eww-header-line-format
+                                            `((?u . ,eww-current-url)
+                                              (?t . ,eww-current-title))))
+    (setq header-line-format nil)))
+
+(defun eww-tag-title (cont)
+  (setq eww-current-title "")
+  (dolist (sub cont)
+    (when (eq (car sub) 'text)
+      (setq eww-current-title (concat eww-current-title (cdr sub)))))
+  (eww-update-header-line-format))
 
 (defun eww-tag-body (cont)
   (let* ((start (point))
