@@ -130,6 +130,7 @@
     (setq eww-current-url url)
     (eww-update-header-line-format)
     (let ((inhibit-read-only t)
+	  (shr-width nil)
 	  (shr-external-rendering-functions
 	   '((title . eww-tag-title)
 	     (form . eww-tag-form)
