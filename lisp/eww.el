@@ -301,7 +301,7 @@
 (defun eww-tag-textarea (cont)
   (let* ((start (point))
 	 (widget
-	  (list 'editable-field
+	  (list 'text
 		:size (string-to-number
 		       (or (cdr (assq :cols cont))
 			   "40"))

@@ -513,6 +513,8 @@ size, and full-buffer size."
 	    (shr-parse-base base)
 	  ;; Bound by the parser.
 	  shr-base))
+  (when (zerop (length url))
+    (setq url nil))
   (cond ((or (not url)
 	     (not base)
 	     (string-match "\\`[a-z]*:" url))
