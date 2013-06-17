@@ -223,9 +223,9 @@ redirects somewhere else."
 (defun shr-next-link ()
   "Skip to the next link."
   (interactive)
-  (let ((skip (text-property-any (point) (point-max) 'shr-url nil)))
+  (let ((skip (text-property-any (point) (point-max) 'help-echo nil)))
     (if (not (setq skip (text-property-not-all skip (point-max)
-					       'shr-url nil)))
+					       'help-echo nil)))
 	(message "No next link")
       (goto-char skip)
       (message "%s" (get-text-property (point) 'help-echo)))))
@@ -237,11 +237,11 @@ redirects somewhere else."
 	(found nil))
     ;; Skip past the current link.
     (while (and (not (bobp))
-		(get-text-property (point) 'shr-url))
+		(get-text-property (point) 'help-echo))
       (forward-char -1))
     ;; Find the previous link.
     (while (and (not (bobp))
-		(not (setq found (get-text-property (point) 'shr-url))))
+		(not (setq found (get-text-property (point) 'help-echo))))
       (forward-char -1))
     (if (not found)
 	(progn
@@ -249,7 +249,7 @@ redirects somewhere else."
 	  (goto-char start))
       ;; Put point at the start of the link.
       (while (and (not (bobp))
-		  (get-text-property (point) 'shr-url))
+		  (get-text-property (point) 'help-echo))
 	(forward-char -1))
       (forward-char 1)
       (message "%s" (get-text-property (point) 'help-echo)))))
@@ -799,12 +799,13 @@ START, and END.  Note that START and END should be markers."
   (shr-ensure-paragraph))
 
 (defun shr-urlify (start url &optional title)
+  (when (and title (string-match "ctx" title)) (debug))
   (shr-add-font start (point) 'shr-link)
   (add-text-properties
    start (point)
    (list 'shr-url url
-	 'local-map shr-map
-	 'help-echo (if title (format "%s (%s)" url title) url))))
+	 'help-echo (if title (format "%s (%s)" url title) url)
+	 'local-map shr-map)))
 
 (defun shr-encode-url (url)
   "Encode URL."
@@ -1162,11 +1163,7 @@ ones, in case fg and bg are nil."
   (shr-generic cont))
 
 (defun shr-tag-span (cont)
-  (let ((title (cdr (assq :title cont))))
-    (shr-generic cont)
-    (when (and title
-	       shr-start)
-      (put-text-property shr-start (point) 'help-echo title))))
+  (shr-generic cont)))
 
 (defun shr-tag-h1 (cont)
   (shr-heading cont 'bold 'underline))

@@ -455,6 +455,10 @@
       (when (and widget
 		 (not (eq (car widget) 'hidden)))
 	(apply 'widget-create widget)
+	(put-text-property start (point) 'help-echo
+			   (if (memq (car widget) '(text editable-field))
+			       "Input field"
+			     "Button"))
 	(when (eq (car widget) 'push-button)
 	  (add-face-text-property start (point) 'eww-button t))))
     (widget-setup)
