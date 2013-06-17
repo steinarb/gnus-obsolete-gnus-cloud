@@ -1016,7 +1016,9 @@ ones, in case fg and bg are nil."
       plist)))
 
 (defun shr-tag-base (cont)
-  (setq shr-base (shr-parse-base (cdr (assq :href cont))))
+  (let ((base (cdr (assq :href cont))))
+    (when base
+      (setq shr-base (shr-parse-base base))))
   (shr-generic cont))
 
 (defun shr-tag-a (cont)

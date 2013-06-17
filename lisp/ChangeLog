@@ -1,6 +1,7 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* shr.el (shr-insert-table): Respect border-collapse: collapse.
+	(shr-tag-base): Protect against base specs that are degenerate.
 
 	* eww.el (eww-convert-widgets): Put `help-echo' on input fields so that
 	we can navigate to them.
