@@ -1,7 +1,11 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* eww.el (eww-put-color): Removed.
+	(eww-colorize-region): Use `add-face-text-property'.
+
 	* shr.el (shr-add-font): Append face data, so that we get the correct
 	presedence: The innermost value (which is applied first) wins.
+	(shr-make-overlay): Obsolete function.
 
 	* mm-decode.el (mm-convert-shr-links): New function to convert
 	new-style shr URL links into widgets.

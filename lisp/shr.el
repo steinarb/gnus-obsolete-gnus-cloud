@@ -609,11 +609,6 @@ size, and full-buffer size."
     (dolist (type types)
       (shr-add-font (or shr-start (point)) (point) type))))
 
-(defun shr-make-overlay (beg end &optional buffer front-advance rear-advance)
-  (let ((overlay (make-overlay beg end buffer front-advance rear-advance)))
-    (overlay-put overlay 'evaporate t)
-    overlay))
-
 ;; Add face to the region, but avoid putting the font properties on
 ;; blank text at the start of the line, and the newline at the end, to
 ;; avoid ugliness.
