@@ -1,5 +1,7 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* shr.el (shr-colorize-region): Put the colours over the entire region.
+
 	* eww.el (eww-button): New face.
 	(eww-convert-widgets): Use it to make submit buttons more button-like.
 

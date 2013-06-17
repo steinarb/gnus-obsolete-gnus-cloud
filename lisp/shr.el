@@ -838,9 +838,13 @@ ones, in case fg and bg are nil."
     (let ((new-colors (shr-color-check fg bg)))
       (when new-colors
 	(when fg
-	  (shr-add-font start end (list :foreground (cadr new-colors))))
+	  (add-face-text-property start end
+				  (list :foreground (cadr new-colors))
+				  t))
 	(when bg
-	  (shr-add-font start end (list :background (car new-colors)))))
+	  (add-face-text-property start end
+				  (list :background (car new-colors))
+				  t)))
       new-colors)))
 
 (defun shr-expand-newlines (start end color)
