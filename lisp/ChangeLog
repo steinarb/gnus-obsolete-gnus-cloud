@@ -2,6 +2,8 @@
 
 	* shr.el (shr-insert-table): Respect border-collapse: collapse.
 	(shr-tag-base): Protect against base specs that are degenerate.
+	(shr-ensure-paragraph): Don't delete empty lines that have text
+	properties, because these may be input fields.
 
 	* eww.el (eww-convert-widgets): Put `help-echo' on input fields so that
 	we can navigate to them.

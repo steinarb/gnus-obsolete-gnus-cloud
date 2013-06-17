@@ -596,7 +596,14 @@ size, and full-buffer size."
 	  (insert "\n"))
       (if (save-excursion
 	    (beginning-of-line)
-	    (looking-at " *$"))
+	    ;; If the current line is totally blank, and doesn't even
+	    ;; have any face properties set, then delete the blank
+	    ;; space.
+	    (and (looking-at " *$")
+		 (not (get-text-property (point) 'face))
+		 (not (= (next-single-property-change (point) 'face nil
+						      (line-end-position))
+			 (line-end-position)))))
 	  (delete-region (match-beginning 0) (match-end 0))
 	(insert "\n\n")))))
 

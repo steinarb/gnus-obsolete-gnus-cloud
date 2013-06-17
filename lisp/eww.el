@@ -276,34 +276,39 @@
   (let* ((start (point))
 	 (type (downcase (or (cdr (assq :type cont))
 			     "text")))
+	 (value (cdr (assq :value cont)))
 	 (widget
 	  (cond
 	   ((equal type "submit")
 	    (list 'push-button
 		  :notify 'eww-submit
 		  :name (cdr (assq :name cont))
-		  :value (cdr (assq :value cont))
+		  :value (if (zerop (length value))
+			     "Submit"
+			   value)
 		  :eww-form eww-form
-		  (or (cdr (assq :value cont)) "Submit")))
+		  (or (if (zerop (length value))
+			  "Submit"
+			value))))
 	   ((or (equal type "radio")
 		(equal type "checkbox"))
 	    (list 'checkbox
 		  :notify 'eww-click-radio
 		  :name (cdr (assq :name cont))
-		  :checkbox-value (cdr (assq :value cont))
+		  :checkbox-value value
 		  :checkbox-type type
 		  :eww-form eww-form
 		  (cdr (assq :checked cont))))
 	   ((equal type "hidden")
 	    (list 'hidden
 		  :name (cdr (assq :name cont))
-		  :value (cdr (assq :value cont))))
+		  :value value))
 	   (t
 	    (list 'editable-field
 		  :size (string-to-number
 			 (or (cdr (assq :size cont))
 			     "40"))
-		  :value (or (cdr (assq :value cont)) "")
+		  :value value
 		  :secret (and (equal type "password") ?*)
 		  :action 'eww-submit
 		  :name (cdr (assq :name cont))
