@@ -1,5 +1,8 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* shr.el (shr-add-font): Append face data, so that we get the correct
+	presedence: The innermost value (which is applied first) wins.
+
 	* mm-decode.el (mm-convert-shr-links): New function to convert
 	new-style shr URL links into widgets.
 	(mm-shr): Use it.

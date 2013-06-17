@@ -623,7 +623,7 @@ size, and full-buffer size."
     (while (< (point) end)
       (when (bolp)
 	(skip-chars-forward " "))
-      (add-face-text-property (point) (min (line-end-position) end) type)
+      (add-face-text-property (point) (min (line-end-position) end) type t)
       (if (< (line-end-position) end)
 	  (forward-line 1)
 	(goto-char end)))))
@@ -843,31 +843,10 @@ ones, in case fg and bg are nil."
     (let ((new-colors (shr-color-check fg bg)))
       (when new-colors
 	(when fg
-	  (shr-put-color start end :foreground (cadr new-colors)))
+	  (shr-add-font start end (list :foreground (cadr new-colors))))
 	(when bg
-	  (shr-put-color start end :background (car new-colors))))
+	  (shr-add-font start end (list :background (car new-colors)))))
       new-colors)))
-
-;; Put a color in the region, but avoid putting colors on blank
-;; text at the start of the line, and the newline at the end, to avoid
-;; ugliness.  Also, don't overwrite any existing color information,
-;; since this can be called recursively, and we want the "inner" color
-;; to win.
-(defun shr-put-color (start end type color)
-  (save-excursion
-    (goto-char start)
-    (while (< (point) end)
-      (when (and (bolp)
-		 (not (eq type :background)))
-	(skip-chars-forward " "))
-      (when (> (line-end-position) (point))
-	(shr-put-color-1 (point) (min (line-end-position) end) type color))
-      (if (< (line-end-position) end)
-	  (forward-line 1)
-	(goto-char end)))
-    (when (and (eq type :background)
-	       (= shr-table-depth 0))
-      (shr-expand-newlines start end color))))
 
 (defun shr-expand-newlines (start end color)
   (save-restriction
@@ -918,24 +897,6 @@ ones, in case fg and bg are nil."
 		 (length (plist-get (overlay-properties overlay)
 				    'before-string)))))
       (+ width previous-width))))
-
-(defun shr-put-color-1 (start end type color)
-  (let* ((old-props (get-text-property start 'face))
-	 (do-put (and (listp old-props)
-                      (not (memq type old-props))))
-	 change)
-    (while (< start end)
-      (setq change (next-single-property-change start 'face nil end))
-      (when do-put
-	(add-face-text-property start change (list type color)))
-      (setq old-props (get-text-property change 'face))
-      (setq do-put (and (listp old-props)
-                        (not (memq type old-props))))
-      (setq start change))
-    (when (and do-put
-	       (> end start))
-      (put-text-property start end 'face
-			 (nconc (list type color old-props))))))
 
 ;;; Tag-specific rendering rules.
 
@@ -1381,7 +1342,8 @@ ones, in case fg and bg are nil."
 	      (insert (make-string (string-width (car lines)) ? )
 		      shr-table-vertical-line)
 	      (when (nth 4 column)
-		(shr-put-color start (1- (point)) :background (nth 4 column))))
+		(shr-add-font start (1- (point))
+			      (list :background (nth 4 column)))))
 	    (forward-line 1)))))
     (shr-insert-table-ruler widths)))
 
@@ -1567,7 +1529,7 @@ ones, in case fg and bg are nil."
 
 ;; Emacs less than 24.3
 (unless (fboundp 'add-face-text-property)
-  (defun add-face-text-property (beg end face)
+  (defun add-face-text-property (beg end face &optional appendp object)
     "Combine FACE BEG and END."
     (let ((b beg))
       (while (< b end)
@@ -1578,9 +1540,13 @@ ones, in case fg and bg are nil."
 			face)
 		       ((and (consp oldval)
 			     (not (keywordp (car oldval))))
-			(cons face oldval))
+			(if appendp
+			    (nconc oldval (list face))
+			  (cons face oldval)))
 		       (t
-			(list face oldval)))))))))
+			(if appendp
+			    (list oldval face)
+			  (list face oldval))))))))))
 
 (provide 'shr)
 
