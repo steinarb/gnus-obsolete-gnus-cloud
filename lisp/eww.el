@@ -308,7 +308,7 @@
 		  :size (string-to-number
 			 (or (cdr (assq :size cont))
 			     "40"))
-		  :value value
+		  :value (or value "")
 		  :secret (and (equal type "password") ?*)
 		  :action 'eww-submit
 		  :name (cdr (assq :name cont))
@@ -449,7 +449,9 @@
     ;; so we need to nix out the list of widgets and recreate them.
     (setq widget-field-list nil
 	  widget-field-new nil)
-    (while (setq start (next-single-property-change start 'eww-widget))
+    (while (setq start (if (get-text-property start 'eww-widget)
+			   start
+			 (next-single-property-change start 'eww-widget)))
       (setq widget (get-text-property start 'eww-widget))
       (goto-char start)
       (let ((end (next-single-property-change start 'eww-widget)))
