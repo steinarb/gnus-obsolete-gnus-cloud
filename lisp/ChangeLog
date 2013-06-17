@@ -1,6 +1,10 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* shr.el (shr-colorize-region): Put the colours over the entire region.
+	(shr-inhibit-decoration): New variable.
+	(shr-add-font): Use it to inhibit text property decorations while doing
+	preliminary table renderings.  This speeds up typical Wikipedia page
+	renderings by 15%.
 
 	* eww.el (eww-button): New face.
 	(eww-convert-widgets): Use it to make submit buttons more button-like.

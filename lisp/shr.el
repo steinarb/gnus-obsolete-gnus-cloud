@@ -125,6 +125,7 @@ cid: URL as the argument.")
 (defvar shr-ignore-cache nil)
 (defvar shr-external-rendering-functions nil)
 (defvar shr-target-id nil)
+(defvar shr-inhibit-decoration nil)
 
 (defvar shr-map
   (let ((map (make-sparse-keymap)))
@@ -613,15 +614,16 @@ size, and full-buffer size."
 ;; blank text at the start of the line, and the newline at the end, to
 ;; avoid ugliness.
 (defun shr-add-font (start end type)
-  (save-excursion
-    (goto-char start)
-    (while (< (point) end)
-      (when (bolp)
-	(skip-chars-forward " "))
-      (add-face-text-property (point) (min (line-end-position) end) type t)
-      (if (< (line-end-position) end)
-	  (forward-line 1)
-	(goto-char end)))))
+  (unless shr-inhibit-decoration
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end)
+	(when (bolp)
+	  (skip-chars-forward " "))
+	(add-face-text-property (point) (min (line-end-position) end) type t)
+	(if (< (line-end-position) end)
+	    (forward-line 1)
+	  (goto-char end))))))
 
 (defun shr-browse-url ()
   "Browse the URL under point."
@@ -834,7 +836,8 @@ ones, in case fg and bg are nil."
                (shr-color-visible bg fg)))))))
 
 (defun shr-colorize-region (start end fg &optional bg)
-  (when (or fg bg)
+  (when (and (not shr-inhibit-decoration)
+	     (or fg bg))
     (let ((new-colors (shr-color-check fg bg)))
       (when new-colors
 	(when fg
@@ -1021,7 +1024,8 @@ ones, in case fg and bg are nil."
 	(start (point))
 	shr-start)
     (shr-generic cont)
-    (when url
+    (when (and url
+	       (not shr-inhibit-decoration))
       (shr-urlify (or shr-start start) (shr-expand-url url) title))))
 
 (defun shr-tag-object (cont)
@@ -1397,7 +1401,8 @@ ones, in case fg and bg are nil."
 	data)))
 
 (defun shr-make-table-1 (cont widths &optional fill)
-  (let ((trs nil))
+  (let ((trs nil)
+	(shr-inhibit-decoration (not fill)))
     (dolist (row cont)
       (when (eq (car row) 'tr)
 	(let ((tds nil)
