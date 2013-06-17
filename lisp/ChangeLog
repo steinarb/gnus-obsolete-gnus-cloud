@@ -1,5 +1,8 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* mm-decode.el (mm-convert-shr-links): Override the shr local map, so
+	that Gnus commands work.
+
 	* shr.el (shr-render-td): Support horizontal alignment.
 
 	* eww.el (eww-put-color): Removed.
