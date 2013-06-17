@@ -1163,7 +1163,7 @@ ones, in case fg and bg are nil."
   (shr-generic cont))
 
 (defun shr-tag-span (cont)
-  (shr-generic cont)))
+  (shr-generic cont))
 
 (defun shr-tag-h1 (cont)
   (shr-heading cont 'bold 'underline))
