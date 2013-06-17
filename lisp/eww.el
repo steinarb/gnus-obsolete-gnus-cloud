@@ -350,13 +350,14 @@
 		    :value (cdr (assq :value (cdr elem)))
 		    :tag (cdr (assq 'text (cdr elem))))
 	      options)))
-    ;; If we have no selected values, default to the first value.
-    (unless (plist-get (cdr menu) :value)
-      (nconc menu (list :value (nth 2 (car options)))))
-    (nconc menu options)
-    (apply 'widget-create menu)
-    (put-text-property start (point) 'eww-widget menu)
-    (shr-ensure-paragraph)))
+    (when options
+      ;; If we have no selected values, default to the first value.
+      (unless (plist-get (cdr menu) :value)
+	(nconc menu (list :value (nth 2 (car options)))))
+      (nconc menu options)
+      (apply 'widget-create menu)
+      (put-text-property start (point) 'eww-widget menu)
+      (shr-ensure-paragraph))))
 
 (defun eww-click-radio (widget &rest ignore)
   (let ((form (plist-get (cdr widget) :eww-form))
