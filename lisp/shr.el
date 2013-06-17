@@ -1449,11 +1449,23 @@ ones, in case fg and bg are nil."
 	  (if (zerop (buffer-size))
 	      (insert (make-string width ? ))
 	    ;; Otherwise, fill the buffer.
-	    (while (not (eobp))
-	      (end-of-line)
-	      (when (> (- width (current-column)) 0)
-		(insert (make-string (- width (current-column)) ? )))
-	      (forward-line 1)))
+	    (let ((align (cdr (assq :align cont)))
+		  length)
+	      (while (not (eobp))
+		(end-of-line)
+		(setq length (- width (current-column)))
+		(when (> length 0)
+		  (cond
+		   ((equal align "right")
+		    (beginning-of-line)
+		    (insert (make-string length ? )))
+		   ((equal align "center")
+		    (insert (make-string (/ length 2) ? ))
+		    (beginning-of-line)
+		    (insert (make-string (- length (/ length 2)) ? )))
+		   (t
+		    (insert (make-string length ? )))))
+		(forward-line 1))))
 	  (when style
 	    (setq actual-colors
 		  (shr-colorize-region

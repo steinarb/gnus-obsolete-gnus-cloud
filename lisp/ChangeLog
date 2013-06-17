@@ -1,5 +1,7 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* shr.el (shr-render-td): Support horizontal alignment.
+
 	* eww.el (eww-put-color): Removed.
 	(eww-colorize-region): Use `add-face-text-property'.
 
