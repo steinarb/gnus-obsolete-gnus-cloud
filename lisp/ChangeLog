@@ -1,5 +1,8 @@
 2013-06-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* eww.el (eww-button): New face.
+	(eww-convert-widgets): Use it to make submit buttons more button-like.
+
 	* mm-decode.el (mm-convert-shr-links): Override the shr local map, so
 	that Gnus commands work.
 

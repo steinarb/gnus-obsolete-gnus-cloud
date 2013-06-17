@@ -43,6 +43,14 @@
   :group 'eww
   :type 'string)
 
+(defface eww-button
+  '((((type x w32 ns) (class color))	; Like default mode line
+     :box (:line-width 2 :style released-button)
+     :background "lightgrey" :foreground "black"))
+  "Face for eww buffer buttons."
+  :version "24.4"
+  :group 'eww)
+
 (defvar eww-current-url nil)
 (defvar eww-current-title ""
   "Title of current page.")
@@ -303,7 +311,8 @@
     (nconc eww-form (list widget))
     (unless (eq (car widget) 'hidden)
       (apply 'widget-create widget)
-      (put-text-property start (point) 'eww-widget widget))))
+      (put-text-property start (point) 'eww-widget widget)
+      (insert " "))))
 
 (defun eww-tag-textarea (cont)
   (let* ((start (point))
@@ -445,7 +454,9 @@
 	(delete-region start end))
       (when (and widget
 		 (not (eq (car widget) 'hidden)))
-	(apply 'widget-create widget)))
+	(apply 'widget-create widget)
+	(when (eq (car widget) 'push-button)
+	  (add-face-text-property start (point) 'eww-button t))))
     (widget-setup)
     (eww-fix-widget-keymap)))
 
