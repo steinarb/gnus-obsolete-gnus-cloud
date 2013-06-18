@@ -1435,6 +1435,7 @@ ones, in case fg and bg are nil."
 (defun shr-make-table-1 (cont widths &optional fill)
   (let ((trs nil)
 	(shr-inhibit-decoration (not fill))
+	(rowspans (make-vector (length widths) 0))
 	width colspan)
     (dolist (row cont)
       (when (eq (car row) 'tr)
@@ -1444,9 +1445,21 @@ ones, in case fg and bg are nil."
 	      (width-column 0)
 	      column)
 	  (while (< i (length widths))
-	    (setq column (pop columns))
+	    ;; If we previously had a rowspan definition, then that
+	    ;; means that we now have a "missing" td/th element here.
+	    ;; So just insert a dummy, empty one to (sort of) emulate
+	    ;; rowspan.
+	    (setq column
+		  (if (zerop (aref rowspans i))
+		      (pop columns)
+		    (aset rowspans i (1- (aref rowspans i)))
+		    '(td)))
 	    (when (or (memq (car column) '(td th))
 		      (not column))
+	      (when (cdr (assq :rowspan (cdr column)))
+		(aset rowspans i (+ (aref rowspans i)
+				    (1- (string-to-number
+					 (cdr (assq :rowspan (cdr column))))))))
 	      (setq width
 		    (if column
 			(aref widths width-column)
