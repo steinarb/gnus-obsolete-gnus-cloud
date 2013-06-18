@@ -1,6 +1,9 @@
 2013-06-18  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* shr.el (shr-make-table-1): Implement <td rowspan>.
+	(shr-table-horizontal-line): Allow nil as a value, and change the
+	default.
+	(shr-insert-table-ruler): Respect the nil value.
 
 2013-06-18  Tom Tromey  <tromey@barimba>
 

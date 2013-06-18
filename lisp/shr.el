@@ -55,8 +55,9 @@ fit these criteria."
   :group 'shr
   :type '(choice (const nil) regexp))
 
-(defcustom shr-table-horizontal-line ?\s
-  "Character used to draw horizontal table lines."
+(defcustom shr-table-horizontal-line nil
+  "Character used to draw horizontal table lines.
+If nil, don't draw horizontal table lines."
   :group 'shr
   :type 'character)
 
@@ -1383,14 +1384,15 @@ ones, in case fg and bg are nil."
 	(shr-insert-table-ruler widths)))))
 
 (defun shr-insert-table-ruler (widths)
-  (when (and (bolp)
-	     (> shr-indentation 0))
-    (shr-indent))
-  (insert shr-table-corner)
-  (dotimes (i (length widths))
-    (insert (make-string (aref widths i) shr-table-horizontal-line)
-	    shr-table-corner))
-  (insert "\n"))
+  (when shr-table-horizontal-line
+    (when (and (bolp)
+	       (> shr-indentation 0))
+      (shr-indent))
+    (insert shr-table-corner)
+    (dotimes (i (length widths))
+      (insert (make-string (aref widths i) shr-table-horizontal-line)
+	      shr-table-corner))
+    (insert "\n")))
 
 (defun shr-table-widths (table natural-table suggested-widths)
   (let* ((length (length suggested-widths))
