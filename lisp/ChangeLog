@@ -6,6 +6,8 @@
 	(shr-tag-dl, shr-tag-dt, shr-tag-dd): Add support for <dl>, <dt> and
 	<dd>.
 	(shr-make-table-1): Implement <td colspan=> support.
+	(shr-insert-document): Use one less than window width if `shr-width' is
+	nil, since otherwise things may get one character too wide.
 
 2013-06-18  Katsumi Yamaoka  <yamaoka@jpl.org>
 
