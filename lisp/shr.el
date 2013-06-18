@@ -126,6 +126,7 @@ cid: URL as the argument.")
 (defvar shr-external-rendering-functions nil)
 (defvar shr-target-id nil)
 (defvar shr-inhibit-decoration nil)
+(defvar shr-table-separator-length 1)
 
 (defvar shr-map
   (let ((map (make-sparse-keymap)))
@@ -1347,6 +1348,7 @@ ones, in case fg and bg are nil."
 (defun shr-insert-table (table widths)
   (let* ((collapse (equal (cdr (assq 'border-collapse shr-stylesheet))
 			  "collapse"))
+	 (shr-table-separator-length (if collapse 0 1))
 	 (shr-table-vertical-line (if collapse "" shr-table-vertical-line)))
     (unless collapse
       (shr-insert-table-ruler widths))
@@ -1432,20 +1434,39 @@ ones, in case fg and bg are nil."
 
 (defun shr-make-table-1 (cont widths &optional fill)
   (let ((trs nil)
-	(shr-inhibit-decoration (not fill)))
+	(shr-inhibit-decoration (not fill))
+	width colspan)
     (dolist (row cont)
       (when (eq (car row) 'tr)
 	(let ((tds nil)
 	      (columns (cdr row))
 	      (i 0)
+	      (width-column 0)
 	      column)
 	  (while (< i (length widths))
 	    (setq column (pop columns))
 	    (when (or (memq (car column) '(td th))
-		      (null column))
-	      (push (shr-render-td (cdr column) (aref widths i) fill)
-		    tds)
-	      (setq i (1+ i))))
+		      (not column))
+	      (setq width
+		    (if column
+			(aref widths width-column)
+		      0))
+	      (when (and fill
+			 (setq colspan (cdr (assq :colspan (cdr column)))))
+		(setq colspan (string-to-number colspan))
+		(dotimes (j (1- colspan))
+		  (if (> (+ i 1 j) (1- (length widths)))
+		      (setq width (aref widths (1- (length widths))))
+		    (setq width (+ width
+				   shr-table-separator-length
+				   (aref widths (+ i 1 j))))))
+		(setq width-column (+ width-column (1- colspan))))
+	      (when (or column
+			(not fill))
+		(push (shr-render-td (cdr column) width fill)
+		      tds))
+	      (setq i (1+ i)
+		    width-column (1+ width-column))))
 	  (push (nreverse tds) trs))))
     (nreverse trs)))
 

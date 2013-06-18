@@ -5,6 +5,7 @@
 	awkward.
 	(shr-tag-dl, shr-tag-dt, shr-tag-dd): Add support for <dl>, <dt> and
 	<dd>.
+	(shr-make-table-1): Implement <td colspan=> support.
 
 2013-06-18  Katsumi Yamaoka  <yamaoka@jpl.org>
 
