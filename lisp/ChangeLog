@@ -1,3 +1,16 @@
+2013-06-18  Tom Tromey  <tromey@barimba>
+
+	* eww.el (eww-next-url, eww-previous-url, eww-up-url, eww-top-url):
+	New defvars.
+	(eww-open-file): New defun.
+	(eww-render): Initialize new variables.
+	(eww-display-html): Handle "link" and "a".
+	(eww-handle-link, eww-tag-link, eww-tag-a): New defuns.
+	(eww-mode-map): Move "p" to "l".  Bind "p", "n", "t", and "u".
+	(eww-back-url): Rename from eww-previous-url.
+	(eww-next-url, eww-previous-url, eww-up-url, eww-top-url): New
+	defuns.
+
 2013-06-18  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* shr.el (shr-tag-table): Insert the images after the table, so that
