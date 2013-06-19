@@ -1,5 +1,8 @@
 2013-06-19  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
+	don't shadow mode-specific bindings.
+
 	* eww.el (eww-browse-url): Don't push stuff onto history if there's
 	nothing to push.
 

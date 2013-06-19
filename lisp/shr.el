@@ -136,7 +136,7 @@ cid: URL as the argument.")
     (define-key map "z" 'shr-zoom-image)
     (define-key map [tab] 'shr-next-link)
     (define-key map [backtab] 'shr-previous-link)
-    (define-key map [down-mouse-1] 'shr-browse-url)
+    (define-key map [follow-link] 'mouse-face)
     (define-key map "I" 'shr-insert-image)
     (define-key map "u" 'shr-copy-url)
     (define-key map "v" 'shr-browse-url)
@@ -819,7 +819,7 @@ START, and END.  Note that START and END should be markers."
    start (point)
    (list 'shr-url url
 	 'help-echo (if title (format "%s (%s)" url title) url)
-	 'local-map shr-map)))
+	 'keymap shr-map)))
 
 (defun shr-encode-url (url)
   "Encode URL."
