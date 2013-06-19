@@ -1463,6 +1463,9 @@ ones, in case fg and bg are nil."
 		(aset rowspans i (+ (aref rowspans i)
 				    (1- (string-to-number
 					 (cdr (assq :rowspan (cdr column))))))))
+	      ;; Sanity check for invalid column-spans.
+	      (when (>= width-column (length widths))
+		(setq width-column 0))
 	      (setq width
 		    (if column
 			(aref widths width-column)
