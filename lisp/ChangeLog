@@ -8,6 +8,7 @@
 	work.
 	(eww-submit): Rewrite to use the new-style form methods.
 	(eww-select-display): Display the correct selected item.
+	(eww-change-select): Implement changing the select value.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.

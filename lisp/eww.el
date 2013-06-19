@@ -402,8 +402,15 @@ or <a> tag."
       (forward-char 1))))
 
 (defun eww-beginning-of-field ()
-  (previous-single-property-change
-   (point) 'eww-form nil (point-min)))
+  (cond
+   ((bobp)
+    (point))
+   ((not (eq (get-text-property (point) 'eww-form)
+	     (get-text-property (1- (point)) 'eww-form)))
+    (point))
+   (t
+    (previous-single-property-change
+     (point) 'eww-form nil (point-min)))))
 
 (defun eww-end-of-field ()
   (1- (next-single-property-change
@@ -487,7 +494,8 @@ or <a> tag."
 (defun eww-process-text-input (beg end length)
   (let ((form (get-text-property end 'eww-form))
 	(properties (text-properties-at end)))
-    (when form
+    (when (and form
+	       (member (plist-get form :type) '("text" "password" "textarea")))
       (cond
        ((zerop length)
 	;; Delete some text
@@ -614,6 +622,31 @@ or <a> tag."
 		 (equal value (plist-get (cdr elem) :value)))
 	(setq display (plist-get (cdr elem) :display))))
     display))
+
+(defun eww-change-select ()
+  "Change the value of the select drop-down menu under point."
+  (interactive)
+  (let* ((input (get-text-property (point) 'eww-form))
+	 (start (eww-beginning-of-field))
+	 (end (1+ (eww-end-of-field)))
+	 (properties (text-properties-at (point)))
+	 (completion-ignore-case t)
+	 (options
+	  (delq nil
+		(mapcar (lambda (elem)
+			  (and (consp elem)
+			       (eq (car elem) 'item)
+			       (cons (plist-get (cdr elem) :display)
+				     (plist-get (cdr elem) :value))))
+			input)))
+	 (display
+	  (completing-read "Change value: " options nil 'require-match))
+	 (inhibit-read-only t))
+    (plist-put input :value (cdr (assoc-string display options t)))
+    (delete-region start end)
+    (insert display (make-string (- (- end start) (length display)) ? ))
+    (set-text-properties start end properties)
+    (goto-char start)))
 
 (defun eww-click-radio (widget &rest ignore)
   (let ((form (plist-get (cdr widget) :eww-form))
