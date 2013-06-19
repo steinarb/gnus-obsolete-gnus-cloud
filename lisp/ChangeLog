@@ -7,6 +7,7 @@
 	(eww-process-text-input): New function to make text input field editing
 	work.
 	(eww-submit): Rewrite to use the new-style form methods.
+	(eww-select-display): Display the correct selected item.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.

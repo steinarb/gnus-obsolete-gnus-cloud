@@ -445,6 +445,7 @@ or <a> tag."
     (put-text-property start (point) 'eww-form
 		       (list :eww-form eww-form
 			     :value value
+			     :type "submit"
 			     :name (cdr (assq :name cont))))
     (put-text-property start (point) 'keymap eww-submit-map)
     (insert " ")))
@@ -585,23 +586,34 @@ or <a> tag."
 	  (nconc menu (list :value
 			    (cdr (assq :value (cdr elem))))))
 	(let ((display (or (cdr (assq 'text (cdr elem))) "")))
-	  (setq max (max max (length display))))
-	(push (list 'item
-		    :value (cdr (assq :value (cdr elem)))
-		    :display display)
-	      options)))
+	  (setq max (max max (length display)))
+	  (push (list 'item
+		      :value (cdr (assq :value (cdr elem)))
+		      :display display)
+		options))))
     (when options
+      (setq options (nreverse options))
       ;; If we have no selected values, default to the first value.
       (unless (plist-get menu :value)
 	(nconc menu (list :value (nth 2 (car options)))))
       (nconc menu options)
-      (let ((selected (eww-element-value menu)))
+      (let ((selected (eww-select-display menu)))
 	(insert selected
 		(make-string (- max (length selected)) ? )))
       (put-text-property start (point) 'eww-form menu)
       (add-face-text-property start (point) 'eww-form-select)
       (put-text-property start (point) 'keymap eww-select-map)
       (shr-ensure-paragraph))))
+
+(defun eww-select-display (select)
+  (let ((value (plist-get select :value))
+	display)
+    (dolist (elem select)
+      (when (and (consp elem)
+		 (eq (car elem) 'item)
+		 (equal value (plist-get (cdr elem) :value)))
+	(setq display (plist-get (cdr elem) :display))))
+    display))
 
 (defun eww-click-radio (widget &rest ignore)
   (let ((form (plist-get (cdr widget) :eww-form))
@@ -635,8 +647,6 @@ or <a> tag."
 (defun eww-input-value (input)
   (let ((type (plist-get input :type)))
     (cond
-     ((equal type "select")
-      )
      (t
       (let ((value (plist-get input :value)))
 	(if (string-match " +" value)
@@ -669,6 +679,7 @@ or <a> tag."
 		      (and (not (eq input this-input))
 			   (null next-submit)
 			   (> input-start (point))))
+	      (setq next-submit t)
 	      (push (cons name (plist-get input :value))
 		    values)))
 	   (t
