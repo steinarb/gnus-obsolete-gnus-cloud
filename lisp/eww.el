@@ -83,7 +83,9 @@
 (defvar eww-next-url nil)
 (defvar eww-previous-url nil)
 (defvar eww-up-url nil)
-(defvar eww-top-url nil)
+(defvar eww-home-url nil)
+(defvar eww-start-url nil)
+(defvar eww-contents-url nil)
 
 ;;;###autoload
 (defun eww (url)
@@ -106,7 +108,9 @@
   (set (make-local-variable 'eww-next-url) nil)
   (set (make-local-variable 'eww-previous-url) nil)
   (set (make-local-variable 'eww-up-url) nil)
-  (set (make-local-variable 'eww-top-url) nil)
+  (set (make-local-variable 'eww-home-url) nil)
+  (set (make-local-variable 'eww-start-url) nil)
+  (set (make-local-variable 'eww-contents-url) nil)
   (let* ((headers (eww-parse-headers))
 	 (shr-target-id
 	  (and (string-match "#\\(.*\\)" url)
@@ -195,10 +199,22 @@
 (defun eww-handle-link (cont)
   (let* ((rel (assq :rel cont))
   	(href (assq :href cont))
-	(where (assoc (cdr rel)
+	(where (assoc
+		;; The text associated with :rel is case-insensitive.
+		(if rel (downcase (cdr rel)))
 		      '(("next" . eww-next-url)
+			;; Texinfo uses "previous", but HTML specifies
+			;; "prev", so recognize both.
 			("previous" . eww-previous-url)
-			("start" . eww-top-url)
+			("prev" . eww-previous-url)
+			;; HTML specifies "start" but also "contents",
+			;; and Gtk seems to use "home".  Recognize
+			;; them all; but store them in different
+			;; variables so that we can readily choose the
+			;; "best" one.
+			("start" . eww-start-url)
+			("home" . eww-home-url)
+			("contents" . eww-contents-url)
 			("up" . eww-up-url)))))
     (and href
 	 where
@@ -347,12 +363,15 @@ or <a> tag."
 
 (defun eww-top-url ()
   "Go to the page marked `top'.
-A page is marked `top' if rel=\"start\" appears in a <link>
-or <a> tag."
+A page is marked `top' if rel=\"start\", rel=\"home\", or rel=\"contents\"
+appears in a <link> or <a> tag."
   (interactive)
-  (if eww-top-url
-      (eww-browse-url (shr-expand-url eww-top-url eww-current-url))
-    (error "No `top' on this page")))
+  (let ((best-url (or eww-start-url
+		      eww-contents-url
+		      eww-home-url)))
+    (if best-url
+	(eww-browse-url (shr-expand-url best-url eww-current-url))
+      (error "No `top' for this page"))))
 
 (defun eww-reload ()
   "Reload the current page."
