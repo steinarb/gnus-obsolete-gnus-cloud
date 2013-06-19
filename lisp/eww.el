@@ -178,6 +178,7 @@
     (setq eww-current-url url)
     (eww-update-header-line-format)
     (let ((inhibit-read-only t)
+	  (after-change-functions nil)
 	  (shr-width nil)
 	  (shr-external-rendering-functions
 	   '((title . eww-tag-title)
@@ -292,7 +293,9 @@
 \\{eww-mode-map}"
   (set (make-local-variable 'eww-current-url) 'author)
   (set (make-local-variable 'browse-url-browser-function) 'eww-browse-url)
-  (setq buffer-read-only t))
+  (set (make-local-variable 'after-change-functions) 'eww-process-text-input)
+  ;;(setq buffer-read-only t)
+  )
 
 (defun eww-browse-url (url &optional new-window)
   (when (and (equal major-mode 'eww-mode)
@@ -374,13 +377,12 @@ or <a> tag."
 
 (defvar eww-text-map
   (let ((map (make-keymap)))
-    (suppress-keymap map)
     (set-keymap-parent map text-mode-map)
-    (substitute-key-definition
-     'undefined 'eww-self-insert map)
     (define-key map "\r" 'eww-submit)
     (define-key map [(control a)] 'eww-beginning-of-text)
     (define-key map [(control e)] 'eww-end-of-text)
+    (define-key map [tab] 'shr-next-link)
+    (define-key map [backtab] 'shr-previous-link)
     map))
 
 (defun eww-beginning-of-text ()
@@ -392,13 +394,18 @@ or <a> tag."
 (defun eww-end-of-text ()
   "Move to the end of the text in the input field."
   (interactive)
-  (goto-char (1- (next-single-property-change
-		  (point) 'eww-form nil (point-max))))
+  (goto-char (eww-end-of-field))
   (let ((start (previous-single-property-change
 		(point) 'eww-form nil (point-min))))
     (while (and (equal (following-char) ? )
 		(> (point) start))
-      (forward-char -1))))
+      (forward-char -1))
+    (when (> (point) start)
+      (forward-char 1))))
+
+(defun eww-end-of-field ()
+  (1- (next-single-property-change
+       (point) 'eww-form nil (point-max))))
 
 (defun eww-self-insert ()
   "Insert the character you type."
@@ -475,11 +482,35 @@ or <a> tag."
       (insert (make-string (- width (length value)) ? )))
     (put-text-property start (point) 'face 'eww-form-text)
     (put-text-property start (point) 'local-map eww-text-map)
+    (put-text-property start (point) 'inhibit-read-only t)
     (put-text-property start (point) 'eww-form
 		       (list :eww-form eww-form
 			     :value value
 			     :type type
 			     :name (cdr (assq :name cont))))))
+
+(defun eww-process-text-input (beg end length)
+  (let ((form (get-text-property end 'eww-form))
+	(properties (text-properties-at end)))
+    (when form
+      (cond
+       ((zerop length)
+	;; Delete some text
+	(save-excursion
+	  (goto-char (eww-end-of-field))
+	  (let ((new (- end beg)))
+	    (while (and (> new 0)
+			(eql (following-char) ? ))
+	      (delete-region (point) (1+ (point)))
+	      (setq new (1- new))))
+	  (set-text-properties beg end properties)))
+       ((> length 0)
+	;; Add padding.
+	(save-excursion
+	  (goto-char (1+ (eww-end-of-field)))
+	  (let ((start (point)))
+	    (insert (make-string length ? ))
+	    (set-text-properties start (point) properties))))))))
 
 (defun eww-form-textarea (cont)
   (let ((start (point))

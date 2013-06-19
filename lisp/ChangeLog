@@ -4,6 +4,8 @@
 	relying in widget.el.  Using widget.el leads to too many
 	user interface inconsistencies.
 	(eww-self-insert): Implement entering commands in text fields.
+	(eww-process-text-input): New function to make text input field editing
+	work.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.
