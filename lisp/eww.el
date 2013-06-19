@@ -385,6 +385,19 @@ or <a> tag."
     (define-key map [backtab] 'shr-previous-link)
     map))
 
+(defvar eww-textarea-map
+  (let ((map (make-keymap)))
+    (set-keymap-parent map text-mode-map)
+    (define-key map "\r" 'forward-line)
+    (define-key map [tab] 'shr-next-link)
+    (define-key map [backtab] 'shr-previous-link)
+    map))
+
+(defvar eww-select-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\r" 'eww-change-select)
+    map))
+
 (defun eww-beginning-of-text ()
   "Move to the start of the input field."
   (interactive)
@@ -415,16 +428,6 @@ or <a> tag."
 (defun eww-end-of-field ()
   (1- (next-single-property-change
        (point) 'eww-form nil (point-max))))
-
-(defvar eww-textarea-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map text-mode-map)
-    map))
-
-(defvar eww-select-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "\r" 'eww-change-select)
-    map))
 
 (defun eww-tag-form (cont)
   (let ((eww-form
@@ -494,15 +497,19 @@ or <a> tag."
     (insert " ")))
 
 (defun eww-process-text-input (beg end length)
-  (let ((form (get-text-property end 'eww-form))
-	(properties (text-properties-at end)))
+  (let* ((form (get-text-property end 'eww-form))
+	(properties (text-properties-at end))
+	(type (plist-get form :type)))
     (when (and form
-	       (member (plist-get form :type) '("text" "password" "textarea")))
+	       (member type '("text" "password" "textarea")))
       (cond
        ((zerop length)
 	;; Delete some text
 	(save-excursion
-	  (goto-char (eww-end-of-field))
+	  (goto-char
+	   (if (equal type "textarea")
+	       (1- (line-end-position))
+	     (eww-end-of-field)))
 	  (let ((new (- end beg)))
 	    (while (and (> new 0)
 			(eql (following-char) ? ))
@@ -512,7 +519,10 @@ or <a> tag."
        ((> length 0)
 	;; Add padding.
 	(save-excursion
-	  (goto-char (1+ (eww-end-of-field)))
+	  (goto-char
+	   (if (equal type "textarea")
+	       (1- (line-end-position))
+	     (eww-end-of-field)))
 	  (let ((start (point)))
 	    (insert (make-string length ? ))
 	    (set-text-properties start (point) properties)))))
@@ -520,7 +530,7 @@ or <a> tag."
 			      (eww-beginning-of-field)
 			      (eww-end-of-field))))))
 
-(defun eww-form-textarea (cont)
+(defun eww-tag-textarea (cont)
   (let ((start (point))
 	(value (or (cdr (assq :value cont)) ""))
 	(lines (string-to-number
@@ -536,7 +546,7 @@ or <a> tag."
     (when (< (count-lines start (point)) lines)
       (dotimes (i (- lines (count-lines start (point))))
 	(insert "\n")))
-    (setq end (point))
+    (setq end (point-marker))
     (goto-char start)
     (while (< (point) end)
       (end-of-line)
@@ -546,16 +556,18 @@ or <a> tag."
       (add-face-text-property (line-beginning-position)
 			      (point) 'eww-form-text)
       (put-text-property (line-beginning-position) (point)
-			 'keymap eww-text-map)))
-  (put-text-property start (point) 'eww-form
-		     (list :eww-form eww-form
-			   :value value
-			   :type (downcase (cdr (assq :type cont)))
-			   :name (cdr (assq :name cont)))))
+			 'local-map eww-textarea-map)
+      (forward-line 1))
+    (put-text-property start (point) 'eww-form
+		       (list :eww-form eww-form
+			     :value value
+			     :type "textarea"
+			     :name (cdr (assq :name cont))))))
 
 (defun eww-tag-input (cont)
   (let ((type (downcase (or (cdr (assq :type cont))
-			     "text"))))
+			     "text")))
+	(start (point)))
     (cond
      ((or (equal type "checkbox")
 	  (equal type "radio"))
@@ -578,10 +590,9 @@ or <a> tag."
 				 :name name
 				 :value (cdr (assq :value cont))))))))
      (t
-      (eww-form-text cont)))))
-
-(defun eww-tag-textarea (cont)
-  (eww-form-textarea cont))
+      (eww-form-text cont)))
+    (unless (= start (point))
+      (put-text-property start (1+ start) 'help-echo "Input field"))))
 
 (defun eww-tag-select (cont)
   (shr-ensure-paragraph)
@@ -643,17 +654,16 @@ or <a> tag."
 	  (completing-read "Change value: " options nil 'require-match))
 	 (inhibit-read-only t))
     (plist-put input :value (cdr (assoc-string display options t)))
-    (goto-chat
-     (eww-update-field
-      (concat display
-	      (make-string (- (- end start) (length display)) ? ))))))
+    (goto-char
+     (eww-update-field display))))
 
 (defun eww-update-field (string)
   (let ((properties (text-properties-at (point)))
 	(start (eww-beginning-of-field))
 	(end (1+ (eww-end-of-field))))
     (delete-region start end)
-    (insert string)
+    (insert string
+	    (make-string (- (- end start) (length string)) ? ))
     (set-text-properties start end properties)
     start))
 
@@ -700,11 +710,20 @@ or <a> tag."
     (nreverse inputs)))
 
 (defun eww-input-value (input)
-  (let ((type (plist-get input :type)))
-    (let ((value (plist-get input :value)))
-      (if (string-match " +" value)
+  (let ((type (plist-get input :type))
+	(value (plist-get input :value)))
+    (cond
+     ((equal type "textarea")
+      (with-temp-buffer
+	(insert value)
+	(goto-char (point-min))
+	(while (re-search-forward "^ +\n\\| +$" nil t)
+	  (replace-match "" t t))
+	(buffer-string)))
+     (t
+      (if (string-match " +\\'" value)
 	  (substring value 0 (match-beginning 0))
-	value))))
+	value)))))
 
 (defun eww-submit ()
   "Submit the current form."

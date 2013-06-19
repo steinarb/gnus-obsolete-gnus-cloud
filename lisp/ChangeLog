@@ -10,6 +10,8 @@
 	(eww-select-display): Display the correct selected item.
 	(eww-change-select): Implement changing the select value.
 	(eww-toggle-checkbox): Implement radio/checkboxes.
+	(eww-update-field): Fix compilation error.
+	(eww-tag-textarea): Implement <textarea>.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.
