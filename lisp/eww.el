@@ -517,13 +517,13 @@ appears in a <link> or <a> tag."
 
 (defun eww-process-text-input (beg end length)
   (let* ((form (get-text-property end 'eww-form))
-	(properties (text-properties-at end))
-	(type (plist-get form :type)))
+	 (properties (text-properties-at end))
+	 (type (plist-get form :type)))
     (when (and form
 	       (member type '("text" "password" "textarea")))
       (cond
        ((zerop length)
-	;; Delete some text
+	;; Delete some space at the end.
 	(save-excursion
 	  (goto-char
 	   (if (equal type "textarea")
@@ -545,9 +545,17 @@ appears in a <link> or <a> tag."
 	  (let ((start (point)))
 	    (insert (make-string length ? ))
 	    (set-text-properties start (point) properties)))))
-      (plist-put form :value (buffer-substring-no-properties
-			      (eww-beginning-of-field)
-			      (eww-end-of-field))))))
+      (let ((value (buffer-substring-no-properties
+		    (eww-beginning-of-field)
+		    (eww-end-of-field))))
+	(when (string-match " +\\'" value)
+	  (setq value (substring value 0 (match-beginning 0))))
+	(plist-put form :value value)
+	(when (equal type "password")
+	  ;; Display passwords as asterisks.
+	  (let ((start (eww-beginning-of-field)))
+	    (put-text-property start (+ start (length value))
+			       'display (make-string (length value) ?*))))))))
 
 (defun eww-tag-textarea (cont)
   (let ((start (point))

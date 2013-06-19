@@ -1,5 +1,7 @@
 2013-06-19  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* eww.el (eww-process-text-input): Display passwords as asterisks.
+
 	* shr.el (shr-make-table-1): Protect against invalid column-spans.
 
 2013-06-19  Tom Tromey  <tromey@redhat.com>
