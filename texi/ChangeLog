@@ -1,6 +1,6 @@
 2013-06-13  Albert Krewinkel  <tarleb@moltkeplatz.de>
 
-	* sieve.texi: (Managing Sieve): Fix port in example, fix documentation
+	* sieve.texi (Managing Sieve): Fix port in example, fix documentation
 	for keys q and Q.
 	(Standards): Reference RFC5804 as the defining document of the
 	managesieve protocol.
