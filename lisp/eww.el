@@ -270,8 +270,10 @@
   (set (make-local-variable 'browse-url-browser-function) 'eww-browse-url))
 
 (defun eww-browse-url (url &optional new-window)
-  (push (list eww-current-url (point))
-	eww-history)
+  (when (and (equal major-mode 'eww-mode)
+	     eww-current-url)
+    (push (list eww-current-url (point))
+	  eww-history))
   (eww url))
 
 (defun eww-quit ()

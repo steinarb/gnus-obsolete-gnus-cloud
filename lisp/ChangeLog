@@ -1,5 +1,8 @@
 2013-06-19  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* eww.el (eww-browse-url): Don't push stuff onto history if there's
+	nothing to push.
+
 	* shr.el (shr-map): Bind [down-mouse-1] to browse URLs.
 
 2013-06-18  Teodor Zlatanov  <tzz@lifelogs.com>
