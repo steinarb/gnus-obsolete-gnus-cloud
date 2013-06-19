@@ -467,6 +467,7 @@ or <a> tag."
 		       (list :eww-form eww-form
 			     :value (cdr (assq :value cont))
 			     :type (downcase (cdr (assq :type cont)))
+			     :checked (cdr (assq :checked cont))
 			     :name (cdr (assq :name cont))))
     (put-text-property start (point) 'keymap eww-checkbox-map)
     (insert " ")))
@@ -489,7 +490,8 @@ or <a> tag."
 		       (list :eww-form eww-form
 			     :value value
 			     :type type
-			     :name (cdr (assq :name cont))))))
+			     :name (cdr (assq :name cont))))
+    (insert " ")))
 
 (defun eww-process-text-input (beg end length)
   (let ((form (get-text-property end 'eww-form))
@@ -627,8 +629,6 @@ or <a> tag."
   "Change the value of the select drop-down menu under point."
   (interactive)
   (let* ((input (get-text-property (point) 'eww-form))
-	 (start (eww-beginning-of-field))
-	 (end (1+ (eww-end-of-field)))
 	 (properties (text-properties-at (point)))
 	 (completion-ignore-case t)
 	 (options
@@ -643,25 +643,47 @@ or <a> tag."
 	  (completing-read "Change value: " options nil 'require-match))
 	 (inhibit-read-only t))
     (plist-put input :value (cdr (assoc-string display options t)))
-    (delete-region start end)
-    (insert display (make-string (- (- end start) (length display)) ? ))
-    (set-text-properties start end properties)
-    (goto-char start)))
+    (goto-chat
+     (eww-update-field
+      (concat display
+	      (make-string (- (- end start) (length display)) ? ))))))
 
-(defun eww-click-radio (widget &rest ignore)
-  (let ((form (plist-get (cdr widget) :eww-form))
-	(name (plist-get (cdr widget) :name)))
-    (when (equal (plist-get (cdr widget) :type) "radio")
-      (if (widget-value widget)
-	  ;; Switch all the other radio buttons off.
-	  (dolist (overlay (overlays-in (point-min) (point-max)))
-	    (let ((field (plist-get (overlay-properties overlay) 'button)))
-	      (when (and (eq (plist-get (cdr field) :eww-form) form)
-			 (equal name (plist-get (cdr field) :name)))
-		(unless (eq field widget)
-		  (widget-value-set field nil)))))
-	(widget-value-set widget t)))
-    (eww-fix-widget-keymap)))
+(defun eww-update-field (string)
+  (let ((properties (text-properties-at (point)))
+	(start (eww-beginning-of-field))
+	(end (1+ (eww-end-of-field))))
+    (delete-region start end)
+    (insert string)
+    (set-text-properties start end properties)
+    start))
+
+(defun eww-toggle-checkbox ()
+  "Toggle the value of the checkbox under point."
+  (interactive)
+  (let* ((input (get-text-property (point) 'eww-form))
+	 (type (plist-get input :type)))
+    (if (equal type "checkbox")
+	(goto-char
+	 (1+
+	  (if (plist-get input :checked)
+	      (progn
+		(plist-put input :checked nil)
+		(eww-update-field "[ ]"))
+	    (plist-put input :checked t)
+	    (eww-update-field "[X]"))))
+      ;; Radio button.  Switch all other buttons off.
+      (let ((name (plist-get input :name)))
+	(save-excursion
+	  (dolist (elem (eww-inputs (plist-get input :eww-form)))
+	    (when (equal (plist-get (cdr elem) :name) name)
+	      (goto-char (car elem))
+	      (if (not (eq (cdr elem) input))
+		  (progn
+		    (plist-put input :checked nil)
+		    (eww-update-field "[ ]"))
+		(plist-put input :checked t)
+		(eww-update-field "[X]")))))
+	(forward-char 1)))))
 
 (defun eww-inputs (form)
   (let ((start (point-min))
@@ -679,12 +701,10 @@ or <a> tag."
 
 (defun eww-input-value (input)
   (let ((type (plist-get input :type)))
-    (cond
-     (t
-      (let ((value (plist-get input :value)))
-	(if (string-match " +" value)
-	    (substring value 0 (match-beginning 0))
-	  value))))))
+    (let ((value (plist-get input :value)))
+      (if (string-match " +" value)
+	  (substring value 0 (match-beginning 0))
+	value))))
 
 (defun eww-submit ()
   "Submit the current form."
@@ -700,7 +720,7 @@ or <a> tag."
 	     (name (plist-get input :name)))
 	(when name
 	  (cond
-	   ((equal (plist-get input :type) "checkbox")
+	   ((member (plist-get input :type) '("checkbox" "radio"))
 	    (when (plist-get input :checked)
 	      (push (cons name (plist-get input :value))
 		    values)))
