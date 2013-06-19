@@ -6,7 +6,7 @@
 
 2013-06-19  Tom Tromey  <tromey@redhat.com>
 
-	* net/eww.el (eww-top-url): Remove.
+	* eww.el (eww-top-url): Remove.
 	(eww-home-url, eww-start-url, eww-contents-url): New defvars.
 	(eww-render): Set new variables.  Don't set eww-top-url.
 	(eww-handle-link): Handle "prev", "home", and "contents".
