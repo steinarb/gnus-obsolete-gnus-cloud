@@ -6,6 +6,7 @@
 	(eww-self-insert): Implement entering commands in text fields.
 	(eww-process-text-input): New function to make text input field editing
 	work.
+	(eww-submit): Rewrite to use the new-style form methods.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.

@@ -388,32 +388,26 @@ or <a> tag."
 (defun eww-beginning-of-text ()
   "Move to the start of the input field."
   (interactive)
-  (goto-char (previous-single-property-change
-	      (point) 'eww-form nil (point-min))))
+  (goto-char (eww-beginning-of-field)))
 
 (defun eww-end-of-text ()
   "Move to the end of the text in the input field."
   (interactive)
   (goto-char (eww-end-of-field))
-  (let ((start (previous-single-property-change
-		(point) 'eww-form nil (point-min))))
+  (let ((start (eww-beginning-of-field)))
     (while (and (equal (following-char) ? )
 		(> (point) start))
       (forward-char -1))
     (when (> (point) start)
       (forward-char 1))))
 
+(defun eww-beginning-of-field ()
+  (previous-single-property-change
+   (point) 'eww-form nil (point-min)))
+
 (defun eww-end-of-field ()
   (1- (next-single-property-change
        (point) 'eww-form nil (point-max))))
-
-(defun eww-self-insert ()
-  "Insert the character you type."
-  (interactive)
-  (let ((inhibit-read-only t)
-	(end (next-single-property-change
-	      (point) 'eww-form nil (point-max))))
-    (insert last-command-event)))
 
 (defvar eww-textarea-map
   (let ((map (make-sparse-keymap)))
@@ -510,7 +504,10 @@ or <a> tag."
 	  (goto-char (1+ (eww-end-of-field)))
 	  (let ((start (point)))
 	    (insert (make-string length ? ))
-	    (set-text-properties start (point) properties))))))))
+	    (set-text-properties start (point) properties)))))
+      (plist-put form :value (buffer-substring-no-properties
+			      (eww-beginning-of-field)
+			      (eww-end-of-field))))))
 
 (defun eww-form-textarea (cont)
   (let ((start (point))
@@ -555,9 +552,20 @@ or <a> tag."
      ((equal type "submit")
       (eww-form-submit cont))
      ((equal type "hidden")
-      (nconc eww-form (list 'hidden
-			    :name (cdr (assq :name cont))
-			    :value (cdr (assq :value cont)))))
+      (let ((form eww-form)
+	    (name (cdr (assq :name cont))))
+	;; Don't add <input type=hidden> elements repeatedly.
+	(while (and form
+		    (or (not (consp (car form)))
+			(not (eq (caar form) 'hidden))
+			(not (equal (plist-get (cdr (car form)) :name)
+				    name))))
+	  (setq form (cdr form)))
+	(unless form
+	  (nconc eww-form (list
+			   (list 'hidden
+				 :name name
+				 :value (cdr (assq :value cont))))))))
      (t
       (eww-form-text cont)))))
 
@@ -610,57 +618,68 @@ or <a> tag."
 	(widget-value-set widget t)))
     (eww-fix-widget-keymap)))
 
-(defun eww-submit (widget &rest ignore)
-  (let ((form (plist-get (cdr widget) :eww-form))
-	values)
-    (dolist (overlay (sort (overlays-in (point-min) (point-max))
-			   (lambda (o1 o2)
-			     (< (overlay-start o1) (overlay-start o2)))))
-      (let ((field (or (plist-get (overlay-properties overlay) 'field)
-		       (plist-get (overlay-properties overlay) 'button))))
-	(when (eq (plist-get (cdr field) :eww-form) form)
-	  (let ((name (plist-get (cdr field) :name)))
-	    (when name
-	      (cond
-	       ((eq (car field) 'checkbox)
-		(when (widget-value field)
-		  (push (cons name (plist-get (cdr field) :checkbox-value))
-			values)))
-	       ((eq (car field) 'push-button)
-		;; We want the values from buttons if we hit a button,
-		;; if it's the first button in the DOM after the field
-		;; hit ENTER on.
-		(when (and (eq (car widget) 'push-button)
-			   (eq widget field))
-		  (push (cons name (widget-value field))
-			values)))
-	       (t
-		(push (cons name (widget-value field))
-		      values))))))))
+(defun eww-inputs (form)
+  (let ((start (point-min))
+	(inputs nil))
+    (while (and start
+		(< start (point-max)))
+      (when (or (get-text-property start 'eww-form)
+		(setq start (next-single-property-change start 'eww-form)))
+	(when (eq (plist-get (get-text-property start 'eww-form) :eww-form)
+		  form)
+	  (push (cons start (get-text-property start 'eww-form))
+		inputs))
+	(setq start (next-single-property-change start 'eww-form))))
+    (nreverse inputs)))
+
+(defun eww-input-value (input)
+  (let ((type (plist-get input :type)))
+    (cond
+     ((equal type "select")
+      )
+     (t
+      (let ((value (plist-get input :value)))
+	(if (string-match " +" value)
+	    (substring value 0 (match-beginning 0))
+	  value))))))
+
+(defun eww-submit ()
+  "Submit the current form."
+  (interactive)
+  (let* ((this-input (get-text-property (point) 'eww-form))
+	 (form (plist-get this-input :eww-form))
+	 values next-submit)
+    (dolist (elem (sort (eww-inputs form)
+			 (lambda (o1 o2)
+			   (< (car o1) (car o2)))))
+      (let* ((input (cdr elem))
+	     (input-start (car elem))
+	     (name (plist-get input :name)))
+	(when name
+	  (cond
+	   ((equal (plist-get input :type) "checkbox")
+	    (when (plist-get input :checked)
+	      (push (cons name (plist-get input :value))
+		    values)))
+	   ((equal (plist-get input :type) "submit")
+	    ;; We want the values from buttons if we hit a button if
+	    ;; we hit enter on it, or if it's the first button after
+	    ;; the field we did hit return on.
+	    (when (or (eq input this-input)
+		      (and (not (eq input this-input))
+			   (null next-submit)
+			   (> input-start (point))))
+	      (push (cons name (plist-get input :value))
+		    values)))
+	   (t
+	    (push (cons name (eww-input-value input))
+		  values))))))
     (dolist (elem form)
       (when (and (consp elem)
 		 (eq (car elem) 'hidden))
 	(push (cons (plist-get (cdr elem) :name)
 		    (plist-get (cdr elem) :value))
 	      values)))
-    ;; If we hit ENTER in a non-button field, include the value of the
-    ;; first submit button after it.
-    (unless (eq (car widget) 'push-button)
-      (let ((rest form)
-	    (name (plist-get (cdr widget) :name)))
-	(when rest
-	  (while (and rest
-		      (or (not (consp (car rest)))
-			  (not (equal name (plist-get (cdar rest) :name)))))
-	    (pop rest)))
-	(while rest
-	  (let ((elem (pop rest)))
-	    (when (and (consp (car rest))
-		       (eq (car elem) 'push-button))
-	      (push (cons (plist-get (cdr elem) :name)
-			  (plist-get (cdr elem) :value))
-		    values)
-	      (setq rest nil))))))
     (if (and (stringp (cdr (assq :method form)))
 	     (equal (downcase (cdr (assq :method form))) "post"))
 	(let ((url-request-method "POST")
