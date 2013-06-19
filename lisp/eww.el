@@ -43,11 +43,33 @@
   :group 'eww
   :type 'string)
 
-(defface eww-button
+(defface eww-form-submit
   '((((type x w32 ns) (class color))	; Like default mode line
      :box (:line-width 2 :style released-button)
      :background "lightgrey" :foreground "black"))
   "Face for eww buffer buttons."
+  :version "24.4"
+  :group 'eww)
+
+(defface eww-form-checkbox
+  '((((type x w32 ns) (class color))	; Like default mode line
+     :box (:line-width 2 :style released-button)
+     :background "lightgrey" :foreground "black"))
+  "Face for eww buffer buttons."
+  :version "24.4"
+  :group 'eww)
+
+(defface eww-form-select
+  '((((type x w32 ns) (class color))	; Like default mode line
+     :box (:line-width 2 :style released-button)
+     :background "lightgrey" :foreground "black"))
+  "Face for eww buffer buttons."
+  :version "24.4"
+  :group 'eww)
+
+(defface eww-form-text
+  '((t (:background "red" :foreground "white")))
+  "Face for eww text inputs."
   :version "24.4"
   :group 'eww)
 
@@ -164,8 +186,7 @@
 	     (select . eww-tag-select)
 	     (link . eww-tag-link)
 	     (a . eww-tag-a))))
-      (shr-insert-document document)
-      (eww-convert-widgets))
+      (shr-insert-document document))
     (goto-char (point-min))))
 
 (defun eww-handle-link (cont)
@@ -240,7 +261,6 @@
 (defun eww-setup-buffer ()
   (pop-to-buffer (get-buffer-create "*eww*"))
   (remove-overlays)
-  (setq widget-field-list nil)
   (let ((inhibit-read-only t))
     (erase-buffer))
   (eww-mode))
@@ -267,7 +287,8 @@
 
 \\{eww-mode-map}"
   (set (make-local-variable 'eww-current-url) 'author)
-  (set (make-local-variable 'browse-url-browser-function) 'eww-browse-url))
+  (set (make-local-variable 'browse-url-browser-function) 'eww-browse-url)
+  (setq buffer-read-only t))
 
 (defun eww-browse-url (url &optional new-window)
   (when (and (equal major-mode 'eww-mode)
@@ -336,6 +357,35 @@ or <a> tag."
 
 (defvar eww-form nil)
 
+(defvar eww-submit-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\r" 'eww-submit)
+    map))
+
+(defvar eww-checkbox-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [space] 'eww-toggle-checkbox)
+    (define-key map "\r" 'eww-toggle-checkbox)
+    map))
+
+(defvar eww-text-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map text-mode-map)
+    (define-key map "\r" 'eww-submit)
+    (define-key map [(control a)] 'eww-beginning-of-text)
+    (define-key map [(control e)] 'eww-end-of-text)
+    map))
+
+(defvar eww-textarea-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map text-mode-map)
+    map))
+
+(defvar eww-select-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\r" 'eww-change-select)
+    map))
+
 (defun eww-tag-form (cont)
   (let ((eww-form
 	 (list (assq :method cont)
@@ -350,92 +400,136 @@ or <a> tag."
       (put-text-property start (1+ start)
 			 'eww-form eww-form))))
 
+(defun eww-form-submit (cont)
+  (let ((start (point))
+	(value (cdr (assq :value cont))))
+    (setq value
+	  (if (zerop (length value))
+	      "Submit"
+	    value))
+    (insert value)
+    (add-face-text-property start (point) 'eww-form-submit)
+    (put-text-property start (point) 'eww-form
+		       (list :eww-form eww-form
+			     :value value
+			     :name (cdr (assq :name cont))))
+    (put-text-property start (point) 'keymap eww-submit-map)
+    (insert " ")))
+
+(defun eww-form-checkbox (cont)
+  (let ((start (point)))
+    (if (cdr (assq :checked cont))
+	(insert "[X]")
+      (insert "[ ]"))
+    (add-face-text-property start (point) 'eww-form-checkbox)
+    (put-text-property start (point) 'eww-form
+		       (list :eww-form eww-form
+			     :value (cdr (assq :value cont))
+			     :type (downcase (cdr (assq :type cont)))
+			     :name (cdr (assq :name cont))))
+    (put-text-property start (point) 'keymap eww-checkbox-map)
+    (insert " ")))
+
+(defun eww-form-text (cont)
+  (let ((start (point))
+	(type (downcase (or (cdr (assq :type cont))
+			    "text")))
+	(value (or (cdr (assq :value cont)) ""))
+	(width (string-to-number
+		(or (cdr (assq :size cont))
+		    "40"))))
+    (insert value)
+    (when (< (length value) width)
+      (insert (make-string (- width (length value)) ? )))
+    (put-text-property start (point) 'face 'eww-form-text)
+    (put-text-property start (point) 'keymap eww-text-map)
+    (put-text-property start (point) 'eww-form
+		       (list :eww-form eww-form
+			     :value value
+			     :type type
+			     :name (cdr (assq :name cont))))))
+
+(defun eww-form-textarea (cont)
+  (let ((start (point))
+	(value (or (cdr (assq :value cont)) ""))
+	(lines (string-to-number
+		(or (cdr (assq :rows cont))
+		    "10")))
+	(width (string-to-number
+		(or (cdr (assq :cols cont))
+		    "10")))
+	end)
+    (shr-ensure-newline)
+    (insert value)
+    (shr-ensure-newline)
+    (when (< (count-lines start (point)) lines)
+      (dotimes (i (- lines (count-lines start (point))))
+	(insert "\n")))
+    (setq end (point))
+    (goto-char start)
+    (while (< (point) end)
+      (end-of-line)
+      (let ((pad (- width (- (point) (line-beginning-position)))))
+	(when (> pad 0)
+	  (insert (make-string pad ? ))))
+      (add-face-text-property (line-beginning-position)
+			      (point) 'eww-form-text)
+      (put-text-property (line-beginning-position) (point)
+			 'keymap eww-text-map)))
+  (put-text-property start (point) 'eww-form
+		     (list :eww-form eww-form
+			   :value value
+			   :type (downcase (cdr (assq :type cont)))
+			   :name (cdr (assq :name cont)))))
+
 (defun eww-tag-input (cont)
-  (let* ((start (point))
-	 (type (downcase (or (cdr (assq :type cont))
-			     "text")))
-	 (value (cdr (assq :value cont)))
-	 (widget
-	  (cond
-	   ((or (equal type "submit")
-		(equal type "image"))
-	    (list 'push-button
-		  :notify 'eww-submit
-		  :name (cdr (assq :name cont))
-		  :value (if (zerop (length value))
-			     "Submit"
-			   value)
-		  :eww-form eww-form
-		  (or (if (zerop (length value))
-			  "Submit"
-			value))))
-	   ((or (equal type "radio")
-		(equal type "checkbox"))
-	    (list 'checkbox
-		  :notify 'eww-click-radio
-		  :name (cdr (assq :name cont))
-		  :checkbox-value value
-		  :checkbox-type type
-		  :eww-form eww-form
-		  (cdr (assq :checked cont))))
-	   ((equal type "hidden")
-	    (list 'hidden
-		  :name (cdr (assq :name cont))
-		  :value value))
-	   (t
-	    (list 'editable-field
-		  :size (string-to-number
-			 (or (cdr (assq :size cont))
-			     "40"))
-		  :value (or value "")
-		  :secret (and (equal type "password") ?*)
-		  :action 'eww-submit
-		  :name (cdr (assq :name cont))
-		  :eww-form eww-form)))))
-    (nconc eww-form (list widget))
-    (unless (eq (car widget) 'hidden)
-      (apply 'widget-create widget)
-      (put-text-property start (point) 'eww-widget widget)
-      (insert " "))))
+  (let ((type (downcase (or (cdr (assq :type cont))
+			     "text"))))
+    (cond
+     ((or (equal type "checkbox")
+	  (equal type "radio"))
+      (eww-form-checkbox cont))
+     ((equal type "submit")
+      (eww-form-submit cont))
+     ((equal type "hidden")
+      (nconc eww-form (list 'hidden
+			    :name (cdr (assq :name cont))
+			    :value (cdr (assq :value cont)))))
+     (t
+      (eww-form-text cont)))))
 
 (defun eww-tag-textarea (cont)
-  (let* ((start (point))
-	 (widget
-	  (list 'text
-		:size (string-to-number
-		       (or (cdr (assq :cols cont))
-			   "40"))
-		:value (or (cdr (assq 'text cont)) "")
-		:action 'eww-submit
-		:name (cdr (assq :name cont))
-		:eww-form eww-form)))
-    (nconc eww-form (list widget))
-    (apply 'widget-create widget)
-    (put-text-property start (point) 'eww-widget widget)))
+  (eww-form-textarea cont))
 
 (defun eww-tag-select (cont)
   (shr-ensure-paragraph)
-  (let ((menu (list 'menu-choice
-		    :name (cdr (assq :name cont))
+  (let ((menu (list :name (cdr (assq :name cont))
 		    :eww-form eww-form))
 	(options nil)
-	(start (point)))
+	(start (point))
+	(max 0))
     (dolist (elem cont)
       (when (eq (car elem) 'option)
 	(when (cdr (assq :selected (cdr elem)))
 	  (nconc menu (list :value
 			    (cdr (assq :value (cdr elem))))))
+	(let ((display (or (cdr (assq 'text (cdr elem))) "")))
+	  (setq max (max max (length display))))
 	(push (list 'item
 		    :value (cdr (assq :value (cdr elem)))
-		    :tag (cdr (assq 'text (cdr elem))))
+		    :display display)
 	      options)))
     (when options
       ;; If we have no selected values, default to the first value.
-      (unless (plist-get (cdr menu) :value)
+      (unless (plist-get menu :value)
 	(nconc menu (list :value (nth 2 (car options)))))
       (nconc menu options)
-      (apply 'widget-create menu)
-      (put-text-property start (point) 'eww-widget menu)
+      (let ((selected (eww-element-value menu)))
+	(insert selected
+		(make-string (- max (length selected)) ? )))
+      (put-text-property start (point) 'eww-form menu)
+      (add-face-text-property start (point) 'eww-form-select)
+      (put-text-property start (point) 'keymap eww-select-map)
       (shr-ensure-paragraph))))
 
 (defun eww-click-radio (widget &rest ignore)
@@ -520,41 +614,6 @@ or <a> tag."
 	  eww-current-url)
 	"?"
 	(mm-url-encode-www-form-urlencoded values))))))
-
-(defun eww-convert-widgets ()
-  (let ((start (point-min))
-	widget)
-    ;; Some widgets come from different buffers (rendered for tables),
-    ;; so we need to nix out the list of widgets and recreate them.
-    (setq widget-field-list nil
-	  widget-field-new nil)
-    (while (setq start (if (get-text-property start 'eww-widget)
-			   start
-			 (next-single-property-change start 'eww-widget)))
-      (setq widget (get-text-property start 'eww-widget))
-      (goto-char start)
-      (let ((end (next-single-property-change start 'eww-widget)))
-	(dolist (overlay (overlays-in start end))
-	  (when (or (plist-get (overlay-properties overlay) 'button)
-		    (plist-get (overlay-properties overlay) 'field))
-	    (delete-overlay overlay)))
-	(delete-region start end))
-      (when (and widget
-		 (not (eq (car widget) 'hidden)))
-	(apply 'widget-create widget)
-	(put-text-property start (point) 'help-echo
-			   (if (memq (car widget) '(text editable-field))
-			       "Input field"
-			     "Button"))
-	(when (eq (car widget) 'push-button)
-	  (add-face-text-property start (point) 'eww-button t))))
-    (widget-setup)
-    (eww-fix-widget-keymap)))
-
-(defun eww-fix-widget-keymap ()
-  (dolist (overlay (overlays-in (point-min) (point-max)))
-    (when (plist-get (overlay-properties overlay) 'button)
-      (overlay-put overlay 'local-map widget-keymap))))
 
 (provide 'eww)
 
