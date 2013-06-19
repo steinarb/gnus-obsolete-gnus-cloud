@@ -46,7 +46,7 @@
 (defface eww-form-submit
   '((((type x w32 ns) (class color))	; Like default mode line
      :box (:line-width 2 :style released-button)
-     :background "lightgrey" :foreground "black"))
+     :background "#808080" :foreground "black"))
   "Face for eww buffer buttons."
   :version "24.4"
   :group 'eww)
@@ -68,7 +68,9 @@
   :group 'eww)
 
 (defface eww-form-text
-  '((t (:background "red" :foreground "white")))
+  '((t (:background "#505050"
+		    :foreground "white"
+		    :box (:line-width 1))))
   "Face for eww text inputs."
   :version "24.4"
   :group 'eww)
@@ -239,10 +241,12 @@
       (when new-colors
 	(when fg
 	  (add-face-text-property start end
-				  (list :foreground (cadr new-colors))))
+				  (list :foreground (cadr new-colors))
+				  t))
 	(when bg
 	  (add-face-text-property start end
-				  (list :background (car new-colors))))))))
+				  (list :background (car new-colors))
+				  t))))))
 
 (defun eww-display-raw (charset)
   (let ((data (buffer-substring (point) (point-max))))
@@ -369,12 +373,40 @@ or <a> tag."
     map))
 
 (defvar eww-text-map
-  (let ((map (make-sparse-keymap)))
+  (let ((map (make-keymap)))
+    (suppress-keymap map)
     (set-keymap-parent map text-mode-map)
+    (substitute-key-definition
+     'undefined 'eww-self-insert map)
     (define-key map "\r" 'eww-submit)
     (define-key map [(control a)] 'eww-beginning-of-text)
     (define-key map [(control e)] 'eww-end-of-text)
     map))
+
+(defun eww-beginning-of-text ()
+  "Move to the start of the input field."
+  (interactive)
+  (goto-char (previous-single-property-change
+	      (point) 'eww-form nil (point-min))))
+
+(defun eww-end-of-text ()
+  "Move to the end of the text in the input field."
+  (interactive)
+  (goto-char (1- (next-single-property-change
+		  (point) 'eww-form nil (point-max))))
+  (let ((start (previous-single-property-change
+		(point) 'eww-form nil (point-min))))
+    (while (and (equal (following-char) ? )
+		(> (point) start))
+      (forward-char -1))))
+
+(defun eww-self-insert ()
+  "Insert the character you type."
+  (interactive)
+  (let ((inhibit-read-only t)
+	(end (next-single-property-change
+	      (point) 'eww-form nil (point-max))))
+    (insert last-command-event)))
 
 (defvar eww-textarea-map
   (let ((map (make-sparse-keymap)))
@@ -442,7 +474,7 @@ or <a> tag."
     (when (< (length value) width)
       (insert (make-string (- width (length value)) ? )))
     (put-text-property start (point) 'face 'eww-form-text)
-    (put-text-property start (point) 'keymap eww-text-map)
+    (put-text-property start (point) 'local-map eww-text-map)
     (put-text-property start (point) 'eww-form
 		       (list :eww-form eww-form
 			     :value value

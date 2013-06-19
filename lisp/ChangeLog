@@ -3,6 +3,7 @@
 	* eww.el: Rewrite to implement form elements "by hand" instead of
 	relying in widget.el.  Using widget.el leads to too many
 	user interface inconsistencies.
+	(eww-self-insert): Implement entering commands in text fields.
 
 	* shr.el (shr-urlify): Use `keymap' instead of `local-map' so that we
 	don't shadow mode-specific bindings.
