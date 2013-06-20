@@ -1,3 +1,7 @@
+2013-06-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* configure.in: Work for term-mode running in Emacs.
+
 2011-11-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* etc/gnus/news-server.ast (Setting up the news server name and port
