@@ -1,3 +1,8 @@
+2013-06-23  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* eww.el, shr.el, shr-color.el: Removed from the Gnus repository.  They
+	now live in the lisp/net Emacs 24 repository.
+
 2013-06-21  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* eww.el (eww-update-header-line-format): Quote % characters.

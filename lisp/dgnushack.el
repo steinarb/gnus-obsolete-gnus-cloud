@@ -334,7 +334,7 @@ This means that every warning will be reported as an error."
 		 ;; lpath.el binds it.
 		 (not (eq (symbol-function 'libxml-parse-html-region)
 			  'ignore)))
-      (dolist (file '("color.el" "shr-color.el" "shr.el" "eww.el"))
+      (dolist (file '("color.el"))
 	(setq files (delete file files))))
     (unless (locate-library "epg")
       (setq files (delete "plstore.el" files)))
