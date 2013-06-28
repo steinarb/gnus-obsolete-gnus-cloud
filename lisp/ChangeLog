@@ -1,3 +1,8 @@
+2013-06-28  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-article-extend-url-button): Make it work again with
+	gnus-button-push revised at 2011-01-19.
+
 2013-06-23  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* eww.el, shr.el, shr-color.el: Removed from the Gnus repository.  They
