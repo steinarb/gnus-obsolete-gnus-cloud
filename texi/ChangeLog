@@ -1,7 +1,7 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus.texi (Group Parameters): Mention regexp
-	substitutions(bug#11688).
+	substitutions (bug#11688).
 
 2013-07-06  Nathan Trapuzzano  <nbtrap@nbtrap.com>  (tiny change)
 
