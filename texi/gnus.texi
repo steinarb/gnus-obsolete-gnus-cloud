@@ -3091,6 +3091,12 @@ if address "sender" ["name@@one.org", "else@@two.org"] @{
 @}
 @end example
 
+You can also use regexp expansions in the rules:
+
+@example
+(sieve header :regex "list-id" "<c++std-\\1.accu.org>")
+@end example
+
 See @pxref{Sieve Commands} for commands and variables that might be of
 interest in relation to the sieve parameter.
 
