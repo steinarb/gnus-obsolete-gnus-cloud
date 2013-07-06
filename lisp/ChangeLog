@@ -1,5 +1,8 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* nnir.el (nnir-engines): Note that the group specs are regexps
+	(bug#13238).
+
 	* gnus-msg.el (gnus-copy-article-buffer): If the article buffer has
 	gotten read-only text properties, ensure that those aren't heeded when
 	copying stuff over (bug#13434).
