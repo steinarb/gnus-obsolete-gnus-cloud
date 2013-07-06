@@ -1,5 +1,10 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-art.el (gnus-block-private-groups): Allow `global' methods to
+	display images.
+
+	* gnus.el (gnus-valid-select-methods): Mark nnrss as global.
+
 	* message.el (message-cancel-news): According to
 	<mailman.216.1372942181.12400.help-gnu-emacs@gnu.org>, "cancel" is
 	preferred over "cmsg cancel" in the Subject.

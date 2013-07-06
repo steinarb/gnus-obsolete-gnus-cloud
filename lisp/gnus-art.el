@@ -6948,7 +6948,8 @@ If given a prefix, show the hidden text instead."
 	  (set-buffer buf))))))
 
 (defun gnus-block-private-groups (group)
-  (if (gnus-news-group-p group)
+  (if (or (gnus-news-group-p group)
+	  (gnus-member-of-valid 'global group))
       ;; Block nothing in news groups.
       nil
     ;; Block everything anywhere else.
