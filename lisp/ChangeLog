@@ -1,5 +1,9 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-msg.el (gnus-copy-article-buffer): If the article buffer has
+	gotten read-only text properties, ensure that those aren't heeded when
+	copying stuff over (bug#13434).
+
 	* mm-view.el (mm-inline-text-html): Don't bug out on multipart messages
 	(bug#13762).
 
