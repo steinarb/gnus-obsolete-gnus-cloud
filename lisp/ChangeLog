@@ -1,5 +1,9 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* message.el (message-cancel-news): According to
+	<mailman.216.1372942181.12400.help-gnu-emacs@gnu.org>, "cancel" is
+	preferred over "cmsg cancel" in the Subject.
+
 	* nnir.el (nnir-engines): Note that the group specs are regexps
 	(bug#13238).
 
