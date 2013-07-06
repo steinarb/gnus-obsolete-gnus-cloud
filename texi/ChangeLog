@@ -1,3 +1,7 @@
+2013-07-06  Nathan Trapuzzano  <nbtrap@nbtrap.com>  (tiny change)
+
+	* gnus.texi (Generic Marking Commands): Fix grammar (bug#13368).
+
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus.texi (Emacsen): Fix version.

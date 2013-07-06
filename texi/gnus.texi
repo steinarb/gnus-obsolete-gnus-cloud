@@ -6380,10 +6380,10 @@ The default is @code{t}.
 @node Generic Marking Commands
 @subsection Generic Marking Commands
 
-Some people would like the command that ticks an article (@kbd{!}) go to
-the next article.  Others would like it to go to the next unread
-article.  Yet others would like it to stay on the current article.  And
-even though I haven't heard of anybody wanting it to go to the
+Some people would like the command that ticks an article (@kbd{!}) to
+go to the next article.  Others would like it to go to the next unread
+article.  Yet others would like it to stay on the current article.
+And even though I haven't heard of anybody wanting it to go to the
 previous (unread) article, I'm sure there are people that want that as
 well.
 
