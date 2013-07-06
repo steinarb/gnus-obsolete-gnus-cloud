@@ -1,5 +1,7 @@
 2013-07-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus.texi (Emacsen): Fix version.
+
 	* gnus-faq.texi (FAQ 1-6): Mention the correct Emacs version.
 
 2013-07-06  Glenn Morris  <rgm@gnu.org>

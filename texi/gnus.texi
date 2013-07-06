@@ -26575,7 +26575,7 @@ This version of Gnus should work on:
 @itemize @bullet
 
 @item
-Emacs 21.1 and up.
+Emacs 23.1 and up.
 
 @item
 XEmacs 21.4 and up.
