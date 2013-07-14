@@ -1836,7 +1836,7 @@
 
 	* gnus-sum.el (gnus-summary-limit-to-author): Use the current From
 	address as the default.
-	(gnus-summary-insert-old-articles): Don't include unexistent messages.
+	(gnus-summary-insert-old-articles): Don't include unexisting messages.
 
 	* nnfolder.el (nnfolder-save-buffer): Delete old versions silently.  It
 	makes no sense to query the user about internal files.
