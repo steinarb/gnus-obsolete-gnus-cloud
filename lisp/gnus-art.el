@@ -8420,6 +8420,8 @@ For example:
 	(not (gnus-treat-predicate (car val))))
        ((eq pred 'typep)
 	(equal (car val) gnus-treat-type))
+       ((functionp pred)
+	(funcall pred))
        (t
 	(error "%S is not a valid predicate" pred)))))
    ((eq val t)
