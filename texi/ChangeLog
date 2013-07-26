@@ -1,3 +1,8 @@
+2013-07-26  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus.texi (Sorting the Summary Buffer): Document new defcustom
+	`gnus-sort-threads-recursively'.
+
 2013-07-19  Geoff Kuenning  <geoff@cs.hmc.edu>  (tiny change)
 
 	* gnus.texi (Customizing Articles): Document function predicates.
