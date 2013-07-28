@@ -9102,7 +9102,7 @@
 	* nnimap.el (nnimap-request-group): Low higher than high to signal no
 	messages in empty groups.
 
-2010-10-01  Ted Zlatanov  <tzz@lifelogs.com>
+2010-10-01  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* nnimap.el (nnimap-request-group): Don't bug out when there's an empty
 	non-UIDNEXT group.
@@ -9257,7 +9257,7 @@
 	* nndraft.el (nndraft-request-expire-articles): Use the group name
 	instead if "nndraft".  Fix found by Nils Ackermann.
 
-2010-09-29  Ludovic Courtes  <ludo@gnu.org>
+2010-09-29  Ludovic Courtès  <ludo@gnu.org>
 
 	* nnregistry.el: Add.
 
