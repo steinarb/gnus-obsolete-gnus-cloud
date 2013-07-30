@@ -1,3 +1,9 @@
+2013-07-30  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus.texi (Sorting the Summary Buffer): Document new defcustom
+	`gnus-subthread-sort-functions' and remove the obsolete documentation
+	of `gnus-sort-threads-recursively'.
+
 2013-07-26  Tassilo Horn  <tsdh@gnu.org>
 
 	* gnus.texi (Sorting the Summary Buffer): Document new defcustom
