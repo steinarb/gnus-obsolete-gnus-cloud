@@ -4854,10 +4854,23 @@ If LINE, insert the rebuilt thread starting on line LINE."
 	    (gnus-delete-line)))))))
 
 (defun gnus-sort-threads-recursive (threads func)
+  ;; Responsible for sorting the root articles of threads.
+  (let ((subthread-sort-func (if gnus-sort-threads-recursively
+				 func
+			       #'gnus-thread-sort-by-date)))
+    (sort (mapcar (lambda (thread)
+		    (cons (car thread)
+			  (and (cdr thread)
+			       (gnus-sort-subthreads-recursive
+				(cdr thread) subthread-sort-func))))
+		  threads) func)))
+
+(defun gnus-sort-subthreads-recursive (threads func)
+  ;; Responsible for sorting subthreads.
   (sort (mapcar (lambda (thread)
 		  (cons (car thread)
 			(and (cdr thread)
-			     (gnus-sort-threads-recursive (cdr thread) func))))
+			     (gnus-sort-subthreads-recursive (cdr thread) func))))
 		threads) func))
 
 (defun gnus-sort-threads-loop (threads func)
@@ -4885,9 +4898,7 @@ If LINE, insert the rebuilt thread starting on line LINE."
 	(condition-case nil
 	    (let ((max-lisp-eval-depth (max max-lisp-eval-depth 5000))
 		  (sort-func (gnus-make-sort-function gnus-thread-sort-functions)))
-	      (if gnus-sort-threads-recursively
-		  (gnus-sort-threads-recursive threads sort-func)
-		(sort threads sort-func)))
+	      (gnus-sort-threads-recursive threads sort-func))
 	  ;; Even after binding max-lisp-eval-depth, the recursive
 	  ;; sorter might fail for very long threads.  In that case,
 	  ;; try using a (less well-tested) non-recursive sorter.
