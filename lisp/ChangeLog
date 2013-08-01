@@ -1,5 +1,8 @@
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-start.el (gnus-dribble-save): Only save the dribble file if it's
+	not empty.
+
 	* nnrss.el (nnrss-discover-feed): Indent.
 
 2013-08-01  Katsumi Yamaoka  <yamaoka@jpl.org>
