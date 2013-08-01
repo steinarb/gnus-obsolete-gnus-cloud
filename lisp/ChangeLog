@@ -1,5 +1,7 @@
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-int.el (gnus-warp-to-article): Mention that warp means jump.
+
 	* gnus-uu.el (gnus-uu-mark-thread, gnus-uu-unmark-thread): Work with
 	dummy roots, too.
 
