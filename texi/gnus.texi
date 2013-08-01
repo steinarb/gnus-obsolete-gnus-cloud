@@ -21109,17 +21109,17 @@ the articles that match this query, and takes you to a summary buffer
 showing these articles. Articles may then be read, moved and deleted
 using the usual commands.
 
-The @code{nnir} group made in this way is an @code{ephemeral} group, and
-some changes are not permanent: aside from reading, moving, and
+The @code{nnir} group made in this way is an @code{ephemeral} group,
+and some changes are not permanent: aside from reading, moving, and
 deleting, you can't act on the original article. But there is an
-alternative: you can @emph{warp} to the original group for the article
-on the current line with @kbd{A W}, aka
+alternative: you can @emph{warp} (i.e., jump) to the original group
+for the article on the current line with @kbd{A W}, aka
 @code{gnus-warp-to-article}. Even better, the function
-@code{gnus-summary-refer-thread}, bound by default in summary buffers to
-@kbd{A T}, will first warp to the original group before it works its
-magic and includes all the articles in the thread. From here you can
-read, move and delete articles, but also copy them, alter article marks,
-whatever. Go nuts.
+@code{gnus-summary-refer-thread}, bound by default in summary buffers
+to @kbd{A T}, will first warp to the original group before it works
+its magic and includes all the articles in the thread. From here you
+can read, move and delete articles, but also copy them, alter article
+marks, whatever. Go nuts.
 
 You say you want to search more than just the group on the current line?
 No problem: just process-mark the groups you want to search. You want
