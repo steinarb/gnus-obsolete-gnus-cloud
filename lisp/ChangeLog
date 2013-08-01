@@ -1,5 +1,8 @@
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* message.el (message-ignored-news-headers): Delete X-Gnus-Delayed
+	before sending.
+
 	* dgnushack.el (dgnushack-compile): Add a temporary check for
 	gnus-icalendar.
 
