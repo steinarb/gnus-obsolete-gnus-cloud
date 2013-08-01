@@ -1,3 +1,7 @@
+2013-08-01  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el: New file.
+
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-int.el (gnus-warp-to-article): Mention that warp means jump.
