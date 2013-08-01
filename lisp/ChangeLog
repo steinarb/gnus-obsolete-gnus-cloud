@@ -1,3 +1,8 @@
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-icalendar.el (gnus-icalendar-event:inline-reply-buttons):
+	Include `handle' parameter.
+
 2013-08-01  Jan Tatarik  <jan.tatarik@gmail.com>
 
 	* gnus-icalendar.el: New file.

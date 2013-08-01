@@ -696,13 +696,13 @@ is searched."
 (defun gnus-icalendar-sync-event-to-org (event)
   (gnus-icalendar-event:sync-to-org event gnus-icalendar-reply-status))
 
-(defmethod gnus-icalendar-event:inline-reply-buttons ((event gnus-icalendar-event))
+(defmethod gnus-icalendar-event:inline-reply-buttons ((event gnus-icalendar-event) handle)
   (when (gnus-icalendar-event:rsvp event)
     `(("Accept" gnus-icalendar-reply (,handle accepted ,event))
       ("Tentative" gnus-icalendar-reply (,handle tentative ,event))
       ("Decline" gnus-icalendar-reply (,handle declined ,event)))))
 
-(defmethod gnus-icalendar-event:inline-reply-buttons ((event gnus-icalendar-event-reply))
+(defmethod gnus-icalendar-event:inline-reply-buttons ((event gnus-icalendar-event-reply) handle)
   "No buttons for REPLY events."
   nil)
 
@@ -741,7 +741,8 @@ is searched."
                         buttons)
                   (insert "\n\n"))))
 
-        (insert-button-group (gnus-icalendar-event:inline-reply-buttons event))
+        (insert-button-group
+	 (gnus-icalendar-event:inline-reply-buttons event handle))
 
         (when gnus-icalendar-org-enabled-p
           (insert-button-group (gnus-icalendar-event:inline-org-buttons event)))
@@ -831,6 +832,6 @@ is searched."
                (cons "save calendar event" 'gnus-icalendar-save-event)
                t))
 
-
 (provide 'gnus-icalendar)
+
 ;;; gnus-icalendar.el ends here
