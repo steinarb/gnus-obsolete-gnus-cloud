@@ -1,5 +1,8 @@
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* dgnushack.el (dgnushack-compile): Add a temporary check for
+	gnus-icalendar.
+
 	* mm-decode.el (mm-command-output): New face.
 	(mm-display-external): Use it.
 
