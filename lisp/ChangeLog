@@ -1,3 +1,8 @@
+2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-uu.el (gnus-uu-mark-thread, gnus-uu-unmark-thread): Work with
+	dummy roots, too.
+
 2013-08-01  David Edmondson  <dme@dme.org>
 
 	* mml2015.el (mml2015-epg-key-image-to-string): Protect against bugging
