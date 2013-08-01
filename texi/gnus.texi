@@ -21161,6 +21161,7 @@ query language anyway.
 * The swish++ Engine::                  Swish++ configuration and usage.
 * The swish-e Engine::                  Swish-e configuration and usage.
 * The namazu Engine::                   Namazu configuration and usage.
+* The notmuch Engine::                  Notmuch configuration and usage.
 * The hyrex Engine::                    Hyrex configuration and usage.
 * Customizations::                      User customizable settings.
 @end menu
@@ -21389,6 +21390,26 @@ mknmz --mailnews ~/Mail/archive/ ~/Mail/mail/ ~/Mail/lists/
 
 For maximum searching efficiency you might want to have a cron job run
 this command periodically, say every four hours.
+
+
+@node The notmuch Engine
+@subsubsection The notmuch Engine
+
+@table @code
+@item nnir-notmuch-program
+The name of the notmuch search executable.  Defaults to
+@samp{notmuch}.
+
+@item nnir-notmuch-additional-switches
+A list of strings, to be given as additional arguments to notmuch.
+
+@item nnir-notmuch-remove-prefix
+The prefix to remove from each file name returned by notmuch in order
+to get a group name (albeit with @samp{/} instead of @samp{.}).  This
+is a regular expression.
+
+@end table
+
 
 @node The hyrex Engine
 @subsubsection The hyrex Engine
