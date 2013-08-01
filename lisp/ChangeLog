@@ -1,3 +1,8 @@
+2013-08-01  David Edmondson  <dme@dme.org>
+
+	* mml2015.el (mml2015-epg-key-image-to-string): Protect against bugging
+	out on ttys.
+
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-start.el (gnus-dribble-save): Only save the dribble file if it's
