@@ -1,3 +1,8 @@
+2013-08-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* dgnushack.el (dgnushack-compile): `icalendar--decode-isodatetime'
+	doesn't work properly on XEmacs.
+
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* message.el (message-ignored-news-headers): Delete X-Gnus-Delayed
