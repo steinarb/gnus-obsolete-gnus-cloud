@@ -1,5 +1,8 @@
 2013-08-02  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-group.el (gnus-group-delete-articles): Allow deleting only "old"
+	articles.
+
 	* gnus-delay.el (gnus-delay-article): Run `message-send-hook' so that
 	we can get spell-checking etc.
 
