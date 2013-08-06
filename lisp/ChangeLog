@@ -1,3 +1,7 @@
+2013-08-06  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* dgnushack.el (dgnushack-compile): Allow building on Emacs 23.
+
 2013-08-06  Jan Tatarik  <jan.tatarik@gmail.com>
 
 	* gnus-icalendar.el (gnus-icalendar-event-from-ical): Replace pcase
