@@ -1,3 +1,7 @@
+2013-08-12  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus.texi (Mail Source Specifiers): Fix description for pop3's :leave.
+
 2013-08-01  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus.texi (Basic Usage): Mention that warp means jump here.
