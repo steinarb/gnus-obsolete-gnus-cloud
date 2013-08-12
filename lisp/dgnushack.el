@@ -339,7 +339,9 @@ This means that every warning will be reported as an error."
     (unless (locate-library "epg")
       (setq files (delete "plstore.el" files)))
     ;; Temporary code until we fix pcase and defmethod stuff.
-    (when (featurep 'xemacs)
+    (when (or (featurep 'xemacs)
+	      (or (< emacs-major-version 24)
+		  (< emacs-minor-version 3)))
       (setq files (delete "gnus-icalendar.el" files)))
     (dolist (file files)
       (setq file (expand-file-name file srcdir))
