@@ -1,3 +1,27 @@
+2013-09-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* score-mode.el (gnus-score-mode-map): Move initialization
+	into declaration.
+	(gnus-score-mode): Use define-derived-mode.
+	* gnus-srvr.el (gnus-browse-mode): Use define-derived-mode.
+	* gnus-kill.el (gnus-kill-file-mode-map): Move initialization
+	into declaration.
+	(gnus-kill-file-mode): Use define-derived-mode.
+	(gnus-kill-file-edit-file, gnus-kill-file-enter-kill, gnus-kill):
+	Use derived-mode-p.
+	* gnus-group.el (gnus-group-mode): Use define-derived-mode.
+	(gnus-group-setup-buffer, gnus-group-name-at-point)
+	(gnus-group-make-web-group, gnus-group-enter-directory)
+	(gnus-group-suspend): Use derived-mode-p.
+	* gnus-cus.el (gnus-custom-mode): Use define-derived-mode.
+	* gnus-bookmark.el (gnus-bookmark-bmenu-mode): Use define-derived-mode.
+	* gnus-art.el (gnus-article-mode): Use define-derived-mode.
+	(gnus-article-setup-buffer, gnus-article-prepare)
+	(gnus-article-prepare-display, gnus-sticky-article)
+	(gnus-kill-sticky-article-buffer, gnus-kill-sticky-article-buffers)
+	(gnus-bind-safe-url-regexp, gnus-article-check-buffer)
+	(gnus-article-read-summary-keys): Use derived-mode-p.
+
 2013-08-28  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mm-decode.el (mm-temp-files-delete): Fix file deletion logic.
