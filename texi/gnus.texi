@@ -23000,7 +23000,6 @@ this variable:
 
 @c Hook written by Francesco Potortì <pot@cnuce.cnr.it>
 @lisp
-
 (add-hook 'display-time-hook
           (lambda () (setq gnus-mode-non-string-length
                            (+ 21
