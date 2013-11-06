@@ -652,7 +652,7 @@ BINDINGS is a `let'-style list of bindings to use for the environment.
 EVALSYM is then bound in BODY to a function that takes a sexp and evaluates
 it in the environment specified by BINDINGS."
   (declare (indent 2) (debug ((&rest (sym form)) sym body)))
-  (if (ignore-errors (let ((x 3)) (eq (eval '(- x 1) '((x . 4))) x)))
+  (if (eval '(ignore-errors (let ((x 3)) (eq (eval '(- x 1) '((x . 4))) x))))
       ;; Use lexical vars if possible.
       `(let* ((env (list ,@(mapcar (lambda (binding)
                                      `(cons ',(car binding) ,(cadr binding)))
