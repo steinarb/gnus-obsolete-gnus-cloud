@@ -361,6 +361,11 @@ Return nil for non-recurring EVENT."
         (format "<%s %s-%s%s>" start-date start-time end-time repeat)
       (format "<%s %s>--<%s %s>" start-date start-time end-date end-time))))
 
+(defun gnus-icalendar--format-summary-line (summary &optional location)
+  (if location
+      (format "%s (%s)" summary location)
+    (format "%s" summary)))
+
 ;; TODO: make the template customizable
 (defmethod gnus-icalendar-event->org-entry ((event gnus-icalendar-event) reply-status)
   "Return string with new `org-mode' entry describing EVENT."
@@ -378,7 +383,8 @@ Return nil for non-recurring EVENT."
                       ("RRULE" . ,(gnus-icalendar-event:recur event))
                       ("REPLY" . ,reply))))
 
-        (insert (format "* %s (%s)\n\n" summary location))
+        (insert (format "* %s\n\n"
+                        (gnus-icalendar--format-summary-line summary location)))
         (mapc (lambda (prop)
                 (org-entry-put (point) (car prop) (cdr prop)))
               props))
@@ -443,7 +449,7 @@ is searched."
                        (headline (delq nil (list
                                             (org-entry-get (point) "TODO")
                                             (when priority (format "[#%s]" priority))
-                                            (format "%s (%s)" summary location)
+                                            (gnus-icalendar--format-summary-line summary location)
                                             (org-entry-get (point) "TAGS")))))
 
                   (re-search-forward "^\\*+ " (line-end-position))
@@ -591,7 +597,7 @@ is searched."
 
     (with-slots (organizer summary description location recur uid method rsvp) event
       (let ((headers `(("Summary" ,summary)
-                      ("Location" ,location)
+                      ("Location" ,(or location ""))
                       ("Time" ,(gnus-icalendar-event:org-timestamp event))
                       ("Organizer" ,organizer)
                       ("Method" ,method))))
