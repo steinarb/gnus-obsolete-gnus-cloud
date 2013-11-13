@@ -546,7 +546,7 @@ is searched."
       (gnus-icalendar--update-org-event event reply-status)
     (gnus-icalendar:org-event-save event reply-status)))
 
-(defmethod gnus-icalendar-event:sync-to-org ((event gnus-icalendar-event-cancel))
+(defmethod gnus-icalendar-event:sync-to-org ((event gnus-icalendar-event-cancel) reply-status)
   (when (gnus-icalendar-find-org-event-file event)
     (gnus-icalendar--cancel-org-event event)))
 
@@ -722,6 +722,18 @@ is searched."
                  `(,export-button-text gnus-icalendar-sync-event-to-org ,event))
                (when org-entry-exists-p
                  `("Show Org Entry" gnus-icalendar--show-org-event ,event))))))
+
+
+(defmethod gnus-icalendar-event:inline-org-buttons ((event gnus-icalendar-event-cancel))
+  (let ((org-entry-exists-p (gnus-icalendar-find-org-event-file event)))
+
+    (delq nil (list
+               `("Show Agenda" gnus-icalendar-show-org-agenda ,event)
+               (when org-entry-exists-p
+                 `("Update Org Entry" gnus-icalendar-sync-event-to-org ,event))
+               (when org-entry-exists-p
+                 `("Show Org Entry" gnus-icalendar--show-org-event ,event))))))
+
 
 (defun gnus-icalendar-mm-inline (handle)
   (let ((event (gnus-icalendar-event-from-handle handle gnus-icalendar-identities)))
