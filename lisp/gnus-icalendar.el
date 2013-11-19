@@ -387,14 +387,46 @@ Return nil for non-recurring EVENT."
          (end (gnus-icalendar-event:end-time event))
          (start-date (format-time-string "%Y-%m-%d %a" start))
          (start-time (format-time-string "%H:%M" start))
+         (start-at-midnight (string= start-time "00:00"))
          (end-date (format-time-string "%Y-%m-%d %a" end))
          (end-time (format-time-string "%H:%M" end))
+         (end-at-midnight (string= end-time "00:00"))
+         (start-end-date-diff (/ (float-time (time-subtract
+                                        (date-to-time end-date)
+                                        (date-to-time start-date)))
+                                 86400))
          (org-repeat (gnus-icalendar-event:org-repeat event))
-         (repeat (if org-repeat (concat " " org-repeat) "")))
+         (repeat (if org-repeat (concat " " org-repeat) ""))
+         (time-1-day '(0 86400)))
 
-    (if (equal start-date end-date)
-        (format "<%s %s-%s%s>" start-date start-time end-time repeat)
-      (format "<%s %s>--<%s %s>" start-date start-time end-date end-time))))
+    ;; NOTE: special care is needed with appointments ending at midnight
+    ;; (typically all-day events): the end time has to be changed to 23:59 to
+    ;; prevent org agenda showing the event on one additional day
+    (cond
+     ;; start/end midnight
+     ;; A 0:0 - A+1 0:0 -> A
+     ;; A 0:0 - A+n 0:0 -> A - A+n-1
+     ((and start-at-midnight end-at-midnight) (if (> start-end-date-diff 1)
+                                                  (let ((end-ts (format-time-string "%Y-%m-%d %a" (time-subtract end time-1-day))))
+                                                    (format "<%s>--<%s>" start-date end-ts))
+                                                (format "<%s%s>" start-date repeat)))
+     ;; end midnight
+     ;; A .:. - A+1 0:0 -> A .:.-23:59
+     ;; A .:. - A+n 0:0 -> A .:. - A_n-1
+     (end-at-midnight (if (= start-end-date-diff 1)
+                          (format "<%s %s-23:59%s>" start-date start-time repeat)
+                        (let ((end-ts (format-time-string "%Y-%m-%d %a" (time-subtract end time-1-day))))
+                          (format "<%s %s>--<%s>" start-date start-time end-ts))))
+     ;; start midnight
+     ;; A 0:0 - A .:. -> A 0:0-.:. (default 1)
+     ;; A 0:0 - A+n .:. -> A - A+n .:.
+     ((and start-at-midnight
+           (plusp start-end-date-diff)) (format "<%s>--<%s %s>" start-date end-date end-time))
+     ;; default
+     ;; A .:. - A .:. -> A .:.-.:.
+     ;; A .:. - B .:.
+     ((zerop start-end-date-diff) (format "<%s %s-%s%s>" start-date start-time end-time repeat))
+     (t (format "<%s %s>--<%s %s>" start-date start-time end-date end-time)))))
 
 (defun gnus-icalendar--format-summary-line (summary &optional location)
   (if location
