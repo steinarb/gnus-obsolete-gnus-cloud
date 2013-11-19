@@ -649,6 +649,22 @@ is searched."
   :type '(string)
   :group 'gnus-icalendar)
 
+(defcustom gnus-icalendar-additional-identities nil
+  "We need to know your identity to make replies to calendar requests work.
+
+Gnus will only offer you the Accept/Tentative/Decline buttons for
+calendar events if any of your identities matches at least one
+RSVP participant.
+
+Your identity is guessed automatically from the variables `user-full-name',
+`user-mail-address', and `gnus-ignored-from-addresses'.
+
+If you need even more aliases you can define them here.  It really
+only makes sense to define names or email addresses."
+
+  :type '(repeat string)
+  :group 'gnus-icalendar)
+
 (make-variable-buffer-local
  (defvar gnus-icalendar-reply-status nil))
 
@@ -662,8 +678,9 @@ is searched."
   (apply #'append
          (mapcar (lambda (x) (if (listp x) x (list x)))
                  (list user-full-name (regexp-quote user-mail-address)
-                       ; NOTE: this one can be a list
-                       gnus-ignored-from-addresses))))
+                       ; NOTE: these can be lists
+                       gnus-ignored-from-addresses ; already regexp-quoted
+                       (mapcar #'regexp-quote gnus-icalendar-additional-identities)))))
 
 ;; TODO: make the template customizable
 (defmethod gnus-icalendar-event->gnus-calendar ((event gnus-icalendar-event) &optional reply-status)
