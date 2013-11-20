@@ -1,3 +1,8 @@
+2013-11-20  David Engster  <deng@randomsample.de>
+
+	* message.el (message-beginning-of-line): Fix XEmacs warning for last
+	change.
+
 2013-11-20  Dave Goldberg  <david.goldberg6@verizon.net>
 
 	* message.el (message-beginning-of-line):
