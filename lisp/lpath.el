@@ -79,7 +79,8 @@
      select-safe-coding-system set-network-process-option shr-insert-document
      sort-coding-systems term-char-mode term-mode track-mouse ucs-to-char
      url-generic-parse-url url-insert-file-contents vcard-pretty-print
-     w3-parse-buffer w3m-detect-meta-charset w3m-region window-edges))
+     w3-parse-buffer w3m-detect-meta-charset w3m-region window-edges
+     beginning-of-visual-line))
   (maybe-bind
    '(adaptive-fill-first-line-regexp
      buffer-display-table buffer-save-without-query completion-styles

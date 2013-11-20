@@ -6344,8 +6344,7 @@ between beginning of field and beginning of line."
 	(goto-char
 	 (if (and eoh (or (< eoh here) (= bol here)))
 	     eoh bol)))
-    (if (and (not (featurep 'xemacs))
-	     (boundp 'visual-line-mode) visual-line-mode)
+    (if (and (boundp 'visual-line-mode) visual-line-mode)
 	(beginning-of-visual-line n)
       (beginning-of-line n))))
 
