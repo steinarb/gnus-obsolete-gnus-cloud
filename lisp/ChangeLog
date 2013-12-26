@@ -1,3 +1,7 @@
+2013-12-26  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus.el (gnus-group-buffer): Remove duplicate definition.
+
 2013-12-25  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-sum.el (gnus-summary-exit): Stop animations.
