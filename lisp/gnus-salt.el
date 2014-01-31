@@ -879,7 +879,10 @@ it in the environment specified by BINDINGS."
       (set-buffer buf))))
 
 (defun gnus-tree-highlight-article (article face)
-  (with-current-buffer (gnus-get-tree-buffer)
+  ;; The save-excursion here is apparently necessary because
+  ;; `set-window-point' somehow manages to alter the buffer position.
+  (save-excursion
+    (set-buffer (gnus-get-tree-buffer))
     (let (region)
       (when (setq region (gnus-tree-article-region article))
 	(gnus-put-text-property (car region) (cdr region) 'face face)
