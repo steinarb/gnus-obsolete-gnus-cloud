@@ -1,3 +1,21 @@
+2013-09-04  Rasmus Pank Roulund  <emacs@pank.eu>
+
+	* gnus-fun.el (gnus-x-face-omit-files): Regexp to omit matched results
+	from random face commands.
+	(gnus-face-directory): Like `gnus-x-face-directory` for png files and
+	Face.
+	(gnus-face-omit-files): Like `gnus-x-face-omit-files` for Face.
+	(gnus--random-face-with-type): Generic function returning a face-type
+	as a string.
+	(gnus--insert-random-face-with-type): Generic function inserting a face
+	in a message buffer header.
+	(gnus-random-x-face): Rewritten to use `gnus--random-face-with-type`.
+	(gnus-insert-random-x-face-header): Rewritten to use
+	`gnus--insert-random-face-with-type`.
+	(gnus-random-face): Return random (png) Face as string.
+	(nus-insert-random-face-header): Insert random (png) Face in a message
+	buffer.
+
 2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* mm-url.el: Remove all usage of w3.
