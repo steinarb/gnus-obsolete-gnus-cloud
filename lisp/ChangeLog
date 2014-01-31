@@ -1,3 +1,9 @@
+2014-01-31  Magnus Henoch  <magnus.henoch@gmail.com>
+
+	* dns.el (dns-servers-up-to-date-p): New function to see whether the
+	network interfaces changed.
+	(dns-query): Use it to flush the data.
+
 2013-09-04  Rasmus Pank Roulund  <emacs@pank.eu>
 
 	* gnus-fun.el (gnus-x-face-omit-files): Regexp to omit matched results
