@@ -1,3 +1,7 @@
+2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-setup.el: Remove outdated file.
+
 2014-01-31  Lars Magne Ingebrigtsen  <lars@ingebrigtsen.no>
 
 	* gnus.el: Ma Gnus v0.9 is released.
