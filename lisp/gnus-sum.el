@@ -9085,6 +9085,41 @@ non-numeric or nil fetch the number specified by the
       (gnus-summary-limit-include-thread id)))
   (gnus-summary-show-thread))
 
+(defun gnus-summary-open-group-with-article (message-id)
+  "Open a group containing the article with the given MESSAGE-ID."
+  (interactive "sMessage-ID: ")
+  (require 'nndoc)
+  (with-temp-buffer
+    ;; Prepare a dummy article
+    (erase-buffer)
+    (insert "From nobody Tue Sep 13 22:05:34 2011\n\n")
+
+    ;; Prepare pretty modelines for summary and article buffers
+    (let ((gnus-summary-mode-line-format "Found %G")
+          (gnus-article-mode-line-format
+           ;; Group names just get in the way here, especially the
+           ;; abbreviated ones
+           (if (string-match "%[gG]" gnus-article-mode-line-format)
+	       (concat (substring gnus-article-mode-line-format
+				  0 (match-beginning 0))
+		       (substring gnus-article-mode-line-format (match-end 0)))
+	     gnus-article-mode-line-format)))
+
+      ;; Build an ephemeral group containing the dummy article (hidden)
+      (gnus-group-read-ephemeral-group
+       message-id
+       `(nndoc ,message-id
+	       (nndoc-address ,(current-buffer))
+	       (nndoc-article-type mbox))
+       :activate
+       (cons (current-buffer) gnus-current-window-configuration)
+       (not :request-only)
+       '(-1)				; :select-articles
+       (not :parameters)
+       0))				; :number
+    ;; Fetch the desired article
+    (gnus-summary-refer-article message-id)))
+
 (defun gnus-summary-refer-article (message-id)
   "Fetch an article specified by MESSAGE-ID."
   (interactive "sMessage-ID: ")
