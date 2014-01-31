@@ -1,3 +1,9 @@
+2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-art.el (gnus-article-setup-buffer): Refresh the summary buffer
+	name if we're using a single article buffer.  Otherwise, it may point
+	to a killed buffer (bug#13756).
+
 2014-01-30  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnmail.el (nnmail-split-it): Instead of redoing the search to restore
