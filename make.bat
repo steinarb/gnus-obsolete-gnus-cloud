@@ -322,10 +322,6 @@ echo *        /copy indicates that the compiled files should be copied to your
 echo *           emacs lisp, info, and etc site directories.
 REM echo *        ^> inst-log.txt 2^>^&1
 REM echo *           Log output to inst-log.txt
-echo *
-echo * Note: If you have Emacs/w3 you should set the environment variable
-echo *       W3DIR to the directory where w3 is installed eg.
-echo *                set W3DIR=d:\lisp\w3-4.0pre46\lisp
 echo ***************************************************************************
 echo.
 

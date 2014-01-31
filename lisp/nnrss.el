@@ -398,8 +398,6 @@ otherwise return nil."
 					 nnrss-compatible-encoding-alist)))))
     (mm-coding-system-p 'utf-8)))
 
-(declare-function w3-parse-buffer "ext:w3-parse" (&optional buff))
-
 (defun nnrss-fetch (url &optional local)
   "Fetch URL and put it in a the expected Lisp structure."
   (mm-with-unibyte-buffer
@@ -426,22 +424,14 @@ otherwise return nil."
 		  (mm-enable-multibyte))))
       (goto-char (point-min))
 
-      ;; Because xml-parse-region can't deal with anything that isn't
-      ;; xml and w3-parse-buffer can't deal with some xml, we have to
-      ;; parse with xml-parse-region first and, if that fails, parse
-      ;; with w3-parse-buffer.  Yuck.  Eventually, someone should find out
-      ;; why w3-parse-buffer fails to parse some well-formed xml and
-      ;; fix it.
-
       (condition-case err1
 	  (setq xmlform (xml-parse-region (point-min) (point-max)))
 	(error
 	 (condition-case err2
-	     (setq htmlform (caddar (w3-parse-buffer
-				     (current-buffer))))
+	     (setq htmlform (libxml-parse-html-region (point-min) (point-max)))
 	   (error
 	    (message "\
-nnrss: %s: Not valid XML %s and w3-parse doesn't work %s"
+nnrss: %s: Not valid XML %s and libxml-parse-html-region doesn't work %s"
 		     url err1 err2)))))
       (if htmlform
 	  htmlform
@@ -599,7 +589,7 @@ which RSS 2.0 allows."
 (defun nnrss-no-cache (url)
   "")
 
-(defun nnrss-insert-w3 (url)
+(defun nnrss-insert (url)
   (mm-with-unibyte-current-buffer
     (condition-case err
 	(mm-url-insert url)
@@ -613,8 +603,6 @@ which RSS 2.0 allows."
 	(insert string)
 	(mm-url-decode-entities-nbsp)
 	(buffer-string))))
-
-(defalias 'nnrss-insert 'nnrss-insert-w3)
 
 (defun nnrss-mime-encode-string (string)
   (mm-with-multibyte-buffer
@@ -880,8 +868,7 @@ Careful with this on large documents!"
 
 (defun nnrss-extract-hrefs (data)
   "Recursively extract hrefs from a page's source.
-DATA should be the output of `xml-parse-region' or
-`w3-parse-buffer'."
+DATA should be the output of `xml-parse-region'."
   (mapcar (lambda (ahref)
 	    (cdr (assoc 'href (cadr ahref))))
 	  (nnrss-find-el 'a data)))

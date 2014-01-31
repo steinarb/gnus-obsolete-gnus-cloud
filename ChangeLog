@@ -1,3 +1,10 @@
+2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* make.bat (REM FIXME): Remove mention of outdated w3.
+
+	* aclocal.m4 (AC_EMACS_CHECK_LIB): Remove checks for w3 and url.  w3 is
+	outdated, and all Emacs versions Ma Gnus builds against has url.el.
+
 2013-06-20  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* configure.in: Work for term-mode running in Emacs.

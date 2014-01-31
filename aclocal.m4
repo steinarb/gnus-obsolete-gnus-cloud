@@ -186,54 +186,6 @@ fi
 ])
 
 dnl
-dnl Perform sanity checking and try to locate the W3 package
-dnl
-AC_DEFUN(AC_CHECK_W3, [
-AC_MSG_CHECKING(for acceptable W3 version)
-AC_CACHE_VAL(EMACS_cv_ACCEPTABLE_W3,[
-AC_EMACS_CHECK_LIB(w3_forms, w3-form-encode-xwfu,"noecho")
-if test "${HAVE_w3_forms}" = "yes"; then
-	EMACS_cv_ACCEPTABLE_W3=yes
-else
-	EMACS_cv_ACCEPTABLE_W3=no
-fi
-
-if test "${EMACS_cv_ACCEPTABLE_W3}" = "yes"; then
-	AC_EMACS_LISP(w3_dir,(file-name-directory (locate-library \"w3-forms\")),"noecho")
-	EMACS_cv_ACCEPTABLE_W3=$EMACS_cv_SYS_w3_dir
-fi
-])
-   AC_ARG_WITH(w3,[  --with-w3=DIR           Specify where to find the w3 package], [ EMACS_cv_ACCEPTABLE_W3=`( cd $withval && pwd || echo "$withval" ) 2> /dev/null` ])
-   W3=${EMACS_cv_ACCEPTABLE_W3}
-   AC_SUBST(W3)
-   AC_MSG_RESULT("${W3}")
-])
-
-dnl
-dnl Perform sanity checking and try to locate the W3 package
-dnl
-AC_DEFUN(AC_CHECK_URL, [
-AC_MSG_CHECKING(for acceptable URL version)
-AC_CACHE_VAL(EMACS_cv_ACCEPTABLE_URL,[
-AC_EMACS_CHECK_LIB(url, url-retrieve, "noecho")
-if test "${HAVE_url}" = "yes"; then
-	EMACS_cv_ACCEPTABLE_URL=yes
-else
-	EMACS_cv_ACCEPTABLE_URL=no
-fi
-
-if test "${EMACS_cv_ACCEPTABLE_URL}" = "yes"; then
-	AC_EMACS_LISP(url_dir,(file-name-directory (locate-library \"url\")),"noecho")
-	EMACS_cv_ACCEPTABLE_URL=$EMACS_cv_SYS_url_dir
-fi
-])
-   AC_ARG_WITH(url,[  --with-url=DIR          Specify where to find the url package], [ EMACS_cv_ACCEPTABLE_URL=`( cd $withval && pwd || echo "$withval" ) 2> /dev/null` ])
-   URL=${EMACS_cv_ACCEPTABLE_URL}
-   AC_SUBST(URL)
-   AC_MSG_RESULT("${URL}")
-])
-
-dnl
 dnl Perform checking available fonts: Adobe Bembo, Adobe Futura and 
 dnl Bitstream Courier.
 dnl

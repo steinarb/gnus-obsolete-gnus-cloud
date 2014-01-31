@@ -12,9 +12,7 @@ INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 SHELL = /bin/sh
 VPATH = @srcdir@
-W3DIR = @W3@
-URLDIR = @URL@
-EMACS_COMP = URLDIR="$(URLDIR)" W3DIR="$(W3DIR)" lispdir="$(lispdir)" srcdir=$(srcdir) $(EMACS) $(FLAGS)
+EMACS_COMP = lispdir="$(lispdir)" srcdir=$(srcdir) $(EMACS) $(FLAGS)
 
 all total: clean-some gnus-load.el
 	$(EMACS_COMP) -f dgnushack-compile

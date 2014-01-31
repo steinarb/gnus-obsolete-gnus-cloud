@@ -593,10 +593,6 @@ WITHOUT_FONTS_bembo
 WITH_FONTS_bembo
 LATEX
 FLAGS
-W3
-HAVE_w3_forms
-URL
-HAVE_url
 info_dir
 etcdir
 lispdir
@@ -653,8 +649,6 @@ with_xemacs
 with_emacs
 with_lispdir
 with_etcdir
-with_url
-with_w3
 with_fonts
 '
       ac_precious_vars='build_alias
@@ -1270,8 +1264,6 @@ Optional Packages:
   --with-emacs[=PROG]     use Emacs to build (default: PROG=emacs)
   --with-lispdir=DIR      Where to install lisp files
   --with-etcdir=DIR       Where to install etc files
-  --with-url=DIR          Specify where to find the url package
-  --with-w3=DIR           Specify where to find the w3 package
   --with-fonts            Assume all fonts required are available
 
 Report bugs to the package provider.
@@ -2093,208 +2085,6 @@ $as_echo_n "checking where the TeXinfo docs should go... " >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $info_dir" >&5
 $as_echo "$info_dir" >&6; }
 
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for acceptable URL version" >&5
-$as_echo_n "checking for acceptable URL version... " >&6; }
-if ${EMACS_cv_ACCEPTABLE_URL+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for url-retrieve in url" >&5
-$as_echo_n "checking for url-retrieve in url... " >&6; }
-fi
-library=`echo url | tr _ -`
-
-elisp="(progn (fmakunbound 'url-retrieve) (condition-case nil (progn (require '$library) (fboundp 'url-retrieve)) (error (prog1 nil (message \"$library not found\")))))"
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for url" >&5
-$as_echo_n "checking for url... " >&6; }
-fi
-if ${EMACS_cv_SYS_url+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-	OUTPUT=./conftest-$$
-	echo ${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil \"${OUTPUT}\"))" >& 5 2>&1
-	${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x 'ignore) (prin1-to-string x)) nil \"${OUTPUT}\"nil 5))" >& 5 2>&1
-	retval=`cat ${OUTPUT}`
-	echo "=> ${retval}" >& 5 2>&1
-	rm -f ${OUTPUT}
-	EMACS_cv_SYS_url=$retval
-
-fi
-
-url=${EMACS_cv_SYS_url}
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $url" >&5
-$as_echo "$url" >&6; }
-fi
-
-if test "${EMACS_cv_SYS_url}" = "nil"; then
-	EMACS_cv_SYS_url=no
-fi
-if test "${EMACS_cv_SYS_url}" = "t"; then
-	EMACS_cv_SYS_url=yes
-fi
-HAVE_url=${EMACS_cv_SYS_url}
-
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_url" >&5
-$as_echo "$HAVE_url" >&6; }
-fi
-
-if test "${HAVE_url}" = "yes"; then
-	EMACS_cv_ACCEPTABLE_URL=yes
-else
-	EMACS_cv_ACCEPTABLE_URL=no
-fi
-
-if test "${EMACS_cv_ACCEPTABLE_URL}" = "yes"; then
-
-elisp="(file-name-directory (locate-library \"url\"))"
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for url_dir" >&5
-$as_echo_n "checking for url_dir... " >&6; }
-fi
-if ${EMACS_cv_SYS_url_dir+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-	OUTPUT=./conftest-$$
-	echo ${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil \"${OUTPUT}\"))" >& 5 2>&1
-	${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x 'ignore) (prin1-to-string x)) nil \"${OUTPUT}\"nil 5))" >& 5 2>&1
-	retval=`cat ${OUTPUT}`
-	echo "=> ${retval}" >& 5 2>&1
-	rm -f ${OUTPUT}
-	EMACS_cv_SYS_url_dir=$retval
-
-fi
-
-url_dir=${EMACS_cv_SYS_url_dir}
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $url_dir" >&5
-$as_echo "$url_dir" >&6; }
-fi
-
-	EMACS_cv_ACCEPTABLE_URL=$EMACS_cv_SYS_url_dir
-fi
-
-fi
-
-
-# Check whether --with-url was given.
-if test "${with_url+set}" = set; then :
-  withval=$with_url;  EMACS_cv_ACCEPTABLE_URL=`( cd $withval && pwd || echo "$withval" ) 2> /dev/null`
-fi
-
-   URL=${EMACS_cv_ACCEPTABLE_URL}
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: \"${URL}\"" >&5
-$as_echo "\"${URL}\"" >&6; }
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for acceptable W3 version" >&5
-$as_echo_n "checking for acceptable W3 version... " >&6; }
-if ${EMACS_cv_ACCEPTABLE_W3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for w3-form-encode-xwfu in w3_forms" >&5
-$as_echo_n "checking for w3-form-encode-xwfu in w3_forms... " >&6; }
-fi
-library=`echo w3_forms | tr _ -`
-
-elisp="(progn (fmakunbound 'w3-form-encode-xwfu) (condition-case nil (progn (require '$library) (fboundp 'w3-form-encode-xwfu)) (error (prog1 nil (message \"$library not found\")))))"
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for w3_forms" >&5
-$as_echo_n "checking for w3_forms... " >&6; }
-fi
-if ${EMACS_cv_SYS_w3_forms+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-	OUTPUT=./conftest-$$
-	echo ${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil \"${OUTPUT}\"))" >& 5 2>&1
-	${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x 'ignore) (prin1-to-string x)) nil \"${OUTPUT}\"nil 5))" >& 5 2>&1
-	retval=`cat ${OUTPUT}`
-	echo "=> ${retval}" >& 5 2>&1
-	rm -f ${OUTPUT}
-	EMACS_cv_SYS_w3_forms=$retval
-
-fi
-
-w3_forms=${EMACS_cv_SYS_w3_forms}
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $w3_forms" >&5
-$as_echo "$w3_forms" >&6; }
-fi
-
-if test "${EMACS_cv_SYS_w3_forms}" = "nil"; then
-	EMACS_cv_SYS_w3_forms=no
-fi
-if test "${EMACS_cv_SYS_w3_forms}" = "t"; then
-	EMACS_cv_SYS_w3_forms=yes
-fi
-HAVE_w3_forms=${EMACS_cv_SYS_w3_forms}
-
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_w3_forms" >&5
-$as_echo "$HAVE_w3_forms" >&6; }
-fi
-
-if test "${HAVE_w3_forms}" = "yes"; then
-	EMACS_cv_ACCEPTABLE_W3=yes
-else
-	EMACS_cv_ACCEPTABLE_W3=no
-fi
-
-if test "${EMACS_cv_ACCEPTABLE_W3}" = "yes"; then
-
-elisp="(file-name-directory (locate-library \"w3-forms\"))"
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for w3_dir" >&5
-$as_echo_n "checking for w3_dir... " >&6; }
-fi
-if ${EMACS_cv_SYS_w3_dir+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-	OUTPUT=./conftest-$$
-	echo ${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil \"${OUTPUT}\"))" >& 5 2>&1
-	${EMACS} -batch -eval "(let ((x ${elisp})) (write-region (if (stringp x) (princ x 'ignore) (prin1-to-string x)) nil \"${OUTPUT}\"nil 5))" >& 5 2>&1
-	retval=`cat ${OUTPUT}`
-	echo "=> ${retval}" >& 5 2>&1
-	rm -f ${OUTPUT}
-	EMACS_cv_SYS_w3_dir=$retval
-
-fi
-
-w3_dir=${EMACS_cv_SYS_w3_dir}
-if test -z ""noecho""; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $w3_dir" >&5
-$as_echo "$w3_dir" >&6; }
-fi
-
-	EMACS_cv_ACCEPTABLE_W3=$EMACS_cv_SYS_w3_dir
-fi
-
-fi
-
-
-# Check whether --with-w3 was given.
-if test "${with_w3+set}" = set; then :
-  withval=$with_w3;  EMACS_cv_ACCEPTABLE_W3=`( cd $withval && pwd || echo "$withval" ) 2> /dev/null`
-fi
-
-   W3=${EMACS_cv_ACCEPTABLE_W3}
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: \"${W3}\"" >&5
-$as_echo "\"${W3}\"" >&6; }
 
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking which options to pass on to (X)Emacs" >&5

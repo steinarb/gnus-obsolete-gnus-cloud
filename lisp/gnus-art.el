@@ -5885,14 +5885,6 @@ If displaying \"text/html\" is discouraged \(see
    ((and (equal (car handle) "multipart/related")
 	 (not (or gnus-mime-display-multipart-as-mixed
 		  gnus-mime-display-multipart-related-as-mixed)))
-    ;;;!!!We should find the start part, but we just default
-    ;;;!!!to the first part.
-    ;;(gnus-mime-display-part (cadr handle))
-    ;;;!!! Most multipart/related is an HTML message plus images.
-    ;;;!!! Unfortunately we are unable to let W3 display those
-    ;;;!!! included images, so we just display it as a mixed multipart.
-    ;;(gnus-mime-display-mixed (cdr handle))
-    ;;;!!! No, w3 can display everything just fine.
     (gnus-mime-display-part (cadr handle)))
    ((equal (car handle) "multipart/signed")
     (gnus-add-wash-type 'signed)

@@ -45,15 +45,9 @@
 (if (my-getenv "lispdir")
     (push (my-getenv "lispdir") load-path))
 
-(push (or (my-getenv "URLDIR") (expand-file-name "../../url/lisp/" loaddir))
-      load-path)
-
-(push (or (my-getenv "W3DIR") (expand-file-name "../../w3/lisp/" loaddir))
-      load-path)
-
 ;(push "/usr/share/emacs/site-lisp" load-path)
 
-;; If we are building w3 in a different directory than the source
+;; If we are building Gnus in a different directory than the source
 ;; directory, we must read *.el from source directory and write *.elc
 ;; into the building directory.  For that, we define this function
 ;; before loading bytecomp.  Bytecomp doesn't overwrite this function.
@@ -229,9 +223,6 @@
     (autoload 'toggle-truncate-lines "view-less" nil t)
     (autoload 'trace-function-background "trace" nil t)
     (autoload 'unmorse-region "morse" nil t)
-    (autoload 'w3-do-setup "w3")
-    (autoload 'w3-prepare-buffer "w3-display")
-    (autoload 'w3-region "w3-display" nil t)
     (defalias 'frame-char-height 'frame-height)
     (defalias 'frame-char-width 'frame-width)
     (defalias 'frame-parameter 'frame-property)
@@ -245,8 +236,7 @@
     (defalias 'replace-highlight 'ignore)
     (defalias 'gnutls-available-p 'ignore)
     (defvar timer-list nil)
-    (defvar scroll-margin 0)
-    (defalias 'w3-coding-system-for-mime-charset 'ignore)))
+    (defvar scroll-margin 0)))
 
 (defun dgnushack-emacs-compile-defcustom-p ()
   "Return non-nil if Emacs byte compiles `defcustom' forms.
@@ -307,12 +297,6 @@ This means that every warning will be reported as an error."
       (setq files (delete file files)))
     (when (featurep 'base64)
       (setq files (delete "base64.el" files)))
-    (condition-case code
-	(require 'w3-parse)
-      (error
-       (message "No w3: %s %s" (cadr code) (or (locate-library "w3-parse") ""))
-       (dolist (file '("webmail.el" "nnwfm.el"))
-	 (setq files (delete file files)))))
     (condition-case code
 	;; Under XEmacs 21.4 this loads easy-mmode.elc that provides
 	;; the Emacs functions `propertize' and `replace-regexp-in-string'.

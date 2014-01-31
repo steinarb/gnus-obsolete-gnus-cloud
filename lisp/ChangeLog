@@ -1,5 +1,16 @@
 2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* mm-url.el: Remove all usage of w3.
+
+	* nnrss.el: Ditto.
+
+	* mm-decode.el: Ditto.
+
+	* mm-view.el: Ditto.
+
+	* dgnushack.el: Remove mentions of urldir and w3-dir, since w3 is
+	outdated and all Emacsen have url.el built-in.
+
 	* gnus-setup.el: Remove outdated file.
 
 2014-01-31  Lars Magne Ingebrigtsen  <lars@ingebrigtsen.no>

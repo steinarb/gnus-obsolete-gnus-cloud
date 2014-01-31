@@ -11,9 +11,7 @@
 
 (unless (featurep 'xemacs)
   (maybe-fbind '(pgg-display-output-buffer url-generic-parse-url))
-  (maybe-bind '(help-xref-stack-item
-		url-version w3-meta-charset-content-type-regexp
-		w3-meta-content-type-charset-regexp))
+  (maybe-bind '(help-xref-stack-item url-version))
 
   (when (<= emacs-major-version 23)
     (maybe-bind '(mail-encode-mml)))
@@ -37,8 +35,7 @@
        bookmark-prop-get completion-at-point display-time-event-handler
        epg-check-configuration find-coding-system frame-device gnutls-negotiate
        libxml-parse-html-region recenter-top-bottom rmail-swap-buffers-maybe
-       shr-insert-document w3-do-setup w3-parse-buffer w3-prepare-buffer
-       w3-region w3m-detect-meta-charset w3m-region))
+       shr-insert-document w3m-detect-meta-charset w3m-region))
     (maybe-bind
      '(epa-file-encrypt-to w3m-link-map))))
 
@@ -80,7 +77,7 @@
      select-safe-coding-system set-network-process-option shr-insert-document
      sort-coding-systems spam-initialize term-char-mode term-mode track-mouse
      ucs-to-char url-generic-parse-url url-insert-file-contents
-     vcard-pretty-print w3-parse-buffer w3m-detect-meta-charset w3m-region
+     vcard-pretty-print w3m-detect-meta-charset w3m-region
      window-edges))
   (maybe-bind
    '(adaptive-fill-first-line-regexp
@@ -95,8 +92,7 @@
      rmail-default-rmail-file rmail-insert-mime-forwarded-message-function
      show-trailing-whitespace smtpmail-default-smtp-server
      temporary-file-directory tool-bar-mode transient-mark-mode url-version
-     w3-meta-charset-content-type-regexp w3m-link-map
-     w3-meta-content-type-charset-regexp))
+     w3m-link-map))
 
   (when (or (and (= emacs-major-version 21) (= emacs-minor-version 4))
 	    (featurep 'sxemacs))
