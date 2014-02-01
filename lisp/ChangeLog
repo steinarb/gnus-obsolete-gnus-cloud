@@ -1,5 +1,8 @@
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-notifications.el (gravatar-retrieve-synchronously): Declare for
+	XEmacs.
+
 	* nnrss.el (libxml-parse-html-region): Silence compilation error.
 
 2014-02-01  Daniel Dehennin  <daniel.dehennin@baby-gnu.org>
