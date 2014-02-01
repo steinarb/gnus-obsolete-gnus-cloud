@@ -259,7 +259,7 @@ in `defcustom' forms."
 
 (when (and (featurep 'xemacs)
 	   (dgnushack-emacs-compile-defcustom-p))
-  (maybe-fbind '(defined-colors face-attribute network-interface-list))
+  (maybe-fbind '(defined-colors face-attribute))
   (maybe-bind '(idna-program installation-directory)))
 
 (when (featurep 'xemacs)

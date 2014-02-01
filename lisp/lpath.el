@@ -78,7 +78,7 @@
      sort-coding-systems spam-initialize term-char-mode term-mode track-mouse
      ucs-to-char url-generic-parse-url url-insert-file-contents
      vcard-pretty-print w3m-detect-meta-charset w3m-region
-     window-edges))
+     window-edges network-interface-list))
   (maybe-bind
    '(adaptive-fill-first-line-regexp
      buffer-display-table buffer-save-without-query completion-styles
