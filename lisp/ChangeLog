@@ -1,3 +1,7 @@
+2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* nnrss.el (libxml-parse-html-region): Silence compilation error.
+
 2014-02-01  Daniel Dehennin  <daniel.dehennin@baby-gnu.org>
 
 	* gnus-mlspl.el (gnus-group-split-fancy): Use `gnus-parameters' in
