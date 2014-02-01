@@ -614,8 +614,22 @@ Done before generating the new subject of a forward."
 		 regexp))
 
 (defcustom message-forward-ignored-headers "^Content-Transfer-Encoding:\\|^X-Gnus"
-  "*All headers that match this regexp will be deleted when forwarding a message."
+  "*All headers that match this regexp will be deleted when forwarding a message.
+This may also be a list of regexps."
   :version "21.1"
+  :group 'message-forwarding
+  :type '(repeat :value-to-internal (lambda (widget value)
+				      (custom-split-regexp-maybe value))
+		 :match (lambda (widget value)
+			  (or (stringp value)
+			      (widget-editable-list-match widget value)))
+		 regexp))
+
+(defcustom message-forward-included-headers nil
+  "If non-nil, delete non-matching headers when forwarding a message.
+Only headers that match this regexp will be included.  This
+variable should be a regexp or a list of regexps."
+  :version "24.5"
   :group 'message-forwarding
   :type '(repeat :value-to-internal (lambda (widget value)
 				      (custom-split-regexp-maybe value))
@@ -2495,6 +2509,7 @@ With prefix-argument just set Follow-Up, don't cross-post."
   "Remove HEADER in the narrowed buffer.
 If IS-REGEXP, HEADER is a regular expression.
 If FIRST, only remove the first instance of the header.
+If REVERSE, remove headers that doesn't match HEADER.
 Return the number of headers removed."
   (goto-char (point-min))
   (let ((regexp (if is-regexp header (concat "^" (regexp-quote header) ":")))
@@ -7418,17 +7433,25 @@ Optional DIGEST will use digest to forward."
     (message-remove-ignored-headers b e)))
 
 (defun message-remove-ignored-headers (b e)
-  (when message-forward-ignored-headers
+  (when (or message-forward-ignored-headers
+	    message-forward-included-headers)
     (save-restriction
       (narrow-to-region b e)
       (goto-char b)
       (narrow-to-region (point)
 			(or (search-forward "\n\n" nil t) (point)))
-      (let ((ignored (if (stringp message-forward-ignored-headers)
-			 (list message-forward-ignored-headers)
-		       message-forward-ignored-headers)))
-	(dolist (elem ignored)
-	  (message-remove-header elem t))))))
+      (when message-forward-ignored-headers
+	(let ((ignored (if (stringp message-forward-ignored-headers)
+			   (list message-forward-ignored-headers)
+			 message-forward-ignored-headers)))
+	  (dolist (elem ignored)
+	    (message-remove-header elem t))))
+      (when message-forward-included-headers
+	(message-remove-header
+	 (if (listp message-forward-included-headers)
+	     (regexp-opt message-forward-included-headers)
+	   message-forward-included-headers)
+	 t nil t)))))
 
 (defun message-forward-make-body-mime (forward-buffer &optional beg end)
   (let ((b (point)))
@@ -7476,8 +7499,7 @@ Optional DIGEST will use digest to forward."
 	(goto-char (point-max))))
     (setq e (point))
     (insert "<#/mml>\n")
-    (when (and (not message-forward-decoded-p)
-	       message-forward-ignored-headers)
+    (when (not message-forward-decoded-p)
       (message-remove-ignored-headers b e))))
 
 (defun message-forward-make-body-digest-plain (forward-buffer)

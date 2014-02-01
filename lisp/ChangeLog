@@ -1,3 +1,9 @@
+2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* message.el (message-remove-header): Doc fix.
+	(message-forward-included-headers): New variable.
+	(message-remove-ignored-headers): Use it.
+
 2014-01-31  Dave Abrahams  <dave@boostpro.com>
 
 	* gnus-sum.el (gnus-summary-open-group-with-article): New command.

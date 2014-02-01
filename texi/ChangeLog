@@ -1,3 +1,8 @@
+2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* message.texi (Forwarding): Mention
+	`message-forward-included-headers'.
+
 2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus.texi: w3 is no longer supported by Gnus.
