@@ -26,6 +26,56 @@
 
 (eval-when-compile (require 'cl))
 
+(defgroup gnus-cloud nil
+  "Syncing Gnus data via IMAP."
+  :group 'gnus)
+
+(defcustom gnus-cloud-synced-files '("~/\\.authinfo"
+				     "~/\\.authinfo\\.gpg"
+				     "~/\\.gnus\\.el"
+				     "~/News/.*.SCORE")
+  "List of file regexps that should be kept up-to-date via the cloud."
+  :group 'gnus-cloud
+  :type '(repeat regexp))
+
+(defvar gnus-cloud-version "0.1")
+
+(defun gnus-cloud-make-chunk (elems)
+  (with-temp-buffer
+    (insert (format "Version %s\n" gnus-cloud-version))
+    (insert (gnus-cloud-insert-data elems))))
+
+(defun gnus-cloud-insert-data (elems)
+  (mm-with-unibyte-buffer
+    (dolist (elem elems)
+      (cond
+       ((eq (car elem) :file)
+	(let (length data)
+	  (mm-with-unibyte-buffer
+	    (insert-file-contents-literally (cadr elem))
+	    (setq length (buffer-size)
+		  data (buffer-string)))
+	  (insert (format "file %S %s %d\n"
+			  (cadr elem)
+			  (format-time-string
+			   "%FT%T%z" (nth 5 (file-attributes (cadr elem))))
+			  length))
+	  (insert data)
+	  (insert "\n")))
+       ((eq (car elem) :buffer)
+	(insert (format "data %S %d\n" (cadr elem)
+			(with-current-buffer (caddr elem)
+			  (buffer-size))))
+	(insert-buffer-substring (caddr elem))
+	(insert "\n"))))
+    (gnus-cloud-encode-data)
+    (buffer-string)))
+
+(defun gnus-cloud-encode-data ()
+  (call-process-region (point-min) (point-max) "gzip" t (current-buffer) nil
+		       "-c")
+  (base64-encode-region (point-min) (point-max)))
+
 (provide 'gnus-cloud)
 
 ;;; gnus-cloud.el ends here

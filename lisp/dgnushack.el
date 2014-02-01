@@ -331,7 +331,9 @@ This means that every warning will be reported as an error."
     (when (or (featurep 'xemacs)
 	      (or (< emacs-major-version 24)
 		  (< emacs-minor-version 3)))
-      (setq files (delete "gnus-icalendar.el" files)))
+      (setq files (delete "gnus-icalendar.el" files))
+      ;; Temporary during development.
+      (setq files (delete "gnus-cloud.el" files)))
     (dolist (file files)
       (setq file (expand-file-name file srcdir))
       (when (and (file-exists-p
