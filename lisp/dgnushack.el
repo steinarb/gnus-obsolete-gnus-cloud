@@ -26,6 +26,9 @@
 
 (defvar dgnushack-default-load-path (copy-sequence load-path))
 
+(unless (fboundp 'declare-function)
+  (defmacro declare-function (&rest r)))
+
 (defalias 'facep 'ignore)
 
 (require 'cl)

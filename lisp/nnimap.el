@@ -26,10 +26,6 @@
 
 ;;; Code:
 
-;; For Emacs <22.2 and XEmacs.
-(eval-and-compile
-  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
-
 (eval-and-compile
   (require 'nnheader)
   ;; In Emacs 24, `open-protocol-stream' is an autoloaded alias for

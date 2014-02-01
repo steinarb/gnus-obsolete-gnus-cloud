@@ -1,5 +1,8 @@
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-compat.el (gnus-compat): Declare `declare-function' only here
+	instead of in all files.
+
 	* dns.el (network-interface-list): Define for XEmacs.
 
 	* gnus-notifications.el (gravatar-retrieve-synchronously): Declare for

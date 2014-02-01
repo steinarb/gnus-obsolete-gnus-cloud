@@ -141,6 +141,9 @@ one is kept."
 	(setq tail (cdr tail))))
     list))
 
+(unless (fboundp 'declare-function)
+  (defmacro declare-function (&rest r)))
+
 (provide 'gnus-compat)
 
 ;; gnus-compat.el ends here
