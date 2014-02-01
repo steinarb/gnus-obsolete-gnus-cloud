@@ -1,5 +1,8 @@
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gravatar.el (gravatar-retrieve-synchronously): XEmacs also has
+	`url-retrieve-synchronously', apparently.
+
 	* dgnushack.el: Silence XEmacs dns.el warning.
 
 	* gnus-compat.el (gnus-compat): Declare `declare-function' only here
