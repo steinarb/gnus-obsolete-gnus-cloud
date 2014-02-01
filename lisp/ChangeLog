@@ -1,5 +1,7 @@
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* dns.el (network-interface-list): Define for XEmacs.
+
 	* gnus-notifications.el (gravatar-retrieve-synchronously): Declare for
 	XEmacs.
 

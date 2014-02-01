@@ -303,6 +303,8 @@ If TCP-P, the first two bytes of the package with be the length field."
            (t string)))
       (goto-char point))))
 
+(declare-function network-interface-list "process.c")
+
 (defun dns-servers-up-to-date-p ()
   "Return false if we need to recheck the list of DNS servers."
   (and dns-servers
