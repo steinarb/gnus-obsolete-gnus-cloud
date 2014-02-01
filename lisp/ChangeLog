@@ -1,5 +1,7 @@
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* dgnushack.el: Silence XEmacs w3 warning.
+
 	* gravatar.el (gravatar-retrieve-synchronously): XEmacs also has
 	`url-retrieve-synchronously', apparently.
 
