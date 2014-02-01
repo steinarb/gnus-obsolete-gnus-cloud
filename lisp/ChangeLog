@@ -30,6 +30,11 @@
 	(message-forward-included-headers): New variable.
 	(message-remove-ignored-headers): Use it.
 
+2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* nnir.el (nnir-request-update-mark): Don't try to update the source
+	group if we can't find it (bug#16611).
+
 2014-01-31  Dave Abrahams  <dave@boostpro.com>
 
 	* gnus-sum.el (gnus-summary-open-group-with-article): New command.
