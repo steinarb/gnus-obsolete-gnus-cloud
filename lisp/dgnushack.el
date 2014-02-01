@@ -153,8 +153,6 @@
       (defun url-queue-retrieve (url callback &optional cbargs silent
 				     inhibit-cookies)
 	(url-retrieve url callback cbargs)))
-    (unless (boundp 'w3-configuration-directory)
-      (defvar w3-configuration-directory "~/.w3/"))
     (autoload 'Info-directory "info" nil t)
     (autoload 'Info-index "info" nil t)
     (autoload 'Info-index-next "info" nil t)
