@@ -72,9 +72,19 @@
     (buffer-string)))
 
 (defun gnus-cloud-encode-data ()
-  (call-process-region (point-min) (point-max) "gzip" t (current-buffer) nil
+  (call-process-region (point-min) (point-max) "gzip"
+		       t (current-buffer) nil
 		       "-c")
   (base64-encode-region (point-min) (point-max)))
+
+(defun gnus-cloud-decode-data ()
+  (base64-decode-region (point-min) (point-max))
+  (call-process-region (point-min) (point-max) "gunzip"
+		       t (current-buffer) nil
+		       "-c"))
+
+(defun gnus-cloud-parse-chunk ()
+  )
 
 (provide 'gnus-cloud)
 
