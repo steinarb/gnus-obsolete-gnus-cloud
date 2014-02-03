@@ -38,12 +38,16 @@
   :group 'gnus-cloud
   :type '(repeat regexp))
 
-(defvar gnus-cloud-version "0.1")
+(defvar gnus-cloud-version 1)
+
+(defvar gnus-cloud-method nil
+  "The IMAP select method used to store the cloud data.")
 
 (defun gnus-cloud-make-chunk (elems)
   (with-temp-buffer
     (insert (format "Version %s\n" gnus-cloud-version))
-    (insert (gnus-cloud-insert-data elems))))
+    (insert (gnus-cloud-insert-data elems))
+    (buffer-string)))
 
 (defun gnus-cloud-insert-data (elems)
   (mm-with-unibyte-buffer
@@ -55,7 +59,7 @@
 	    (insert-file-contents-literally (cadr elem))
 	    (setq length (buffer-size)
 		  data (buffer-string)))
-	  (insert (format "file %S %s %d\n"
+	  (insert (format "(:file %S %S %d)\n"
 			  (cadr elem)
 			  (format-time-string
 			   "%FT%T%z" (nth 5 (file-attributes (cadr elem))))
@@ -63,7 +67,7 @@
 	  (insert data)
 	  (insert "\n")))
        ((eq (car elem) :buffer)
-	(insert (format "data %S %d\n" (cadr elem)
+	(insert (format "(:data %S %d)\n" (cadr elem)
 			(with-current-buffer (caddr elem)
 			  (buffer-size))))
 	(insert-buffer-substring (caddr elem))
@@ -84,7 +88,84 @@
 		       "-c"))
 
 (defun gnus-cloud-parse-chunk ()
-  )
+  (save-excursion
+    (goto-char (point-min))
+    (unless (looking-at "Version \\([0-9]+\\)")
+      (error "Not a valid Cloud chunk in the current buffer"))
+    (forward-line 1)
+    (let ((version (string-to-number (match-string 1)))
+	  (data (buffer-substring (point) (point-max))))
+      (mm-with-unibyte-buffer
+	(insert data)
+	(cond
+	 ((= version 1)
+	  (gnus-cloud-decode-data)
+	  (gnus-cloud-parse-version-1))
+	 (t
+	  (error "Unsupported Cloud chunk version %s" version)))))))
+
+(defun gnus-cloud-parse-version-1 ()
+  (let ((elems nil))
+    (while (not (eobp))
+      (while (and (not (eobp))
+		  (not (looking-at "(:file\\|(:data")))
+	(forward-line 1))
+      (unless (eobp)
+	(let ((spec (ignore-errors (read (current-buffer))))
+	      length)
+	  (when (and (consp spec)
+		     (or (eq (car spec) :file)
+			 (eq (car spec) :data)))
+	    (setq length (car (last spec)))
+	    (push (append (butlast spec)
+			  (list
+			   (buffer-substring (1+ (point))
+					     (+ (point) 1 length))))
+		  elems)
+	    (goto-char (+ (point) 1 length))))))
+    (nreverse elems)))
+
+(defun gnus-cloud-update-data (elems)
+  (dolist (elem elems)
+    (cond
+     ((eq (car elem) :data)
+      )
+     ((eq (car elem) :file)
+      (unless (= (length elem) 4)
+	(error "Invalid length of a file spec: %s" (length elem)))
+      (gnus-cloud-update-file (cdr elem)))
+     (t
+      (error "Unknown type %s" (car elem))))))
+
+(defun gnus-cloud-update-file (elem)
+  (let ((file-name (pop elem))
+	(date (pop elem))
+	(contents (pop elem)))
+    (unless (gnus-cloud-file-covered-p file-name)
+      (message "%s isn't covered by the cloud; ignoring" file-name))
+    (when (or (not (file-exists-p file-name))
+	      (and (file-exists-p file-name)
+		   (mm-with-unibyte-buffer
+		     (insert-file-contents-literally file-name)
+		     (not
+		      (equal (buffer-string (point-min) (point-max))
+			     contents)))))
+      (gnus-cloud-replace-file file-name date contents))))
+
+(defun gnus-cloud-replace-file (file-name date new-contents)
+  (mm-with-unibyte-buffer
+    (insert new-contents)
+    (when (file-exists-p file-name)
+      (let ((backup (car (find-backup-file-name file-name))))
+	(rename-file file-name backup)))
+    (write-region (point-min) (point-max) file-name)))
+
+(defun gnus-cloud-file-covered-p (file-name)
+  (let ((matched nil))
+    (dolist (regexp gnus-cloud-synced-files)
+      (when (string-match regexp file-name)
+	(setq matched t)))
+    matched))
 
 (provide 'gnus-cloud)
 
