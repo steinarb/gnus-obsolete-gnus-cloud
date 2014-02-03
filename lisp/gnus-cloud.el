@@ -147,9 +147,7 @@
 	      (and (file-exists-p file-name)
 		   (mm-with-unibyte-buffer
 		     (insert-file-contents-literally file-name)
-		     (not
-		      (equal (buffer-string (point-min) (point-max))
-			     contents)))))
+		     (not (equal (buffer-string) contents)))))
       (gnus-cloud-replace-file file-name date contents))))
 
 (defun gnus-cloud-replace-file (file-name date new-contents)
