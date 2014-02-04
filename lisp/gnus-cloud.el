@@ -25,6 +25,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+(require 'parse-time)
 
 (defgroup gnus-cloud nil
   "Syncing Gnus data via IMAP."
@@ -74,7 +75,7 @@
 	(insert-buffer-substring (caddr elem))
 	(insert "\n"))
        ((eq (car elem) :delete)
-	(insert (format ("(:delete %S)\n") (cadr elem))))))
+	(insert (format "(:delete %S)\n" (cadr elem))))))
     (gnus-cloud-encode-data)
     (buffer-string)))
 
