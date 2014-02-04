@@ -55,27 +55,28 @@
   (mm-with-unibyte-buffer
     (dolist (elem elems)
       (cond
-       ((eq (car elem) :file)
+       ((eq (plist-get elem :type) :file)
 	(let (length data)
 	  (mm-with-unibyte-buffer
-	    (insert-file-contents-literally (cadr elem))
+	    (insert-file-contents-literally (plist-get elem :file-name))
 	    (setq length (buffer-size)
 		  data (buffer-string)))
-	  (insert (format "(:file %S %S %d)\n"
-			  (cadr elem)
-			  (format-time-string
-			   "%FT%T%z" (nth 5 (file-attributes (cadr elem))))
+	  (insert (format "(:type :file :file-name %S :timestamp %S :length %d)\n"
+			  (plist-get elem :file-name)
+			  (plist-get elem :timestamp)
 			  length))
 	  (insert data)
 	  (insert "\n")))
-       ((eq (car elem) :buffer)
-	(insert (format "(:data %S %d)\n" (cadr elem)
-			(with-current-buffer (caddr elem)
+       ((eq (plist-get elem :type) :data)
+	(insert (format "(:type :data :name %S :length %d)\n"
+			(plist-get elem :name)
+			(with-current-buffer (plist-get elem :buffer)
 			  (buffer-size))))
-	(insert-buffer-substring (caddr elem))
+	(insert-buffer-substring (plist-get elem :buffer))
 	(insert "\n"))
-       ((eq (car elem) :delete)
-	(insert (format "(:delete %S)\n" (cadr elem))))))
+       ((eq (plist-get elem :type) :delete)
+	(insert (format "(:type :delete :file-name %S)\n"
+			(plist-get elem :file-name))))))
     (gnus-cloud-encode-data)
     (buffer-string)))
 
@@ -104,6 +105,7 @@
 	(cond
 	 ((= version 1)
 	  (gnus-cloud-decode-data)
+	  (goto-char (point-min))
 	  (gnus-cloud-parse-version-1))
 	 (t
 	  (error "Unsupported Cloud chunk version %s" version)))))))
@@ -112,43 +114,40 @@
   (let ((elems nil))
     (while (not (eobp))
       (while (and (not (eobp))
-		  (not (looking-at "(:file\\|(:data\\|(:delete")))
+		  (not (looking-at "(:type")))
 	(forward-line 1))
       (unless (eobp)
 	(let ((spec (ignore-errors (read (current-buffer))))
 	      length)
 	  (when (and (consp spec)
-		     (or (eq (car spec) :file)
-			 (eq (car spec) :data)
-			 (eq (car spec) :delete)))
-	    (setq length (car (last spec)))
-	    (push (append (butlast spec)
+		     (memq (getf spec :type) '(:file :data :deleta)))
+	    (setq length (plist-get spec :length))
+	    (push (append spec
 			  (list
-			   (buffer-substring (1+ (point))
-					     (+ (point) 1 length))))
+			   :contents (buffer-substring (1+ (point))
+						       (+ (point) 1 length))))
 		  elems)
 	    (goto-char (+ (point) 1 length))))))
     (nreverse elems)))
 
 (defun gnus-cloud-update-data (elems)
   (dolist (elem elems)
-    (cond
-     ((eq (car elem) :data)
-      )
-     ((eq (car elem) :delete)
-      (gnus-cloud-delete-file (cadr elem))
-      )
-     ((eq (car elem) :file)
-      (unless (= (length elem) 4)
-	(error "Invalid length of a file spec: %s" (length elem)))
-      (gnus-cloud-update-file (cdr elem)))
-     (t
-      (error "Unknown type %s" (car elem))))))
+    (let ((type (plist-get elem :type)))
+      (cond
+       ((eq type :data)
+	)
+       ((eq type :delete)
+	(gnus-cloud-delete-file (plist-get elem :file-name))
+	)
+       ((eq type :file)
+	(gnus-cloud-update-file elem))
+       (t
+	(message "Unknown type %s; ignoring" type))))))
 
 (defun gnus-cloud-update-file (elem)
-  (let ((file-name (pop elem))
-	(date (pop elem))
-	(contents (pop elem)))
+  (let ((file-name (plist-get elem :file-name))
+	(date (plist-get elem :timestamp))
+	(contents (plist-get elem :contents)))
     (unless (gnus-cloud-file-covered-p file-name)
       (message "%s isn't covered by the cloud; ignoring" file-name))
     (when (or (not (file-exists-p file-name))
@@ -197,29 +196,33 @@
 	(dolist (file (directory-files (plist-get elem :directory)
 				       nil
 				       (plist-get elem :match)))
-	  (push (expand-file-name file (plist-get elem :directory))
+	  (push (format "%s/%s"
+			(directory-file-name (plist-get elem :directory))
+			file)
 		files)))))
     (nreverse files)))
 
 (defvar gnus-cloud-file-timestamps nil)
 
 (defun gnus-cloud-files-to-upload (&optional full)
-  (let ((files nil))
+  (let ((files nil)
+	timestamp)
     (dolist (file (gnus-cloud-all-files))
       (if (file-exists-p file)
-	  (when (or full
-		    (gnus-cloud-file-new-p file))
-	    (push `(:file ,file) files))
+	  (when (setq timestamp (gnus-cloud-file-new-p file full))
+	    (push `(:type :file :file-name ,file :timestamp ,timestamp) files))
 	(when (assoc file gnus-cloud-file-timestamps)
-	  (push `(:delete ,file) files))))
+	  (push `(:type :delete :file-name ,file) files))))
     (nreverse files)))
 
-(defun gnus-cloud-file-new-p (file)
+(defun gnus-cloud-file-new-p (file full)
   (let ((timestamp (format-time-string
 		    "%FT%T%z" (nth 5 (file-attributes file))))
 	(old (cadr (assoc file gnus-cloud-file-timestamps))))
-    (or (null old)
-	(string< old timestamp))))
+    (when (or full
+	      (null old)
+	      (string< old timestamp))
+      timestamp)))
 
 (provide 'gnus-cloud)
 
