@@ -1,3 +1,9 @@
+2014-02-04  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* parse-time.el (parse-time-iso8601-regexp)
+	(parse-iso8601-time-string): Copied from `url-dav' so that we can use
+	it more generally.
+
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-cloud.el: New file to provide the Emacs Cloud.
