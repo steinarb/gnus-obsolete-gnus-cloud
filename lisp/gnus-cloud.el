@@ -30,10 +30,11 @@
   "Syncing Gnus data via IMAP."
   :group 'gnus)
 
-(defcustom gnus-cloud-synced-files '("~/\\.authinfo"
-				     "~/\\.authinfo\\.gpg"
-				     "~/\\.gnus\\.el"
-				     "~/News/.*.SCORE")
+(defcustom gnus-cloud-synced-files
+  '("~/.authinfo"
+    "~/.authinfo.gpg"
+    "~/.gnus.el"
+    (:directory "~/News" :match ".*.SCORE\\'"))
   "List of file regexps that should be kept up-to-date via the cloud."
   :group 'gnus-cloud
   :type '(repeat regexp))
@@ -160,9 +161,17 @@
 
 (defun gnus-cloud-file-covered-p (file-name)
   (let ((matched nil))
-    (dolist (regexp gnus-cloud-synced-files)
-      (when (string-match regexp file-name)
-	(setq matched t)))
+    (dolist (elem gnus-cloud-synced-files)
+      (cond
+       ((stringp elem)
+	(when (equal elem file-name)
+	  (setq matched t)))
+       ((consp elem)
+	(when (and (equal (directory-file-name (plist-get elem :directory))
+			  (directory-file-name (file-name-directory file-name)))
+		   (string-match (plist-get elem :match)
+				 (file-name-nondirectory file-name)))
+	  (setq matched t)))))
     matched))
 
 (provide 'gnus-cloud)
