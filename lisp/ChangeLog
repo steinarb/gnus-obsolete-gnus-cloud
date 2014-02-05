@@ -1,3 +1,17 @@
+2014-02-05  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-mime-display-attachment-buttons-in-header):
+	New user option.
+	(gnus-mime-buttonize-attachments-in-header): New function.
+	(gnus-article-prepare): Use it.
+	(gnus-mime-inline-part): Suppress extra newline.
+	(gnus-mm-display-part): Save excursion;
+	remove useless deleting and adding of buttons.
+	(gnus-insert-mime-button): Allow insertion in the middle of a line.
+
+	* gnus-sum.el (gnus-summary-wash-mime-map, gnus-summary-article-menu):
+	Add gnus-mime-buttonize-attachments-in-header.
+
 2014-02-05  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-request-articles): New command to download several

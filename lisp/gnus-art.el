@@ -4696,6 +4696,9 @@ If ALL-HEADERS is non-nil, no headers are hidden."
 	    (when (or (numberp article)
 		      (stringp article))
 	      (gnus-article-prepare-display)
+	      ;; Add attachment buttons to the header.
+	      (when gnus-mime-display-attachment-buttons-in-header
+		(gnus-mime-buttonize-attachments-in-header))
 	      ;; Do page break.
 	      (goto-char (point-min))
 	      (when gnus-break-pages
@@ -5329,7 +5332,7 @@ Compressed files like .gz and .bz2 are decompressed."
 		    (mm-read-coding-system "Charset: "))))
 	 ((mm-handle-undisplayer handle)
 	  (mm-remove-part handle)))
-	(forward-line 2)
+	(forward-line 1)
         (mm-display-inline handle)
 	(goto-char b)))))
 
@@ -5654,26 +5657,22 @@ all parts."
 		  (if (mm-handle-displayed-p handle)
 		      ;; This will remove the part.
 		      (mm-display-part handle)
-		    (save-restriction
-		      (narrow-to-region (point)
-					(if (eobp) (point) (1+ (point))))
-		      (gnus-bind-safe-url-regexp (mm-display-part handle))
-		      ;; We narrow to the part itself and
-		      ;; then call the treatment functions.
-		      (goto-char (point-min))
-		      (forward-line 1)
-		      (narrow-to-region (point) (point-max))
-		      (gnus-treat-article
-		       nil id
-		       (gnus-article-mime-total-parts)
-		       (mm-handle-media-type handle)))))
+		    (save-window-excursion
+		      (save-restriction
+			(narrow-to-region (point)
+					  (if (eobp) (point) (1+ (point))))
+			(gnus-bind-safe-url-regexp (mm-display-part handle))
+			;; We narrow to the part itself and
+			;; then call the treatment functions.
+			(goto-char (point-min))
+			(forward-line 1)
+			(narrow-to-region (point) (point-max))
+			(gnus-treat-article
+			 nil id
+			 (gnus-article-mime-total-parts)
+			 (mm-handle-media-type handle))))))
 	      (if (window-live-p window)
-		  (select-window window)))))
-      (goto-char point)
-      (gnus-delete-line)
-      (gnus-insert-mime-button
-       handle id (list (mm-handle-displayed-p handle)))
-      (goto-char point))))
+		  (select-window window))))))))
 
 (defun gnus-article-goto-part (n)
   "Go to MIME part N."
@@ -5734,8 +5733,6 @@ all parts."
 					  (concat "; " gnus-tmp-name))))
     (unless (equal gnus-tmp-description "")
       (setq gnus-tmp-type-long (concat " --- " gnus-tmp-type-long)))
-    (unless (bolp)
-      (insert "\n"))
     (setq b (point))
     (gnus-eval-format
      gnus-mime-button-line-format gnus-mime-button-line-format-alist
@@ -5858,6 +5855,16 @@ If displaying \"text/html\" is discouraged \(see
 \"multipart/related\" part might be overlooked when this variable is nil."
   :version "22.1"
   :group 'gnus-article-mime
+  :type 'boolean)
+
+(defcustom gnus-mime-display-attachment-buttons-in-header t
+  "Add attachment buttons in the end of the header of an article.
+Since MIME attachments tend to be put at the end of an article, we may
+overlook them if there is a huge body.  This option offers you a copy
+of all non-inlinable MIME parts as buttons shown in front of an article.
+If nil, don't show those extra buttons."
+  :version "24.5"
+  :group 'gnus-article
   :type 'boolean)
 
 (defun gnus-mime-display-part (handle)
@@ -6205,6 +6212,88 @@ Provided for backwards compatibility."
 						 'gnus-image-category 'shr)))))
     (when image
       (gnus-add-image 'shr image))))
+
+(defun gnus-mime-buttonize-attachments-in-header (&optional interactive)
+  "Show attachments as buttons in the end of the header of an article.
+This function toggles the display when called interactively.  Note that
+buttons to be added to the header are only the ones that aren't inlined
+in the body.  Use `gnus-header-face-alist' to highlight buttons."
+  (interactive (list t))
+  (gnus-with-article-buffer
+    (let ((case-fold-search t)
+	  buttons st nd handle marker)
+      (save-excursion
+	(save-restriction
+	  (widen)
+	  (article-narrow-to-head)
+	  ;; Header buttons exist?
+	  (while (and (not buttons)
+		      (re-search-forward "^attachments?:[\n ]+" nil t))
+	    (when (get-char-property (match-end 0)
+				     'gnus-button-attachment-extra)
+	      (setq buttons (match-beginning 0))))
+	  (widen)
+	  (if (and interactive buttons)
+	      ;; Delete header buttons.
+	      (delete-region buttons
+			     (if (re-search-forward "^[^ ]" nil t)
+				 (match-beginning 0)
+			       (point-max)))
+	    (unless buttons
+	      (article-goto-body)
+	      (setq st (point))
+	      ;; Find buttons in the body.
+	      (while (setq st (text-property-not-all st (point-max)
+						     'gnus-part nil))
+		(setq nd (or (text-property-any st (point-max) 'gnus-part nil)
+			     (point-max)))
+		(when (and (get-text-property st 'gnus-part)
+			   (setq handle (get-text-property st 'gnus-data))
+			   (not (and (mm-inlinable-p handle)
+				     (mm-inlined-p handle))))
+		  (goto-char nd)
+		  (skip-chars-backward "\t\n ")
+		  (when (> (point) st)
+		    (push (cons (buffer-substring st (point)) (overlays-at st))
+			  buttons)))
+		(setq st nd))
+	      (when buttons
+		;; Add header buttons.
+		(article-goto-body)
+		(forward-line -1)
+		(narrow-to-region (point) (point))
+		(insert "Attachment" (if (cdr buttons) "s" "") ":")
+		(dolist (button (nreverse buttons))
+		  (when (> (+ (current-column) 1 (string-width (car button)))
+			   (window-width))
+		    (insert "\n"))
+		  (insert " ")
+		  (setq st (point))
+		  (insert (car button))
+		  (setq nd (point))
+		  ;; Make buttons uncatchable by the K-prefixed commands.
+		  (put-text-property
+		   st nd 'gnus-part
+		   (number-to-string (get-text-property st 'gnus-part)))
+		  (dolist (ovl (cdr button))
+		    (setq ovl (copy-overlay ovl))
+		    (when (setq marker
+				(plist-get (cdr (overlay-get ovl 'button))
+					   :from))
+		      (set-marker marker st))
+		    (when (setq marker
+				(plist-get (cdr (overlay-get ovl 'button))
+					   :to))
+		      (set-marker marker nd))
+		    (move-overlay ovl st nd)
+		    (setq st nd)
+		    (overlay-put ovl 'gnus-button-attachment-extra t)
+		    (overlay-put ovl 'face nil)))
+		(insert "\n")
+		(let ((gnus-treatment-function-alist
+		       '((gnus-treat-highlight-headers
+			  gnus-article-highlight-headers))))
+		  (gnus-treat-article 'head))))))))))
 
 ;;; Article savers.
 

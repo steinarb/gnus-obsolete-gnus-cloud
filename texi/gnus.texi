@@ -9801,6 +9801,19 @@ Make all the @acronym{MIME} parts have buttons in front of them.  This is
 mostly useful if you wish to save (or perform other actions) on inlined
 parts.
 
+@item W M h
+@kindex W M h (Summary)
+@findex gnus-mime-buttonize-attachments-in-header
+@vindex gnus-mime-display-attachment-buttons-in-header
+Display @acronym{MIME} part buttons in the end of the header of an
+article (@code{gnus-mime-buttonize-attachments-in-header}).  This
+command toggles the display.  Note that buttons to be added to the
+header are only the ones that aren't inlined in the body.  If you want
+those buttons always to be displayed, set
+@code{gnus-mime-display-attachment-buttons-in-header} to non-@code{nil}.
+The default is @code{t}.  To change the appearance of buttons, customize
+@code{gnus-header-face-alist}.
+
 @item K m
 @kindex K m (Summary)
 @findex gnus-summary-repair-multipart

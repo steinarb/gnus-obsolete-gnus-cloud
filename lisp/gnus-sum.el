@@ -2185,6 +2185,7 @@ increase the score of each group you read."
 (gnus-define-keys (gnus-summary-wash-mime-map "M" gnus-summary-wash-map)
   "w" gnus-article-decode-mime-words
   "c" gnus-article-decode-charset
+  "h" gnus-mime-buttonize-attachments-in-header
   "v" gnus-mime-view-all-parts
   "b" gnus-article-view-part)
 
@@ -2391,6 +2392,8 @@ increase the score of each group you read."
 	      ["QP" gnus-article-de-quoted-unreadable t]
 	      ["Base64" gnus-article-de-base64-unreadable t]
 	      ["View MIME buttons" gnus-summary-display-buttonized t]
+	      ["View MIME buttons in header"
+	       gnus-mime-buttonize-attachments-in-header t]
 	      ["View all" gnus-mime-view-all-parts t]
 	      ["Verify and Decrypt" gnus-summary-force-verify-and-decrypt t]
 	      ["Encrypt body" gnus-article-encrypt-body
