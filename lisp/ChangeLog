@@ -1,5 +1,8 @@
 2014-02-05  Katsumi Yamaoka  <yamaoka@jpl.org>
 
+	* gnus.el, gnus-xmas.el (gnus-copy-overlay, gnus-overlays-at):
+	New functions.
+
 	* gnus-art.el (gnus-mime-display-attachment-buttons-in-header):
 	New user option.
 	(gnus-mime-buttonize-attachments-in-header): New function.

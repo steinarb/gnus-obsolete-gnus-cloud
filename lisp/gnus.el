@@ -305,6 +305,7 @@ be set in `.emacs' instead."
 
 (unless (featurep 'gnus-xmas)
   (defalias 'gnus-make-overlay 'make-overlay)
+  (defalias 'gnus-copy-overlay 'copy-overlay)
   (defalias 'gnus-delete-overlay 'delete-overlay)
   (defalias 'gnus-overlay-get 'overlay-get)
   (defalias 'gnus-overlay-put 'overlay-put)
@@ -312,6 +313,7 @@ be set in `.emacs' instead."
   (defalias 'gnus-overlay-buffer 'overlay-buffer)
   (defalias 'gnus-overlay-start 'overlay-start)
   (defalias 'gnus-overlay-end 'overlay-end)
+  (defalias 'gnus-overlays-at 'overlays-at)
   (defalias 'gnus-overlays-in 'overlays-in)
   (defalias 'gnus-extent-detached-p 'ignore)
   (defalias 'gnus-extent-start-open 'ignore)

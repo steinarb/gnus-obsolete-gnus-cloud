@@ -211,6 +211,10 @@ call it with the value of the `gnus-data' text property."
 		 (delete-extent extent)
 		 nil)))
 
+(defun gnus-xmas-overlays-at (pos)
+  "Return a list of the extents that contain the character at POS."
+  (mapcar-extents #'identity nil nil pos (1+ pos)))
+
 (defun gnus-xmas-overlays-in (beg end)
   "Return a list of the extents that overlap the region BEG ... END."
   (mapcar-extents #'identity nil nil beg end))
@@ -399,6 +403,7 @@ then we display only bindings that start with that prefix."
 FRONT-ADVANCE and REAR-ADVANCE are ignored."
       (make-extent beg end buffer)))
 
+  (defalias 'gnus-copy-overlay 'copy-extent)
   (defalias 'gnus-delete-overlay 'delete-extent)
   (defalias 'gnus-overlay-get 'extent-property)
   (defalias 'gnus-overlay-put 'set-extent-property)
@@ -406,6 +411,7 @@ FRONT-ADVANCE and REAR-ADVANCE are ignored."
   (defalias 'gnus-overlay-buffer 'extent-object)
   (defalias 'gnus-overlay-start 'extent-start-position)
   (defalias 'gnus-overlay-end 'extent-end-position)
+  (defalias 'gnus-overlays-at 'gnus-xmas-overlays-at)
   (defalias 'gnus-overlays-in 'gnus-xmas-overlays-in)
   (defalias 'gnus-kill-all-overlays 'gnus-xmas-kill-all-overlays)
   (defalias 'gnus-extent-detached-p 'extent-detached-p)

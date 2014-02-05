@@ -6254,7 +6254,8 @@ in the body.  Use `gnus-header-face-alist' to highlight buttons."
 		  (goto-char nd)
 		  (skip-chars-backward "\t\n ")
 		  (when (> (point) st)
-		    (push (cons (buffer-substring st (point)) (overlays-at st))
+		    (push (cons (buffer-substring st (point))
+				(gnus-overlays-at st))
 			  buttons)))
 		(setq st nd))
 	      (when buttons
@@ -6276,19 +6277,19 @@ in the body.  Use `gnus-header-face-alist' to highlight buttons."
 		   st nd 'gnus-part
 		   (number-to-string (get-text-property st 'gnus-part)))
 		  (dolist (ovl (cdr button))
-		    (setq ovl (copy-overlay ovl))
+		    (setq ovl (gnus-copy-overlay ovl))
 		    (when (setq marker
-				(plist-get (cdr (overlay-get ovl 'button))
+				(plist-get (cdr (gnus-overlay-get ovl 'button))
 					   :from))
 		      (set-marker marker st))
 		    (when (setq marker
-				(plist-get (cdr (overlay-get ovl 'button))
+				(plist-get (cdr (gnus-overlay-get ovl 'button))
 					   :to))
 		      (set-marker marker nd))
-		    (move-overlay ovl st nd)
+		    (gnus-move-overlay ovl st nd)
 		    (setq st nd)
-		    (overlay-put ovl 'gnus-button-attachment-extra t)
-		    (overlay-put ovl 'face nil)))
+		    (gnus-overlay-put ovl 'gnus-button-attachment-extra t)
+		    (gnus-overlay-put ovl 'face nil)))
 		(insert "\n")
 		(let ((gnus-treatment-function-alist
 		       '((gnus-treat-highlight-headers
