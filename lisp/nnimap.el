@@ -624,6 +624,26 @@ textual parts.")
 	    (nnheader-ms-strip-cr)
 	    (cons group article)))))))
 
+(deffoo nnimap-request-articles (articles &optional group server)
+  (when group
+    (setq group (nnimap-decode-gnus-group group)))
+  (with-current-buffer nntp-server-buffer
+    (let ((result (nnimap-change-group group server)))
+      (when result
+	(erase-buffer)
+	(with-current-buffer (nnimap-buffer)
+	  (erase-buffer)
+	  (when (nnimap-command
+		 (if (nnimap-ver4-p)
+		     "UID FETCH %s BODY.PEEK[]"
+		   "UID FETCH %s RFC822.PEEK")
+		 (nnimap-article-ranges (gnus-compress-sequence articles)))
+	    (let ((buffer (current-buffer)))
+	      (with-current-buffer nntp-server-buffer
+		(nnheader-insert-buffer-substring buffer)
+		(nnheader-ms-strip-cr)))
+	    t))))))
+
 (defun nnimap-get-whole-article (article &optional command)
   (let ((result
 	 (nnimap-command

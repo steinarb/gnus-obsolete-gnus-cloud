@@ -26,6 +26,7 @@
 
 (eval-when-compile (require 'cl))
 (require 'parse-time)
+(require 'nnimap)
 
 (defgroup gnus-cloud nil
   "Syncing Gnus data via IMAP."
@@ -274,7 +275,10 @@
 	(while (and (not (eobp))
 		    (setq head (nnheader-parse-head)))
 	  (push head headers))))
-    (nreverse headers)))
+    (sort (nreverse headers)
+	  (lambda (h1 h2)
+	    (> (gnus-cloud-chunk-sequence (mail-header-subject h1))
+	       (gnus-cloud-chunk-sequence (mail-header-subject h2)))))))
 
 (defun gnus-cloud-chunk-sequence (string)
   (if (string-match "sequence: \\([0-9]+\\)" string)
@@ -282,11 +286,7 @@
     0))
 
 (defun gnus-cloud-prune-old-chunks (headers)
-  (let ((headers
-	 (sort (reverse headers)
-	       (lambda (h1 h2)
-		 (> (gnus-cloud-chunk-sequence (mail-header-subject h1))
-		    (gnus-cloud-chunk-sequence (mail-header-subject h2))))))
+  (let ((headers (reverse headers))
 	(found nil))
   (while (and headers
 	      (not found))
@@ -301,6 +301,22 @@
 	       (mail-header-number h))
 	     (nreverse headers))
      (gnus-group-full-name gnus-cloud-group-name gnus-cloud-method)))))
+
+(defun gnus-cloud-download-data ()
+  (let ((articles nil)
+	chunks)
+    (dolist (header (gnus-cloud-available-chunks))
+      (when (> (gnus-cloud-chunk-sequence (mail-header-subject header))
+	       gnus-cloud-sequence)
+	(push (mail-header-number header) articles)))
+    (when articles
+      (nnimap-request-articles (nreverse articles) gnus-cloud-group-name)
+      (with-current-buffer nntp-server-buffer
+	(goto-char (point-min))
+	(while (re-search-forward "^Version " nil t)
+	  (beginning-of-line)
+	  (push (gnus-cloud-parse-chunk) chunks)
+	  (forward-line 1))))))
 
 (provide 'gnus-cloud)
 
