@@ -32,7 +32,7 @@
   :group 'gnus)
 
 (defcustom gnus-cloud-synced-files
-  '("~/.authinfo"
+  '(;;"~/.authinfo"
     "~/.authinfo.gpg"
     "~/.gnus.el"
     (:directory "~/News" :match ".*.SCORE\\'"))
@@ -40,7 +40,10 @@
   :group 'gnus-cloud
   :type '(repeat regexp))
 
+(defvar gnus-cloud-group-name "*Emacs Cloud*")
+
 (defvar gnus-cloud-version 1)
+(defvar gnus-cloud-sequence 1)
 
 (defvar gnus-cloud-method nil
   "The IMAP select method used to store the cloud data.")
@@ -223,6 +226,70 @@
 	      (null old)
 	      (string< old timestamp))
       timestamp)))
+
+(defun gnus-cloud-ensure-cloud-group ()
+  (let ((method (if (stringp gnus-cloud-method)
+		    (gnus-server-to-method gnus-cloud-method)
+		  gnus-cloud-method)))
+    (unless (or (gnus-active gnus-cloud-group-name)
+		(gnus-activate-group gnus-cloud-group-name nil nil
+				     gnus-cloud-method))
+      (and (gnus-request-create-group gnus-cloud-group-name gnus-cloud-method)
+	   (gnus-activate-group gnus-cloud-group-name nil nil gnus-cloud-method)
+	   (gnus-subscribe-group gnus-cloud-group-name)))))
+
+(defun gnus-cloud-upload-data ()
+  (gnus-cloud-ensure-cloud-group)
+  (with-temp-buffer
+    (let* ((full t)
+	   (elems (gnus-cloud-files-to-upload full)))
+      (insert (format "Subject: (sequence: %d type: %s)\n"
+		      gnus-cloud-sequence
+		      (if full :full :partial)))
+      (insert "From: nobody@invalid.com\n")
+      (insert "\n")
+      (insert (gnus-cloud-make-chunk elems))
+      (gnus-request-accept-article gnus-cloud-group-name gnus-cloud-method
+				   t t))))
+
+(defun gnus-cloud-available-chunks ()
+  (gnus-activate-group gnus-cloud-group-name nil nil gnus-cloud-method)
+  (let* ((group (gnus-group-full-name gnus-cloud-group-name gnus-cloud-method))
+	 (active (gnus-active group))
+	 headers head)
+    (when (gnus-retrieve-headers (gnus-uncompress-range active) group)
+      (with-current-buffer nntp-server-buffer
+	(goto-char (point-min))
+	(while (and (not (eobp))
+		    (setq head (nnheader-parse-head)))
+	  (push head headers))))
+    (nreverse headers)))
+
+(defun gnus-cloud-chunk-sequence (string)
+  (if (string-match "sequence: \\([0-9]+\\)" string)
+      (string-to-number (match-string 1 string))
+    0))
+
+(defun gnus-cloud-prune-old-chunks (headers)
+  (let ((headers
+	 (sort (reverse headers)
+	       (lambda (h1 h2)
+		 (> (gnus-cloud-chunk-sequence (mail-header-subject h1))
+		    (gnus-cloud-chunk-sequence (mail-header-subject h2))))))
+	(found nil))
+  (while (and headers
+	      (not found))
+    (when (string-match "type: :full" (mail-header-subject (car headers)))
+      (setq found t))
+    (pop headers))
+  ;; All the chunks that are older than the newest :full chunk can be
+  ;; deleted.
+  (when headers
+    (gnus-request-expire-articles
+     (mapcar (lambda (h)
+	       (mail-header-number h))
+	     (nreverse headers))
+     (gnus-group-full-name gnus-cloud-group-name gnus-cloud-method)))))
 
 (provide 'gnus-cloud)
 
