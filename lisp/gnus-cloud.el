@@ -238,19 +238,30 @@
 	   (gnus-activate-group gnus-cloud-group-name nil nil gnus-cloud-method)
 	   (gnus-subscribe-group gnus-cloud-group-name)))))
 
-(defun gnus-cloud-upload-data ()
+(defun gnus-cloud-upload-data (&optional full)
   (gnus-cloud-ensure-cloud-group)
   (with-temp-buffer
-    (let* ((full t)
-	   (elems (gnus-cloud-files-to-upload full)))
+    (let ((elems (gnus-cloud-files-to-upload full)))
       (insert (format "Subject: (sequence: %d type: %s)\n"
 		      gnus-cloud-sequence
 		      (if full :full :partial)))
       (insert "From: nobody@invalid.com\n")
       (insert "\n")
       (insert (gnus-cloud-make-chunk elems))
-      (gnus-request-accept-article gnus-cloud-group-name gnus-cloud-method
-				   t t))))
+      (when (gnus-request-accept-article gnus-cloud-group-name gnus-cloud-method
+					 t t)
+	(setq gnus-cloud-sequence (1+ gnus-cloud-sequence))
+	(gnus-cloud-add-timestamps elems)))))
+
+(defun gnus-cloud-add-timestamps (elems)
+  (dolist (elem elems)
+    (let* ((file-name (plist-get elem :file-name))
+	   (old (assoc file-name gnus-cloud-file-timestamps)))
+      (when old
+	(setq gnus-cloud-file-timestamps
+	      (delq old gnus-cloud-file-timestamps)))
+      (push (list file-name (plist-get elem :timestamp))
+	    gnus-cloud-file-timestamps))))
 
 (defun gnus-cloud-available-chunks ()
   (gnus-activate-group gnus-cloud-group-name nil nil gnus-cloud-method)

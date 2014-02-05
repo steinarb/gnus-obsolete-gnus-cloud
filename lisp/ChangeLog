@@ -1,5 +1,7 @@
 2014-02-05  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus.el (gnus-variable-list): Save Cloud variables.
+
 	* gnus-int.el (gnus-request-accept-article): Doc fix.
 
 2014-02-04  Lars Ingebrigtsen  <larsi@gnus.org>
