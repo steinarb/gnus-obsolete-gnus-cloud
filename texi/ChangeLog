@@ -4,6 +4,10 @@
 	gnus-mime-buttonize-attachments-in-header and
 	gnus-mime-display-attachment-buttons-in-header.
 
+2014-02-05  Glenn Morris  <rgm@gnu.org>
+
+	* epa.texi: Add indices.
+
 2014-02-01  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* message.texi (Forwarding): Mention
