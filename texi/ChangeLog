@@ -1,3 +1,7 @@
+2014-02-06  Glenn Morris  <rgm@gnu.org>
+
+	* epa.texi (Mail-mode integration): Mention epa-mail-aliases.
+
 2014-02-05  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus.texi (MIME Commands): Mention
