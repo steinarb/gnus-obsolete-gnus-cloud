@@ -1,5 +1,9 @@
 2014-02-07  Katsumi Yamaoka  <yamaoka@jpl.org>
 
+	* gnus-art.el (gnus-mime-buttonize-attachments-in-header): Display
+	buttons that are hidden in unselected alternative part as well.
+	(gnus-mime-display-alternative): Redraw attachment buttons in header.
+
 	* gmm-utils.el (gmm-flet, gmm-labels): Add edebug spec.
 
 2014-02-07  Lars Ingebrigtsen  <larsi@gnus.org>
