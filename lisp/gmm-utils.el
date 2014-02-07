@@ -445,6 +445,7 @@ the function cell of FUNCs rather than their value cell.
 	 ,@body)
     `(flet ,bindings ,@body)))
 (put 'gmm-flet 'lisp-indent-function 1)
+(put 'gmm-flet 'edebug-form-spec '((&rest (sexp sexp &rest form)) &rest form))
 
 (defmacro gmm-labels (bindings &rest body)
   "Make temporary function bindings.
@@ -457,6 +458,7 @@ rather than relying on `lexical-binding'.
   `(,(progn (require 'cl) (if (fboundp 'cl-labels) 'cl-labels 'labels))
     ,bindings ,@body))
 (put 'gmm-labels 'lisp-indent-function 1)
+(put 'gmm-labels 'edebug-form-spec '((&rest (sexp sexp &rest form)) &rest form))
 
 (provide 'gmm-utils)
 
