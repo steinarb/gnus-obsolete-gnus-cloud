@@ -1612,7 +1612,7 @@ slower."
   :type 'string)
 
 (defcustom gnus-valid-select-methods
-  '(("nntp" post address prompt-address physical-address)
+  '(("nntp" post address prompt-address physical-address cloud)
     ("nnspool" post address)
     ("nnvirtual" post-mail virtual prompt-address)
     ("nnmbox" mail respool address)
@@ -1629,7 +1629,7 @@ slower."
     ("nnrss" none global)
     ("nnagent" post-mail)
     ("nnimap" post-mail address prompt-address physical-address respool
-     server-marks)
+     server-marks cloud)
     ("nnmaildir" mail respool address server-marks)
     ("nnnil" none))
   "*An alist of valid select methods.

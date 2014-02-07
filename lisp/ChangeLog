@@ -2,6 +2,8 @@
 
 	* gnus-srvr.el (gnus-server-toggle-cloud-server): New command and
 	keystroke.
+	(gnus-server-toggle-cloud-server): Only allow clouding applicable
+	types.
 
 	* ietf-drums.el (ietf-drums-parse-address): Don't bug out when called
 	with an empty string.

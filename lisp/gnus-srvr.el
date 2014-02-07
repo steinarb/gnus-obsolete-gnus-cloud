@@ -1106,6 +1106,9 @@ Requesting compaction of %s... (this may take a long time)"
     (unless server
       (error "No server on the current line"))
 
+    (unless (gnus-method-option-p server 'cloud)
+      (error "The server under point doesn't support cloudiness"))
+
     (if (gnus-cloud-server-p server)
 	(setq gnus-cloud-covered-servers
 	      (delete server gnus-cloud-covered-servers))
