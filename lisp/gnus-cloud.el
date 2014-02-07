@@ -42,6 +42,7 @@
   :type '(repeat regexp))
 
 (defvar gnus-cloud-group-name "*Emacs Cloud*")
+(defvar gnus-cloud-covered-servers nil)
 
 (defvar gnus-cloud-version 1)
 (defvar gnus-cloud-sequence 1)
@@ -317,6 +318,9 @@
 	  (beginning-of-line)
 	  (push (gnus-cloud-parse-chunk) chunks)
 	  (forward-line 1))))))
+
+(defun gnus-cloud-server-p (server)
+  (member server gnus-cloud-covered-servers))
 
 (provide 'gnus-cloud)
 
