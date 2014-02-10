@@ -5678,8 +5678,11 @@ all parts."
   "Go to MIME part N."
   (when gnus-break-pages
     (widen))
+  (article-goto-body)
   (prog1
-      (let ((start (text-property-any (point-min) (point-max) 'gnus-part n))
+      (let ((start (or (text-property-any (point) (point-max) 'gnus-part n)
+		       ;; There may be header buttons.
+		       (text-property-any (point-min) (point) 'gnus-part n)))
 	    part handle end next handles)
 	(when start
 	  (goto-char start)
@@ -6252,8 +6255,13 @@ in the body.  Use `gnus-header-face-alist' to highlight buttons."
 						     (cdr handle)))))))
 	      (setq flat (cdr flat))
 	      (mapc (lambda (handle)
-		      (setcar handle (mapconcat 'number-to-string (car handle)
-						".")))
+		      (if (cdar handle)
+			  ;; This is a hidden (i.e. unnumbered) handle.
+			  (progn
+			    (setcar handle
+				    (1+ (caar gnus-article-mime-handle-alist)))
+			    (push handle gnus-article-mime-handle-alist))
+			(setcar handle (caar handle))))
 		    flat)
 	      flat))))
       (let ((case-fold-search t) buttons st)

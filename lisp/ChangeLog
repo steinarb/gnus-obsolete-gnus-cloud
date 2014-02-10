@@ -1,3 +1,8 @@
+2014-02-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-article-goto-part): Find a button in the body first.
+	(gnus-mime-buttonize-attachments-in-header): Number hidden buttons.
+
 2014-02-09  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* message.el (message-tab): Mention what happens on normal tabs
