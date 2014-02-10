@@ -115,15 +115,7 @@ which are indicated by the @copying ... @end copying command."
 (defun infohack-replace-unsupported ()
   (goto-char (point-min))
   (while (search-forward "@indicateurl{" nil t)
-    (replace-match "@url{"))
-  (goto-char (point-min))
-  (while (search-forward "@enumerate" nil t)
-    (narrow-to-region (point)
-		      (or (re-search-forward "@end[\t ]+enumerate" nil t)
-			  (point-max)))
-    (goto-char (point-min))
-    (while (re-search-forward "@item[\t ]+\\([^\t\n ]\\)" nil t)
-      (replace-match "@item\n\\1"))))
+    (replace-match "@url{")))
 
 (defun infohack-include-files ()
   "Insert @include files."

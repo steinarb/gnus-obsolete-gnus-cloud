@@ -447,9 +447,12 @@ GnuPG version 2), encryption method (symmetric or public key), and whether or
 not you want to use gpg-agent.  Here are some questions:
 
 @enumerate
-@item Do you use GnuPG version 2 instead of GnuPG version 1?
-@item Do you use symmetric encryption rather than public key encryption?
-@item Do you want to use gpg-agent?
+@item
+Do you use GnuPG version 2 instead of GnuPG version 1?
+@item
+Do you use symmetric encryption rather than public key encryption?
+@item
+Do you want to use gpg-agent?
 @end enumerate
 
 Here are configurations depending on your answers:
