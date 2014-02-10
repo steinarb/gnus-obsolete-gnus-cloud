@@ -1,3 +1,9 @@
+2014-02-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* infohack.el (texinfo-format-comma): Support @comma.
+	(infohack-replace-unsupported): New function.
+	(infohack): Use it.
+
 2014-02-08  Glenn Morris  <rgm@gnu.org>
 
 	* auth.texi (GnuPG and EasyPG Assistant Configuration):
