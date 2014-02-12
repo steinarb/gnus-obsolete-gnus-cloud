@@ -1,3 +1,8 @@
+2014-02-12  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* nnmail.el (nnmail-expand-newtext): Further sub-match fixups
+	(bug#12375).
+
 2014-02-10  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-article-goto-part): Find a button in the body first.
