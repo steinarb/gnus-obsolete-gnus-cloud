@@ -4696,9 +4696,6 @@ If ALL-HEADERS is non-nil, no headers are hidden."
 	    (when (or (numberp article)
 		      (stringp article))
 	      (gnus-article-prepare-display)
-	      ;; Add attachment buttons to the header.
-	      (when gnus-mime-display-attachment-buttons-in-header
-		(gnus-mime-buttonize-attachments-in-header))
 	      ;; Do page break.
 	      (goto-char (point-min))
 	      (when gnus-break-pages
@@ -4729,7 +4726,10 @@ If ALL-HEADERS is non-nil, no headers are hidden."
 	  gnus-article-image-alist nil)
     (gnus-run-hooks 'gnus-tmp-internal-hook)
     (when gnus-display-mime-function
-      (funcall gnus-display-mime-function))))
+      (funcall gnus-display-mime-function))
+    ;; Add attachment buttons to the header.
+    (when gnus-mime-display-attachment-buttons-in-header
+      (gnus-mime-buttonize-attachments-in-header))))
 
 ;;;
 ;;; Gnus Sticky Article Mode

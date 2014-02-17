@@ -1,3 +1,9 @@
+2014-02-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-article-prepare, gnus-article-prepare-display):
+	Display header attachment buttons by gnus-article-prepare-display
+	rather than gnus-article-prepare so as to view in mml-preview as well.
+
 2014-02-13  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* auth-source.el (auth-sources): Add pointer to what the .gpg extension
