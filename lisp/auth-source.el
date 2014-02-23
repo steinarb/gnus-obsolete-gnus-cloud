@@ -1534,10 +1534,10 @@ list, it mathces the original pattern."
            (heads (if (stringp value)
                       (list (list key value))
                     (mapcar (lambda (v) (list key v)) value))))
-      (cl-loop
+      (loop
          for h in heads
          nconc
-           (cl-loop
+           (loop
               for tl in tails
               collect (append h tl))))))
 

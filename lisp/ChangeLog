@@ -1,3 +1,9 @@
+2014-02-23  David Engster  <deng@randomsample.de>
+
+	* auth-source.el (auth-source-netrc-saver): Do not depend on `cl-lib'
+	to stay compatible with older Emacsen, so replace `cl-loop' with
+	`loop'.
+
 2014-02-22  Daniel Colascione  <dancol@dancol.org>
 
 	* auth-source.el (auth-source-secrets-listify-pattern): New function.
