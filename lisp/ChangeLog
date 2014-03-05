@@ -1,5 +1,7 @@
 2014-03-05  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-group.el (gnus-group-make-group): Clarify prompt.
+
 	* mml.el (mml-insert-mime-headers): Allow `recipient-filename'.
 
 2014-02-23  David Engster  <deng@randomsample.de>

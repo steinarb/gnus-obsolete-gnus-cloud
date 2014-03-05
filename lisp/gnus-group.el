@@ -2724,7 +2724,7 @@ server."
   (interactive
    (list
     (gnus-read-group "Group name: ")
-    (gnus-read-method "From method")))
+    (gnus-read-method "Select method for new group (use tab for completion)")))
 
   (when (stringp method)
     (setq method (or (gnus-server-to-method method) method)))
