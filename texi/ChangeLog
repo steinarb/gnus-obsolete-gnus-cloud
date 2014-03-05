@@ -1,3 +1,7 @@
+2014-03-05  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* emacs-mime.texi (MML Definition): Document recipient-filename.
+
 2014-02-10  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* epa.texi (Caching Passphrases): Don't give argument to @item used in

@@ -648,6 +648,12 @@ The @acronym{MIME} type of the part (@code{Content-Type}).
 Use the contents of the file in the body of the part
 (@code{Content-Disposition}).
 
+@item recipient-filename
+Use this as the file name in the generated @acronym{MIME} message for
+the recipient.  That is, even if the file is called @file{foo.txt}
+locally, use this name instead in the @code{Content-Disposition} in
+the sent message.
+
 @item charset
 The contents of the body of the part are to be encoded in the character
 set specified (@code{Content-Type}). @xref{Charset Translation}.

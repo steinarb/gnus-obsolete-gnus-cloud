@@ -804,7 +804,10 @@ be \"related\" or \"alternate\"."
 	      parameters)
       (insert "Content-Disposition: "
 	      (or disposition
-		  (mml-content-disposition type (cdr (assq 'filename cont)))))
+		  (mml-content-disposition
+		   type
+		   (or (cdr (assq 'recipient-filename cont))
+		       (cdr (assq 'filename cont))))))
       (when parameters
 	(mml-insert-parameter-string
 	 cont mml-content-disposition-parameters))
