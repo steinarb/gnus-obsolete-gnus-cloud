@@ -47,6 +47,7 @@
 (require 'mml)
 (require 'rfc822)
 (require 'format-spec)
+(require 'dired)
 
 (autoload 'mailclient-send-it "mailclient") ;; Emacs 22 or contrib/
 
@@ -8484,6 +8485,17 @@ Used in `message-simplify-recipients'."
 	(mail-extract-address-components
 	 (message-fetch-field hdr) t))
       ", "))))
+
+;;; multipart/related and HTML support.
+
+(defun message-make-html-message-with-image-files (files)
+  (interactive (list (dired-get-marked-files nil current-prefix-arg)))
+  (message-mail)
+  (message-goto-body)
+  (insert "<#part type=text/html>\n\n")
+  (dolist (file files)
+    (insert (format "<img src=%S>\n\n" file)))
+  (message-goto-to))
 
 (when (featurep 'xemacs)
   (require 'messagexmas)

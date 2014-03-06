@@ -468,18 +468,67 @@ be \"related\" or \"alternate\"."
 	(options message-options))
     (if (not cont)
 	nil
+      (when (and (consp (car cont))
+		 (= (length cont) 1)
+		 (equal (cdr (assq 'type (car cont))) "text/html"))
+	(setq cont (mml-expand-html-into-multipart-related (car cont))))
       (prog1
 	  (mm-with-multibyte-buffer
 	    (setq message-options options)
-	    (if (and (consp (car cont))
-		     (= (length cont) 1))
-		(mml-generate-mime-1 (car cont))
+	    (cond
+	     ((and (consp (car cont))
+		   (= (length cont) 1))
+	      (mml-generate-mime-1 (car cont)))
+	     ((eq (car cont) 'multipart)
+	      (mml-generate-mime-1 cont))
+	     (t
 	      (mml-generate-mime-1
 	       (nconc (list 'multipart (cons 'type (or multipart-type "mixed")))
-		      cont)))
+		      cont))))
 	    (setq options message-options)
 	    (buffer-string))
 	(setq message-options options)))))
+
+(defun mml-expand-html-into-multipart-related (cont)
+  (let ((new-parts nil)
+	(cid 1))
+    (mm-with-multibyte-buffer
+      (insert (cdr (assq 'contents cont)))
+      (goto-char (point-min))
+      (with-syntax-table mml-syntax-table
+	(while (re-search-forward "<img\\b" nil t)
+	  (goto-char (match-beginning 0))
+	  (let* ((start (point))
+		 (img (nth 2
+			   (nth 2
+				(libxml-parse-html-region
+				 (point) (progn (forward-sexp) (point))))))
+		 (end (point))
+		 (parsed (url-generic-parse-url (cdr (assq 'src (cadr img))))))
+	    (when (and (null (url-type parsed))
+		       (url-filename parsed)
+		       (file-exists-p (url-filename parsed)))
+	      (goto-char start)
+	      (when (search-forward (url-filename parsed) end t)
+		(let ((cid (format "fsf.%d" cid)))
+		  (replace-match (concat "cid:" cid) t t)
+		  (push (list cid (url-filename parsed)) new-parts))
+		(setq cid (1+ cid)))))))
+      ;; We have local images that we want to include.
+      (if (not new-parts)
+	  (list cont)
+	(setcdr (assq 'contents cont) (buffer-string))
+	(setq cont
+	      (nconc (list 'multipart (cons 'type "related"))
+		     (list cont)))
+	(dolist (new-part (nreverse new-parts))
+	  (setq cont
+		(nconc cont
+		       (list `(part (type . "image/png")
+				    (filename . ,(nth 1 new-part))
+				    (id . ,(concat "<" (nth 0 new-part)
+						   ">")))))))
+	cont))))
 
 (defun mml-generate-mime-1 (cont)
   (let ((mm-use-ultra-safe-encoding
@@ -804,10 +853,7 @@ be \"related\" or \"alternate\"."
 	      parameters)
       (insert "Content-Disposition: "
 	      (or disposition
-		  (mml-content-disposition
-		   type
-		   (or (cdr (assq 'recipient-filename cont))
-		       (cdr (assq 'filename cont))))))
+		  (mml-content-disposition type (cdr (assq 'filename cont)))))
       (when parameters
 	(mml-insert-parameter-string
 	 cont mml-content-disposition-parameters))
