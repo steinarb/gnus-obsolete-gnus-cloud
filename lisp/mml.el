@@ -459,6 +459,9 @@ If MML is non-nil, return the buffer up till the correspondent mml tag."
 (defvar mml-multipart-number 0)
 (defvar mml-inhibit-compute-boundary nil)
 
+(declare-function libxml-parse-html-region "xml.c"
+		  (start end &optional base-url))
+
 (defun mml-generate-mime (&optional multipart-type)
   "Generate a MIME message based on the current MML document.
 MULTIPART-TYPE defaults to \"mixed\", but can also
@@ -470,6 +473,7 @@ be \"related\" or \"alternate\"."
 	nil
       (when (and (consp (car cont))
 		 (= (length cont) 1)
+		 (fboundp 'libxml-parse-html-region)
 		 (equal (cdr (assq 'type (car cont))) "text/html"))
 	(setq cont (mml-expand-html-into-multipart-related (car cont))))
       (prog1

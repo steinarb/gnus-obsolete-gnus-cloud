@@ -2,6 +2,7 @@
 
 	* mml.el (mml-expand-html-into-multipart-related): Allow sending HTML
 	messages with embedded images.
+	(mml-generate-mime): Don't bug out if you don't have libxml.
 
 2014-03-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
