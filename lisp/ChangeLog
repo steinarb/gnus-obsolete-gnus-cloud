@@ -1,3 +1,8 @@
+2014-03-07  Daiki Ueno  <ueno@gnu.org>
+
+	* mml2015.el (mml2015-use): Don't check the availability of GnuPG
+	commands here; instead, only check if epg-config.el is available.
+
 2014-03-06  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* mml.el (mml-expand-html-into-multipart-related): Allow sending HTML
