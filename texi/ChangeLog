@@ -1,6 +1,6 @@
 2014-03-12  Glenn Morris  <rgm@gnu.org>
 
-	* auth.texi, epa.texi, gnus.texi, info.texi, message.texi:
+	* auth.texi, epa.texi, gnus.texi, message.texi:
 	Use @file for buffers, per the Texinfo manual.
 
 2014-03-05  Lars Ingebrigtsen  <larsi@gnus.org>
