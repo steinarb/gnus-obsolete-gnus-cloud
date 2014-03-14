@@ -28384,6 +28384,19 @@ New features in Ma Gnus:
 
 @itemize @bullet
 
+@item Changes in summary and article mode
+@c **************************************
+
+@itemize @bullet
+
+@item
+By default, @acronym{MIME} part buttons for attachments (if any) will
+appear in the end of the article header in addition to the bottom of the
+article body, so you can easily find them without scrolling the article
+again and again.  @xref{MIME Commands}.
+
+@end itemize
+
 @item Changes in Message mode and related Gnus features
 @c ****************************************************
 

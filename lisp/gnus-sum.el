@@ -9814,7 +9814,10 @@ If ARG is a negative number, hide the unwanted header lines."
 		  (gnus-treat-hide-boring-headers nil))
 	      (gnus-delete-wash-type 'headers)
 	      (gnus-treat-article 'head))
-	  (gnus-treat-article 'head))
+	  (gnus-treat-article 'head)
+	  ;; Add attachment buttons to the header.
+	  (when gnus-mime-display-attachment-buttons-in-header
+	    (gnus-mime-buttonize-attachments-in-header)))
 	(widen)
 	(if window
 	    (set-window-start window (goto-char (point-min))))

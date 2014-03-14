@@ -1,3 +1,7 @@
+2014-03-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus.texi (Ma Gnus): Mention header attachment buttons.
+
 2014-03-12  Glenn Morris  <rgm@gnu.org>
 
 	* auth.texi, epa.texi, gnus.texi, message.texi:
