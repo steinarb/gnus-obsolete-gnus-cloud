@@ -3,6 +3,10 @@
 	* gnus-sum.el (gnus-summary-toggle-header): Display header attachment
 	buttons when toggling the header off.
 
+2014-03-14  Juanma Barranquero  <lekktu@gmail.com>
+
+	* tls.el (tls-program): Reflow docstring.
+
 2014-03-07  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-request-accept-article): Make respooling to nnimap
