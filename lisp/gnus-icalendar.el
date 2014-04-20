@@ -563,14 +563,22 @@ is searched."
                     (fill-region (point-min) (point-max))))
 
                 ;; update entry properties
-                (org-entry-put event-pos "ORGANIZER" organizer)
-                (org-entry-put event-pos "LOCATION" location)
-                (org-entry-put event-pos "PARTICIPATION_TYPE" (symbol-name participation-type))
-                (org-entry-put event-pos "REQ_PARTICIPANTS" (gnus-icalendar--format-participant-list req-participants))
-                (org-entry-put event-pos "OPT_PARTICIPANTS" (gnus-icalendar--format-participant-list opt-participants))
-                (org-entry-put event-pos "RRULE" recur)
-                (when reply-status (org-entry-put event-pos "REPLY"
-                                                  (capitalize (symbol-name reply-status))))
+                (gmm-labels
+                    ((update-org-entry (position property value)
+                                       (if (or (null value)
+                                               (string= value ""))
+                                           (org-entry-delete position property)
+                                         (org-entry-put position property value))))
+
+                  (update-org-entry event-pos "ORGANIZER" organizer)
+                  (update-org-entry event-pos "LOCATION" location)
+                  (update-org-entry event-pos "PARTICIPATION_TYPE" (symbol-name participation-type))
+                  (update-org-entry event-pos "REQ_PARTICIPANTS" (gnus-icalendar--format-participant-list req-participants))
+                  (update-org-entry event-pos "OPT_PARTICIPANTS" (gnus-icalendar--format-participant-list opt-participants))
+                  (update-org-entry event-pos "RRULE" recur)
+                  (update-org-entry event-pos "REPLY"
+                                    (if reply-status (capitalize (symbol-name reply-status))
+                                      "Not replied yet")))
                 (save-buffer)))))))))
 
 

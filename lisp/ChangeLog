@@ -5,6 +5,8 @@
 	the org entry body instead of the drawer
 	(gnus-icalendar-event--get-attendee-names): list of participants should
 	contain even attendees without common name attribute
+	(gnus-icalendar--update-org-event): don't generate duplicates of empty
+	property tags in org drawers
 
 2014-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
 
