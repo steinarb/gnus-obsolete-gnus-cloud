@@ -3,6 +3,8 @@
 	* gnus-icalendar.el (gnus-icalendar-event->org-entry)
 	(gnus-icalendar--update-org-event): put event timestamp in
 	the org entry body instead of the drawer
+	(gnus-icalendar-event--get-attendee-names): list of participants should
+	contain even attendees without common name attribute
 
 2014-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
 

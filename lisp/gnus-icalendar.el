@@ -170,7 +170,9 @@
                           (caddr event))))
 
     (gmm-labels ((attendee-role (prop) (plist-get (cadr prop) 'ROLE))
-                 (attendee-name (prop) (plist-get (cadr prop) 'CN))
+                 (attendee-name (prop)
+                                (or (plist-get (cadr prop) 'CN)
+                                    (replace-regexp-in-string "^.*MAILTO:" "" (caddr prop))))
                  (attendees-by-type (type)
                    (gnus-remove-if-not
                     (lambda (p) (string= (attendee-role p) type))
