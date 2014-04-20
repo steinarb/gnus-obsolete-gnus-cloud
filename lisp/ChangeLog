@@ -1,3 +1,9 @@
+2014-04-20  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event->org-entry)
+	(gnus-icalendar--update-org-event): put event timestamp in
+	the org entry body instead of the drawer
+
 2014-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gmm-utils.el (gmm-format-time-string): New function.

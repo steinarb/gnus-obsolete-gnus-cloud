@@ -452,7 +452,6 @@ Return nil for non-recurring EVENT."
                       "Not replied yet"))
              (props `(("ICAL_EVENT" . "t")
                       ("ID" . ,uid)
-                      ("DT" . ,(gnus-icalendar-event:org-timestamp event))
                       ("ORGANIZER" . ,(gnus-icalendar-event:organizer event))
                       ("LOCATION" . ,(gnus-icalendar-event:location event))
                       ("PARTICIPATION_TYPE" . ,(symbol-name (gnus-icalendar-event:participation-type event)))
@@ -470,7 +469,9 @@ Return nil for non-recurring EVENT."
       (when description
         (save-restriction
           (narrow-to-region (point) (point))
-          (insert description)
+          (insert (gnus-icalendar-event:org-timestamp event)
+                  "\n\n"
+                  description)
           (indent-region (point-min) (point-max) 2)
           (fill-region (point-min) (point-max))))
 
@@ -551,12 +552,15 @@ is searched."
                 (when description
                   (save-restriction
                     (narrow-to-region (point) (point))
-                    (insert "\n" (replace-regexp-in-string "[\n]+$" "\n" description) "\n")
+                    (insert "\n"
+                            (gnus-icalendar-event:org-timestamp event)
+                            "\n\n"
+                            (replace-regexp-in-string "[\n]+$" "\n" description)
+                            "\n")
                     (indent-region (point-min) (point-max) (1+ entry-outline-level))
                     (fill-region (point-min) (point-max))))
 
                 ;; update entry properties
-                (org-entry-put event-pos "DT" (gnus-icalendar-event:org-timestamp event))
                 (org-entry-put event-pos "ORGANIZER" organizer)
                 (org-entry-put event-pos "LOCATION" location)
                 (org-entry-put event-pos "PARTICIPATION_TYPE" (symbol-name participation-type))
