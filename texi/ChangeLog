@@ -1,3 +1,7 @@
+2014-05-04  Glenn Morris  <rgm@gnu.org>
+
+	* message.texi (Header Commands): Replace `iff'.
+
 2014-03-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus.texi (Ma Gnus): Mention header attachment buttons.
