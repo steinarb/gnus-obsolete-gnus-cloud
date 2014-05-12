@@ -1,3 +1,8 @@
+2014-05-12  Sam Steingold  <sds@gnu.org>
+
+	* time-date.el (seconds-to-string): New function to pretty print time
+	delay in seconds.
+
 2014-05-09  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-mm-display-part): Don't put article out of sight
