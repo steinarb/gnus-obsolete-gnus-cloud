@@ -1,3 +1,8 @@
+2014-05-29  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* mm-view.el (mm-display-inline-fontify): Use font-lock-ensure.
+	* gnus-cite.el (gnus-message-citation-mode): Use font-lock-flush.
+
 2014-05-15  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-mime-inline-part, gnus-mm-display-part): Don't

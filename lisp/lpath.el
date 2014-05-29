@@ -64,12 +64,12 @@
      display-time-event-handler epg-check-configuration event-click-count
      event-end event-start find-coding-systems-for-charsets
      find-coding-systems-region find-coding-systems-string find-image
-     float-time gnutls-negotiate help-buffer ido-completing-read image-size
-     image-type-available-p insert-image jka-compr-get-compression-info
-     jka-compr-info-uncompress-args jka-compr-info-uncompress-message
-     jka-compr-info-uncompress-program jka-compr-installed-p
-     jka-compr-make-temp-name libxml-parse-html-region mail-abbrevs-setup
-     make-mode-line-mouse-map make-network-process make-term
+     float-time gnutls-negotiate font-lock-ensure font-lock-flush help-buffer
+     ido-completing-read image-size image-type-available-p insert-image
+     jka-compr-get-compression-info jka-compr-info-uncompress-args
+     jka-compr-info-uncompress-message jka-compr-info-uncompress-program
+     jka-compr-installed-p jka-compr-make-temp-name libxml-parse-html-region
+     mail-abbrevs-setup make-mode-line-mouse-map make-network-process make-term
      mouse-minibuffer-check mouse-movement-p mouse-scroll-subr overlay-lists
      pgg-display-output-buffer posn-point posn-window process-type put-image
      read-char-choice read-event recenter-top-bottom
