@@ -1,3 +1,16 @@
+2014-06-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	Add .info extension to info files.
+
+	* Makefile.in (.texi, makeinfo):
+	Don't specify output file name for makeinfo.
+	(clean, distclean, install, uninstall): Delete old info files.
+
+2014-06-10  Glenn Morris  <rgm@gnu.org>
+
+	* auth.texi, emacs-mime.texi, epa.texi, gnus-coding.texi, gnus.texi,
+	message.texi, sieve.texi: Add .info extension to @setfilename commands.
+
 2014-05-04  Glenn Morris  <rgm@gnu.org>
 
 	* message.texi (Header Commands): Replace `iff'.

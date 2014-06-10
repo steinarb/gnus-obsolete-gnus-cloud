@@ -34,10 +34,10 @@ most: texi2latex.elc latex latexps
 .SUFFIXES: .texi .dvi .ps .pdf .latexi .dvi-x .pdf-x
 
 .texi:
+	rm -f $@{,-[0-9],.info,.info-[0-9]}; \
 	if test "x$(MAKEINFO)" != "xno" ; then \
-	  LC_ALL=C $(MAKEINFO) -I $(srcdir) --enable-encoding -o $* $<; \
+	  LC_ALL=C $(MAKEINFO) -I $(srcdir) --enable-encoding $<; \
 	else \
-	  rm -f $@; \
 	  $(EMACSINFO) $<; \
 	fi
 
@@ -105,8 +105,8 @@ almost-clean:
 	thumbdta.tex xface.tex *.tpt gnus-manual-*.pdf gnus-manual-*.ps.gz
 
 makeinfo:
-	LC_ALL=C makeinfo --enable-encoding -o gnus gnus.texi
-	LC_ALL=C makeinfo --enable-encoding -o message message.texi
+	LC_ALL=C makeinfo --enable-encoding gnus.texi
+	LC_ALL=C makeinfo --enable-encoding message.texi
 
 texi2latex.elc: texi2latex.el
 	srcdir=$(srcdir)/../lisp $(EMACSCOMP) -l $(srcdir)/../lisp/dgnushack.el --eval '(byte-compile-file "$(srcdir)/texi2latex.el")'
@@ -188,20 +188,26 @@ out:
 	scp gnus-manual-*.ps.gz gnus-manual-*.pdf www@quimby:html/gnus/documents
 
 clean: almost-clean
+	@for file in $(INFO_DEPS); do \
+	  echo "rm -f $$file{,-[0-9]}"; \
+	  rm -f $$file{,-[0-9]}; \
+	done
 	rm -f gnus.dvi gnus.ps texi2latex.elc
 	rm -f gnus-manual-a4.* gnus-manual-standard.*
 
 distclean: clean
-	rm -f *.orig *.rej *.elc *~ gnus-[0-9] gnus-[0-9][0-9] Makefile
-	rm -f message-[0-9]
-	rm -f $(INFO_DEPS)
+	@for file in $(INFO_DEPS); do \
+	  echo "rm -f $$file{,-[0-9],.info,.info-[0-9]}"; \
+	  rm -f $$file{,-[0-9],.info,.info-[0-9]}; \
+	done
+	rm -f *.orig *.rej *.elc *~ Makefile
 	rm -f gnusconfig.tex
 
 install: $(INFO_DEPS)
 	$(SHELL) $(top_srcdir)/mkinstalldirs "$(DESTDIR)$(infodir)"
-	@list='$(INFO_DEPS)'; \
-	for file in $$list; do \
-	  for ifile in `echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
+	@for file in $(INFO_DEPS); do \
+	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
+	  for ifile in `echo $$file.info $$file.info-[0-9]`; do \
 	    if test -f $$ifile; then \
 	      echo "$(INSTALL_DATA) $$ifile \"$(DESTDIR)$(infodir)/$$ifile\""; \
 	      $(INSTALL_DATA) $$ifile "$(DESTDIR)$(infodir)/$$ifile"; \
@@ -209,27 +215,23 @@ install: $(INFO_DEPS)
 	  done; \
 	done
 	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-	  list='$(INFO_DEPS)'; \
-	  for file in $$list; do \
-	    echo "install-info --info-dir=\"$(DESTDIR)$(infodir)\" \"$(DESTDIR)$(infodir)/$$file\"";\
-	    install-info --info-dir="$(DESTDIR)$(infodir)" "$(DESTDIR)$(infodir)/$$file" || :;\
+	  for file in $(INFO_DEPS); do \
+	    echo "install-info --info-dir=\"$(DESTDIR)$(infodir)\" \"$(DESTDIR)$(infodir)/$$file.info\"";\
+	    install-info --info-dir="$(DESTDIR)$(infodir)" "$(DESTDIR)$(infodir)/$$file.info" || :;\
 	  done; \
 	else : ; fi
 
 uninstall:
-	@list='$(INFO_DEPS)'; \
-	for file in $$list; do \
-	  for ifile in `echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
-	    rm -f "$(DESTDIR)$(infodir)/$$ifile"; \
-	  done; \
-	done
 	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-	  list='$(INFO_DEPS)'; \
-	  for file in $$list; do \
-	    echo "install-info --delete --info-dir=\"$(DESTDIR)$(infodir)\" \"$(DESTDIR)$(infodir)/$$file\"";\
-	    install-info --delete --info-dir="$(DESTDIR)$(infodir)" "$(DESTDIR)$(infodir)/$$file" || :;\
+	  for file in $(INFO_DEPS); do \
+	    echo "install-info --delete --info-dir=\"$(DESTDIR)$(infodir)\" \"$(DESTDIR)$(infodir)/$$file.info\"";\
+	    install-info --delete --info-dir="$(DESTDIR)$(infodir)" "$(DESTDIR)$(infodir)/$$file.info" || :;\
 	  done; \
 	else : ; fi
+	@for file in $(INFO_DEPS); do \
+	  echo "rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}"; \
+	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
+	done
 
 tmps:
 	cd ps; make all
