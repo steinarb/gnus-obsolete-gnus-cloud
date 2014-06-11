@@ -9,7 +9,7 @@ srcdir = @srcdir@
 EMACS = @EMACS@
 XEMACS = @EMACS@
 
-GZIP_PROG = gzip -f
+GZIP_PROG = @GZIP_PROG@
 
 SED_I = sed -i -e
 
@@ -282,7 +282,7 @@ release-make-tar-ball:	$(CIN)gnus-$(VERSION)
 release-diff:	release-check-settings
 	cvs diff -r $(OLD_TAG) -r $(TAG) | sed -e '/^\? /d' > temp.diff || true
 	mv temp.diff $(CIN)gnus-`echo $(OLD_TAG)%$(TAG)|tr - .|tr -d v|tr % -`.diff
-	$(GZIP_PROG) $(CIN)gnus-`echo $(OLD_TAG)%$(TAG)|tr - .|tr -d v|tr % -`.diff
+	$(GZIP_PROG) -f $(CIN)gnus-`echo $(OLD_TAG)%$(TAG)|tr - .|tr -d v|tr % -`.diff
 	ls -l        $(CIN)gnus-`echo $(OLD_TAG)%$(TAG)|tr - .|tr -d v|tr % -`.diff.gz
 
 release-post-clean:	release-check-settings

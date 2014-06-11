@@ -161,10 +161,10 @@ which are indicated by the @copying ... @end copying command."
 	  (expand-file-name (file-name-nondirectory buffer-file-name)
 			    default-directory))
     (setq buffer-file-coding-system coding-system)
-    (if (> (buffer-size) (if (boundp 'Info-split-threshold)
-			     (+ 50000 Info-split-threshold)
-			   100000))
-	(Info-split))
+    ;;(if (> (buffer-size) (if (boundp 'Info-split-threshold)
+    ;;			       (+ 50000 Info-split-threshold)
+    ;;			     100000))
+    ;;	  (Info-split))
     (save-buffer)))
 
 (eval-and-compile

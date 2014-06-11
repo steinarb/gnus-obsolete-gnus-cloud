@@ -1,3 +1,9 @@
+2014-06-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* configure.in: Add --without-compress-install option; check for gzip.
+
+	* Makefile.in (GZIP_PROG): Be substituted by configure.
+
 2014-01-31  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* make.bat (REM FIXME): Remove mention of outdated w3.

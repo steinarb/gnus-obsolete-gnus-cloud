@@ -1,3 +1,8 @@
+2014-06-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* Makefile.in (install-el, install-el-elc): Compress .el files.
+	(uninstall): Remove compressed .el files.
+
 2014-06-05  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-article-edit-part): Don't modifiy markers.

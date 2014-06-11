@@ -28385,6 +28385,21 @@ New features in Ma Gnus:
 
 @itemize @bullet
 
+@item Installation changes
+@c ***********************
+
+@itemize @bullet
+@item
+Lisp source files and info files to be installed will be compressed by
+gzip by default.
+
+If you don't want those files to be compressed, use the configure option
+@samp{--without-compress-install}.  Lisp source files that don't have
+the compiled elc version in the installation directory will not be
+compressed.
+
+@end itemize
+
 @item Changes in summary and article mode
 @c **************************************
 

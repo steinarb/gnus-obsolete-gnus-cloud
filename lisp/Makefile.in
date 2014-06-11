@@ -13,6 +13,8 @@ INSTALL_DATA = @INSTALL_DATA@
 SHELL = /bin/sh
 VPATH = @srcdir@
 EMACS_COMP = lispdir="$(lispdir)" srcdir=$(srcdir) $(EMACS) $(FLAGS)
+GZIP_PROG = @GZIP_PROG@
+COMPRESS_INSTALL = @COMPRESS_INSTALL@
 
 all total: clean-some gnus-load.el
 	$(EMACS_COMP) -f dgnushack-compile
@@ -51,6 +53,10 @@ install-el: gnus-load.el
 	  if [ -f "$(srcdir)/$$p" ]; then \
 	    echo "$(INSTALL_DATA) $$p \"$(DESTDIR)$(lispdir)/$$p\""; \
 	    $(INSTALL_DATA) $(srcdir)/$$p "$(DESTDIR)$(lispdir)/$$p"; \
+	    if test $(COMPRESS_INSTALL) = yes -a -n "$(GZIP_PROG)"; then \
+	      rm -f "$(DESTDIR)$(lispdir)/$$p.gz"; \
+	      $(GZIP_PROG) -9n "$(DESTDIR)$(lispdir)/$$p"; \
+	    fi; \
 	  fi; \
 	done
 
@@ -71,6 +77,10 @@ install-el-elc: clever
 	  if [ -f "$(srcdir)/$$q" ]; then \
 	    echo "$(INSTALL_DATA) $$q \"$(DESTDIR)$(lispdir)/$$q\""; \
 	    $(INSTALL_DATA) $(srcdir)/$$q "$(DESTDIR)$(lispdir)/$$q"; \
+	    if test $(COMPRESS_INSTALL) = yes -a -n "$(GZIP_PROG)"; then \
+	      rm -f "$(DESTDIR)$(lispdir)/$$q.gz"; \
+	      $(GZIP_PROG) -9n "$(DESTDIR)$(lispdir)/$$q"; \
+	    fi; \
 	  fi; \
 	  echo "$(INSTALL_DATA) $$p \"$(DESTDIR)$(lispdir)/$$p\""; \
 	  $(INSTALL_DATA) $$p "$(DESTDIR)$(lispdir)/$$p"; \
@@ -88,7 +98,7 @@ uninstall:
 	done
 	cd $(srcdir); \
 	for p in *.el; do \
-	  rm -f "$(DESTDIR)$(lispdir)/$$p"; \
+	  rm -f "$(DESTDIR)$(lispdir)/$$p" "$(DESTDIR)$(lispdir)/$$p.gz"; \
 	done
 
 tags:

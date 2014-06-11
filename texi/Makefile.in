@@ -22,6 +22,8 @@ PAPERTYPE=a4
 INFO_DEPS=gnus message emacs-mime sieve epa auth sasl
 REFCARD=gnus-refcard
 LOGO=gnus-logo
+GZIP_PROG = @GZIP_PROG@
+COMPRESS_INSTALL = @COMPRESS_INSTALL@
 
 all: $(INFO_DEPS)
 
@@ -36,7 +38,7 @@ most: texi2latex.elc latex latexps
 .texi:
 	rm -f $@{,-[0-9],.info,.info-[0-9]}; \
 	if test "x$(MAKEINFO)" != "xno" ; then \
-	  LC_ALL=C $(MAKEINFO) -I $(srcdir) --enable-encoding $<; \
+	  LC_ALL=C $(MAKEINFO) -I $(srcdir) --enable-encoding --no-split $<; \
 	else \
 	  $(EMACSINFO) $<; \
 	fi
@@ -105,8 +107,8 @@ almost-clean:
 	thumbdta.tex xface.tex *.tpt gnus-manual-*.pdf gnus-manual-*.ps.gz
 
 makeinfo:
-	LC_ALL=C makeinfo --enable-encoding gnus.texi
-	LC_ALL=C makeinfo --enable-encoding message.texi
+	LC_ALL=C makeinfo --enable-encoding --no-split gnus.texi
+	LC_ALL=C makeinfo --enable-encoding --no-split message.texi
 
 texi2latex.elc: texi2latex.el
 	srcdir=$(srcdir)/../lisp $(EMACSCOMP) -l $(srcdir)/../lisp/dgnushack.el --eval '(byte-compile-file "$(srcdir)/texi2latex.el")'
@@ -167,10 +169,10 @@ gnus-manual-standard.latexi: gnus.latexi
 	sed 's/,a4paper/,letterpaper/' $< > $@
 
 gnus-manual-a4.ps.gz: gnus-manual-a4.dvi-x
-	TEXPICTS=$(srcdir) $(DVIPS) -t a4 -f $< | gzip -c > $@
+	TEXPICTS=$(srcdir) $(DVIPS) -t a4 -f $< | $(GZIP_PROG) -c > $@
 
 gnus-manual-standard.ps.gz: gnus-manual-standard.dvi-x
-	TEXPICTS=$(srcdir) $(DVIPS) -t letter -f $< | gzip -c > $@
+	TEXPICTS=$(srcdir) $(DVIPS) -t letter -f $< | $(GZIP_PROG) -c > $@
 
 pdfs: gnus-manual-a4.pdf-x gnus-manual-standard.pdf-x
 	mv gnus-manual-a4.pdf-x gnus-manual-a4.pdf
@@ -207,10 +209,14 @@ install: $(INFO_DEPS)
 	$(SHELL) $(top_srcdir)/mkinstalldirs "$(DESTDIR)$(infodir)"
 	@for file in $(INFO_DEPS); do \
 	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
+	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
 	  for ifile in `echo $$file.info $$file.info-[0-9]`; do \
 	    if test -f $$ifile; then \
 	      echo "$(INSTALL_DATA) $$ifile \"$(DESTDIR)$(infodir)/$$ifile\""; \
 	      $(INSTALL_DATA) $$ifile "$(DESTDIR)$(infodir)/$$ifile"; \
+	      if test $(COMPRESS_INSTALL) = yes -a -n "$(GZIP_PROG)"; then \
+		$(GZIP_PROG) -9n "$(DESTDIR)$(infodir)/$$ifile"; \
+	      fi;\
 	    else : ; fi; \
 	  done; \
 	done
@@ -231,6 +237,8 @@ uninstall:
 	@for file in $(INFO_DEPS); do \
 	  echo "rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}"; \
 	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
+	  echo "rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz"; \
+	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
 	done
 
 tmps:
