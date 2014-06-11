@@ -208,8 +208,8 @@ distclean: clean
 install: $(INFO_DEPS)
 	$(SHELL) $(top_srcdir)/mkinstalldirs "$(DESTDIR)$(infodir)"
 	@for file in $(INFO_DEPS); do \
-	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
-	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
+	  rm -f "$(DESTDIR)$(infodir)"/$$file{,-[0-9],.info,.info-[0-9]}; \
+	  rm -f "$(DESTDIR)$(infodir)"/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
 	  for ifile in `echo $$file.info $$file.info-[0-9]`; do \
 	    if test -f $$ifile; then \
 	      echo "$(INSTALL_DATA) $$ifile \"$(DESTDIR)$(infodir)/$$ifile\""; \
@@ -235,10 +235,10 @@ uninstall:
 	  done; \
 	else : ; fi
 	@for file in $(INFO_DEPS); do \
-	  echo "rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}"; \
-	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}; \
-	  echo "rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz"; \
-	  rm -f $(DESTDIR)$(infodir)/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
+	  echo "rm -f \"$(DESTDIR)$(infodir)\"/$$file{,-[0-9],.info,.info-[0-9]}"; \
+	  rm -f "$(DESTDIR)$(infodir)"/$$file{,-[0-9],.info,.info-[0-9]}; \
+	  echo "rm -f \"$(DESTDIR)$(infodir)\"/$$file{,-[0-9],.info,.info-[0-9]}.gz"; \
+	  rm -f "$(DESTDIR)$(infodir)"/$$file{,-[0-9],.info,.info-[0-9]}.gz; \
 	done
 
 tmps:
