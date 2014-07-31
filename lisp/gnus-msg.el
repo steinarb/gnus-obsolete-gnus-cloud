@@ -1727,7 +1727,7 @@ this is a reply."
 	 (gcc-self-val
 	  (and group (not (gnus-virtual-group-p group))
 	       (gnus-group-find-parameter group 'gcc-self t)))
-	 (gcc-self-get (lambda (gcc-self-val grouy)
+	 (gcc-self-get (lambda (gcc-self-val group)
 			 (if (stringp gcc-self-val)
 			     (if (string-match " " gcc-self-val)
 				 (concat "\"" gcc-self-val "\"")
