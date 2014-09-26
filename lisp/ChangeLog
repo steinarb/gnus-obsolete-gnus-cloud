@@ -1,3 +1,15 @@
+2014-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	Use cl-lib as much as possible following the 2014-09-26 change
+	in the Emacs trunk.
+	* parse-time.el: Try requiring cl-lib.
+	(parse-time-incf): Alias to cl-incf or incf.
+	(digit-char-p): Remove.
+	(parse-time-integer): Alias to cl-parse-integer or the one defined.
+	(parse-integer): Rename to parse-time-integer.
+	(parse-time-tokenize, parse-time-rules, parse-time-string)
+	Use parse-time-incf and parse-time-integer.
+
 2014-09-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-cloud.el (gnus-cloud-parse-version-1): Fix misspelling

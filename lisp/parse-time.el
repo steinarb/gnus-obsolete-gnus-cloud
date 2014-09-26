@@ -34,41 +34,34 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))	;and ah ain't kiddin' 'bout it
-
 (eval-and-compile
-  (when (featurep 'xemacs)
-    (defvar parse-time-syntax (make-vector 256 nil))))
-(defvar parse-time-digits (make-vector 256 nil))
+  (ignore-errors (require 'cl-lib))
+  (if (featurep 'cl-lib)
+      ;; Emacs >=24
+      (defalias 'parse-time-incf 'cl-incf)
+    (require 'cl)
+    (defalias 'parse-time-incf 'incf)))
 
 ;; Byte-compiler warnings
 (defvar parse-time-elt)
 (defvar parse-time-val)
 
-(unless (aref parse-time-digits ?0)
-  (loop for i from ?0 to ?9
-    do (aset parse-time-digits i (- i ?0))))
-
-(when (featurep 'xemacs)
-  (unless (aref parse-time-syntax ?0)
-    (loop for i from ?0 to ?9
-	  do (aset parse-time-syntax i ?0))
-    (loop for i from ?A to ?Z
-	  do (aset parse-time-syntax i ?A))
-    (loop for i from ?a to ?z
-	  do (aset parse-time-syntax i ?a))
-    (aset parse-time-syntax ?+ 1)
-    (aset parse-time-syntax ?- -1)
-    (aset parse-time-syntax ?: ?d)))
-
-(defsubst digit-char-p (char)
-  (aref parse-time-digits char))
-
 (eval-and-compile
   (if (featurep 'xemacs)
-      (defsubst parse-time-string-chars (char)
-	(and (< char (length parse-time-syntax))
-	     (aref parse-time-syntax char)))
+      (progn
+	(defvar parse-time-syntax (make-vector 256 nil))
+	(loop for i from ?0 to ?9
+	      do (aset parse-time-syntax i ?0))
+	(loop for i from ?A to ?Z
+	      do (aset parse-time-syntax i ?A))
+	(loop for i from ?a to ?z
+	      do (aset parse-time-syntax i ?a))
+	(aset parse-time-syntax ?+ 1)
+	(aset parse-time-syntax ?- -1)
+	(aset parse-time-syntax ?: ?d)
+	(defsubst parse-time-string-chars (char)
+	  (and (< char (length parse-time-syntax))
+	       (aref parse-time-syntax char))))
     (defsubst parse-time-string-chars (char)
       (save-match-data
 	(let (case-fold-search str)
@@ -79,29 +72,33 @@
 		((string-match "[[:lower:]]" str) ?a)
 		((string-match "[[:digit:]]" str) ?0)))))))
 
-(put 'parse-error 'error-conditions '(parse-error error))
-(put 'parse-error 'error-message "Parsing error")
-
-(defsubst parse-integer (string &optional start end)
-  "[CL] Parse and return the integer in STRING, or nil if none."
-  (let ((integer 0)
-	(digit 0)
-	(index (or start 0))
-	(end (or end (length string))))
-    (when (< index end)
-      (let ((sign (aref string index)))
-	(if (or (eq sign ?+) (eq sign ?-))
-	    (setq sign (parse-time-string-chars sign)
-		  index (1+ index))
-	  (setq sign 1))
-	(while (and (< index end)
-		    (setq digit (digit-char-p (aref string index))))
-	  (setq integer (+ (* integer 10) digit)
-		index (1+ index)))
-	(if (/= index end)
-	    (signal 'parse-error `("not an integer"
-				   ,(substring string (or start 0) end)))
-	  (* sign integer))))))
+(eval-and-compile
+  (if (fboundp 'cl-parse-integer)
+      (defalias 'parse-time-integer 'cl-parse-integer)
+    (defvar parse-time-digits (make-vector 256 nil))
+    (loop for i from ?0 to ?9
+	  do (aset parse-time-digits i (- i ?0)))
+    (defun parse-time-integer (string &rest keys)
+      "[CL] Parse and return the integer in STRING, or nil if none."
+      (let* ((start (plist-get keys :start))
+	     (end (or (plist-get keys :end) (length string)))
+	     (integer 0)
+	     (digit 0)
+	     (index (or start 0)))
+	(when (< index end)
+	  (let ((sign (aref string index)))
+	    (if (or (eq sign ?+) (eq sign ?-))
+		(setq sign (parse-time-string-chars sign)
+		      index (1+ index))
+	      (setq sign 1))
+	    (while (and (< index end)
+			(setq digit (aref parse-time-digits
+					  (aref string index))))
+	      (setq integer (+ (* integer 10) digit)
+		    index (1+ index)))
+	    (if (/= index end)
+		(error "Not an integer string: `%s'" string)
+	      (* sign integer))))))))
 
 (defun parse-time-tokenize (string)
   "Tokenize STRING into substrings."
@@ -114,13 +111,14 @@
     (while (< index end)
       (while (and (< index end)		;Skip invalid characters.
 		  (not (setq c (parse-time-string-chars (aref string index)))))
-	(incf index))
+	(parse-time-incf index))
       (setq start index all-digits (eq c ?0))
-      (while (and (< (incf index) end)	;Scan valid characters.
+      (while (and (< (parse-time-incf index) end) ;Scan valid characters.
 		  (setq c (parse-time-string-chars (aref string index))))
 	(setq all-digits (and all-digits (eq c ?0))))
       (if (<= index end)
-	  (push (if all-digits (parse-integer string start index)
+	  (push (if all-digits (parse-time-integer string
+						   :start start :end index)
 		  (substring string start index))
 		list)))
     (nreverse list)))
@@ -167,8 +165,9 @@
 	       (= 5 (length parse-time-elt))
 	       (or (= (aref parse-time-elt 0) ?+)
 		   (= (aref parse-time-elt 0) ?-))))
-     ,#'(lambda () (* 60 (+ (parse-integer parse-time-elt 3 5)
-			    (* 60 (parse-integer parse-time-elt 1 3)))
+     ,#'(lambda () (* 60 (+ (parse-time-integer parse-time-elt :start 3 :end 5)
+			    (* 60 (parse-time-integer parse-time-elt
+						      :start 1 :end 3)))
 		      (if (= (aref parse-time-elt 0) ?-) -1 1))))
     ((5 4 3)
      ,#'(lambda () (and (stringp parse-time-elt)
@@ -230,9 +229,10 @@ unknown are returned as nil."
 		(let ((new-val (if rule
 				   (let ((this (pop rule)))
 				     (if (vectorp this)
-					 (parse-integer
+					 (parse-time-integer
 					  parse-time-elt
-					  (aref this 0) (aref this 1))
+					  :start (aref this 0)
+					  :end (aref this 1))
 				       (funcall this)))
 				 parse-time-val)))
 		  (rplaca (nthcdr (pop slots) time) new-val))))))))
