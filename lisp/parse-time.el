@@ -35,12 +35,10 @@
 ;;; Code:
 
 (eval-and-compile
-  (ignore-errors (require 'cl-lib))
-  (if (featurep 'cl-lib)
-      ;; Emacs >=24
-      (defalias 'parse-time-incf 'cl-incf)
-    (require 'cl)
-    (defalias 'parse-time-incf 'incf)))
+  (ignore-errors (require 'cl-lib)))
+(eval-when-compile
+  (require 'cl)				;and ah ain't kiddin' 'bout it
+  (defalias 'parse-time-incf (if (featurep 'cl-lib) 'cl-incf 'incf)))
 
 ;; Byte-compiler warnings
 (defvar parse-time-elt)

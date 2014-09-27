@@ -1,3 +1,7 @@
+2014-09-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* parse-time.el: Require cl when compiling.
+
 2014-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	Use cl-lib as much as possible following the 2014-09-26 change
