@@ -5,7 +5,7 @@
 
 2014-10-04  Alan Schmitt  <alan.schmitt@polytechnique.org>  (tiny change)
 
-	* lisp/nnimap.el (nnimap-process-expiry-targets): Reverse the list of
+	* nnimap.el (nnimap-process-expiry-targets): Reverse the list of
 	expired messages only when it was built in reverse order.
 
 2014-10-04  Peter Münster  <pmlists@free.fr>  (tiny change)
