@@ -1,3 +1,9 @@
+2014-10-05  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* ntlm.el (ntlm-string-make-unibyte, ntlm-secure-hash):
+	New compatibility functions.
+	(ntlm-build-auth-response): Use them.
+
 2014-10-04  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
 
 	* ntlm.el (ntlm-build-auth-request):
