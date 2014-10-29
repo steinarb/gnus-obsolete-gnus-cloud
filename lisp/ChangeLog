@@ -1,3 +1,8 @@
+2014-10-29  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-util.el (gnus-float-time):
+	Don't pass the third argument docstring to `defalias' for XEmacs.
+
 2014-10-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Simplify use of current-time and friends.

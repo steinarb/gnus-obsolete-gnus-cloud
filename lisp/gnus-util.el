@@ -313,12 +313,13 @@ Symbols are also allowed; their print names are used instead."
 
 ;; Every version of Emacs Gnus supports has built-in float-time.
 ;; The featurep test silences an irritating compiler warning.
-(defalias 'gnus-float-time
-  (if (or (featurep 'emacs)
-	  (fboundp 'float-time))
-      'float-time 'time-to-seconds)
-  "Convert time value TIME to a floating point number.
+(if (featurep 'emacs)
+    (defalias 'gnus-float-time 'float-time
+      "Convert time value TIME to a floating point number.
 TIME defaults to the current time.")
+  ;; `defalias' takes only two arguments in XEmacs.
+  (defalias 'gnus-float-time
+    (if (fboundp 'float-time) 'float-time 'time-to-seconds)))
 
 ;;; Keymap macros.
 
