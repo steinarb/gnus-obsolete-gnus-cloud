@@ -11766,11 +11766,12 @@ article buffer.  There are many methods for doing that, but two of
 them are kind of default methods.
 
 If your Emacs copy has been built with libxml2 support, then Gnus uses
-its built-in, plain elisp Simple HTML Renderer (@code{shr}).
+Emacs' built-in, plain elisp Simple HTML Renderer @code{shr}
 @footnote{@code{shr} displays colors as declared in the @acronym{HTML}
 article but tries to adjust them in order to be readable.  If you
 prefer more contrast, have a look at question 4.16 in the
-@xref{Frequently Asked Questions}.}
+@xref{Frequently Asked Questions}.} which is also used by Emacs'
+browser EWW (@xref{Top,,,eww}).
 
 If your Emacs copy lacks libxml2 support but you have @code{w3m}
 installed on your system, Gnus uses that to render @acronym{HTML} mail
