@@ -1,3 +1,8 @@
+2014-11-13  Julien Danjou  <jd@abydos>
+
+	* gnus-notifications.el (gnus-notifications-notify): Provide both
+	app-icon and image-path.
+
 2014-11-10  Kenjiro NAKAYAMA  <nakayamakenjiro@gmail.com>
 
 	* mm-url.el (mm-url-encode-multipart-form-data):
