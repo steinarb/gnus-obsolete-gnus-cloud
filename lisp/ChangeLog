@@ -1,3 +1,8 @@
+2014-11-17  Albert Krewinkel  <albert@zeitkraut.de>
+
+	* message.el (message-valid-fqdn-regexp): Add non-internaional new
+	TLDs.
+
 2014-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Improve time stamp handling, and be more consistent about it.
