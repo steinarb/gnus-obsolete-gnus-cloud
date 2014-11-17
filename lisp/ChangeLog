@@ -5,13 +5,21 @@
 
 2014-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Port new time stamp handling to old Emacs and to XEmacs.
+	This is needed for Gnus, which copies time-date.el and which
+	runs on older Emacs implementations.
+	* time-date.el (with-decoded-time-value):
+	Handle 'nil' and floating-point arg more compatibly with new Emacs.
+	(encode-time-value, with-decoded-time-value):
+	Obsolete only if new Emacs.
+	(time-add, time-subtract, time-less-p): Define if not new Emacs.
+
 	Improve time stamp handling, and be more consistent about it.
 	This implements a suggestion made in:
 	http://lists.gnu.org/archive/html/emacs-devel/2014-10/msg00587.html
 	Among other things, this means timer.el no longer needs to
 	autoload the time-date module.
-	* time-date.el (seconds-to-time, days-to-time, time-since):
-	Simplify by using new functionality.
+	* time-date.el (seconds-to-time, days-to-time, time-since)
 	(with-decoded-time-value):
 	Treat 'nil' as current time.  This is mostly for XEmacs.
 	(encode-time-value, with-decoded-time-value): Obsolete.
