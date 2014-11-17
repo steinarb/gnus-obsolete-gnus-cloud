@@ -1,3 +1,18 @@
+2014-11-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Improve time stamp handling, and be more consistent about it.
+	This implements a suggestion made in:
+	http://lists.gnu.org/archive/html/emacs-devel/2014-10/msg00587.html
+	Among other things, this means timer.el no longer needs to
+	autoload the time-date module.
+	* time-date.el (seconds-to-time, days-to-time, time-since):
+	Simplify by using new functionality.
+	(with-decoded-time-value):
+	Treat 'nil' as current time.  This is mostly for XEmacs.
+	(encode-time-value, with-decoded-time-value): Obsolete.
+	(time-add, time-subtract, time-less-p): Use no-op autoloads, for
+	XEmacs.  Define only if XEmacs, as they're now C builtins in Emacs.
+
 2014-11-14  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-sum.el (gnus-summary-exit-no-update): Don't query about
