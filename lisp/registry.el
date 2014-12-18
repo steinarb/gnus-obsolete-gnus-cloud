@@ -27,7 +27,7 @@
 
 ;; version: a float
 
-;; max-size: an integer, default 50000
+;; max-size: an integer, default 5000000
 
 ;; prune-factor: a float between 0 and 1, default 0.1
 
@@ -110,7 +110,7 @@
             :type (or null float)
             :documentation "The registry version.")
    (max-size :initarg :max-size
-             :initform most-positive-fixnum
+             :initform 5000000
              :type integer
              :custom integer
              :documentation "The maximum number of registry entries.")
