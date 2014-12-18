@@ -1,3 +1,8 @@
+2014-12-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* registry.el (registry-db): Set default slot later.
+	This is because its value is not a literal integer.
+
 2014-12-18  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* registry.el (registry-db): Fix default registry-db max-size.

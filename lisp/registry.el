@@ -27,7 +27,7 @@
 
 ;; version: a float
 
-;; max-size: an integer, default 5000000
+;; max-size: an integer, default most-positive-fixnum
 
 ;; prune-factor: a float between 0 and 1, default 0.1
 
@@ -110,7 +110,7 @@
             :type (or null float)
             :documentation "The registry version.")
    (max-size :initarg :max-size
-             :initform 5000000
+             ;; :initform most-positive-fixnum ;; see below
              :type integer
              :custom integer
              :documentation "The maximum number of registry entries.")
@@ -135,6 +135,8 @@
    (data :initarg :data
          :type hash-table
          :documentation "The data hashtable.")))
+;; Do this separately, since defclass doesn't allow expressions in :initform.
+(oset-default registry-db max-size most-positive-fixnum)
 
 (defmethod initialize-instance :BEFORE ((this registry-db) slots)
   "Check whether a registry object needs to be upgraded."
