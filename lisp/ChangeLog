@@ -1,3 +1,8 @@
+2014-12-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* registry.el (cl-remf, cl-loop, cl-subseq):
+	Alias to remf, loop, and subseq respectively for old Emacsen.
+
 2014-12-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* registry.el (registry-db): Set default slot later.

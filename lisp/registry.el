@@ -95,6 +95,12 @@
       (error
        "eieio not found in `load-path' or gnus-fallback-lib/ directory.")))
 
+(eval-when-compile
+  (unless (fboundp 'cl-remf)
+    (defalias 'cl-remf 'remf)
+    (defalias 'cl-loop 'loop)
+    (defalias 'cl-subseq 'subseq)))
+
 ;; The version number needs to be kept outside of the class definition
 ;; itself.  The persistent-save process does *not* write to file any
 ;; slot values that are equal to the default :initform value.  If a
