@@ -1,3 +1,30 @@
+2014-12-18  Eric Abrahamsen <eric@ericabrahamsen.net>
+
+	* gnus.texi (Gnus Registry Setup): Explain pruning changes. Mention
+	gnus-registry-prune-factor. Explain sorting changes and
+	gnus-registry-default-sort-function. Correct file extension.
+
+2014-11-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus.texi (Top): Add missing `HTML' menu.
+	(HTML): Fix xref to FAQ 4-16.
+
+2014-11-07  Tassilo Horn  <tsdh@gnu.org>
+
+	* gnus.texi (HTML): Update section so that it mentions shr and w3m.
+	Also link the full EWW manual that explains more on shr, too.
+
+	* gnus-faq.texi (FAQ 4 - Reading messages, FAQ 4-16): Add Q&A on how to
+	increase contrast when displaying HTML mail with shr.
+
+2014-11-02  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* auth.texi (Help for users): Explain quoting rules better.
+
+2014-10-25  Eric S. Raymond  <esr@thyrsus.com>
+
+	* gnus-coding.texi: Neutralized language specific to a repository type.
+
 2014-07-31  Tassilo Horn  <tsdh@gnu.org>
 
 	* gnus.texi (Group Parameters): Document that `gcc-self' may also be a

@@ -80,8 +80,8 @@ is not given."
 	(request-msgType (concat (make-string 1 1) (make-string 3 0)))
 					;0x01 0x00 0x00 0x00
 	(request-flags (concat (make-string 1 7) (make-string 1 178)
-			       (make-string 2 0)))
-					;0x07 0xb2 0x00 0x00
+			       (make-string 1 8) (make-string 1 0)))
+					;0x07 0xb2 0x08 0x00
 	lu ld off-d off-u)
     (when (string-match "@" user)
       (unless domain
@@ -110,7 +110,45 @@ is not given."
   (defmacro ntlm-string-as-unibyte (string)
     (if (fboundp 'string-as-unibyte)
 	`(string-as-unibyte ,string)
+      string))
+  (defmacro ntlm-string-make-unibyte (string)
+    (if (fboundp 'string-make-unibyte)
+	`(string-make-unibyte ,string)
       string)))
+
+(eval-and-compile
+  (autoload 'sha1 "sha1")
+  (if (fboundp 'secure-hash)
+      (defalias 'ntlm-secure-hash 'secure-hash)
+    (defun ntlm-secure-hash (algorithm object &optional start end binary)
+      "Return the secure hash of OBJECT, a buffer or string.
+ALGORITHM is a symbol specifying the hash to use: md5, sha1.
+
+The two optional arguments START and END are positions specifying for
+which part of OBJECT to compute the hash.  If nil or omitted, uses the
+whole OBJECT.
+
+If BINARY is non-nil, returns a string in binary form."
+      (cond ((eq algorithm 'md5)
+	     (if binary
+		 (let* ((hex (md5 object start end))
+			(len (length hex))
+			(beg 0)
+			rest)
+		   (while (< beg len)
+		     (push (ntlm-string-make-unibyte
+			    (char-to-string
+			     (string-to-number
+			      (substring hex beg (setq beg (+ beg 2)))
+			      16)))
+			   rest))
+		   (apply #'concat (nreverse rest)))
+	       (md5 object start end)))
+	    ((eq algorithm 'sha1)
+	     (sha1 object start end binary))
+	    (t
+	     (error "(ntlm-secure-hash) Unsupported algorithm: %s"
+		    algorithm))))))
 
 (defun ntlm-build-auth-response (challenge user password-hashes)
   "Return the response string to a challenge string CHALLENGE given by
@@ -144,11 +182,35 @@ by PASSWORD-HASHES.  PASSWORD-HASHES should be a return value of
       (setq domain (substring user (1+ (match-beginning 0))))
       (setq user (substring user 0 (match-beginning 0))))
 
-    ;; generate response data
-    (setq lmRespData
-	  (ntlm-smb-owf-encrypt (car password-hashes) challengeData))
-    (setq ntRespData
-	  (ntlm-smb-owf-encrypt (cadr password-hashes) challengeData))
+    ;; check if "negotiate NTLM2 key" flag is set in type 2 message
+    (if (not (zerop (logand (aref flags 2) 8)))
+	(let (randomString
+	      sessionHash)
+	  ;; generate NTLM2 session response data
+	  (setq randomString (ntlm-string-make-unibyte
+			      (concat
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256))
+			       (make-string 1 (random 256)))))
+	  (setq sessionHash (ntlm-secure-hash
+			     'md5 (concat challengeData randomString)
+			     nil nil t))
+	  (setq sessionHash (substring sessionHash 0 8))
+
+	  (setq lmRespData (concat randomString (make-string 16 0)))
+	  (setq ntRespData (ntlm-smb-owf-encrypt
+			    (cadr password-hashes) sessionHash)))
+      (progn
+	;; generate response data
+	(setq lmRespData
+	      (ntlm-smb-owf-encrypt (car password-hashes) challengeData))
+	(setq ntRespData
+	      (ntlm-smb-owf-encrypt (cadr password-hashes) challengeData))))
 
     ;; get offsets to fields to pack the response struct in a string
     (setq lu (length user))

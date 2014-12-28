@@ -52,20 +52,26 @@
     (should-not (registry--match :member entry '((hello)))))
   (message "Done with matching testing."))
 
-(defun gnustest-registry-make-testable-db (n &optional name file)
+(defun gnustest-registry-sort-function (l r)
+  "Sort lower values of sort-field earlier."
+  (< (cadr (assq 'sort-field l))
+     (cadr (assq 'sort-field r))))
+
+(defun gnustest-registry-make-testable-db (n &optional prune-factor name file)
   (let* ((db (registry-db
               (or name "Testing")
               :file (or file "unused")
-              :max-hard n
-              :max-soft 0               ; keep nothing not precious
+              :max-size n
+	      :prune-factor (or prune-factor 0.1)
               :precious '(extra more-extra)
               :tracked '(sender subject groups))))
     (dotimes (i n)
       (registry-insert db i `((sender "me")
                               (subject "about you")
-                              (more-extra) ; empty data key should be pruned
-                              ;; first 5 entries will NOT have this extra data
-                              ,@(when (< 5 i) (list (list 'extra "more data")))
+                              (more-extra) ; Empty data key should be pruned.
+                              ;; First 5 entries will NOT have this extra data.
+                              ,@(when (< 4 i) (list (list 'extra "more data")))
+			      (sort-field ,(- n i))
                               (groups ,(number-to-string i)))))
     db))
 
@@ -101,22 +107,56 @@
     (should (= n (length (registry-search db :all t))))
     (message "Secondary search after delete")
     (should (= n (length (registry-lookup-secondary-value db 'sender "me"))))
-    ;; (message "Pruning")
-    ;; (let* ((tokeep (registry-search db :member '((extra "more data"))))
-    ;;        (count (- n (length tokeep)))
-    ;;        (pruned (registry-prune db))
-    ;;        (prune-count (length pruned)))
-    ;;   (message "Expecting to prune %d entries and pruned %d"
-    ;;            count prune-count)
-    ;;   (should (and (= count 5)
-    ;;                (= count prune-count))))
     (message "Done with usage testing.")))
+
+(ert-deftest gnustest-registry-pruning-test ()
+  "Check that precious entries are never pruned."
+  (let ((dbs (list
+	      ;; Can prune fully without touching precious entries.
+	      (gnustest-registry-make-testable-db 10 0.1)
+	      ;; Pruning limited by precious entries.
+	      (gnustest-registry-make-testable-db 10 0.6))))
+    (dolist (db dbs)
+      (message "Pruning")
+      (let* ((size (registry-size db))
+	     (limit (- (oref db :max-size)
+		       (* (oref db :max-size)
+			  (oref db :prune-factor))))
+	     (keepers (registry-search db :member '((extra "more data"))))
+	     (expected-prune-count (min (- size (length keepers))
+					(- size limit)))
+	     (actual-prune-count (registry-prune db)))
+	(ert-info
+	    ((format "Expected to prune %d entries but pruned %d"
+		     expected-prune-count actual-prune-count)
+	     :prefix "Error: ")
+	  (should (= expected-prune-count actual-prune-count)))))))
+
+(ert-deftest gnustest-registry-pruning-sort-test ()
+  "Check that entries are sorted properly before pruning."
+  (let ((db (gnustest-registry-make-testable-db 10 0.4))
+	;; These entries have the highest 'sort-field values.  Pruning
+	;; sorts by lowest values first, then prunes from the front of
+	;; the list, so these entries survive
+	(expected-survivors '(5 6 7 8 9 0))
+	actual-survivors disjunct)
+    (registry-prune
+     db #'gnustest-registry-sort-function)
+    (maphash (lambda (k v) (push k actual-survivors))
+	     (oref db :data))
+    (setq disjunct (cl-set-exclusive-or
+		    expected-survivors
+		    actual-survivors))
+    (ert-info
+	((format "Incorrect pruning: %s" disjunct)
+	 :prefix "Error: ")
+      (should (null disjunct)))))
 
 (ert-deftest gnustest-registry-persistence-test ()
   (let* ((n 100)
          (tempfile (make-temp-file "registry-persistence-"))
          (name "persistence tester")
-         (db (gnustest-registry-make-testable-db n name tempfile))
+         (db (gnustest-registry-make-testable-db n nil name tempfile))
          size back)
     (message "Saving to %s" tempfile)
     (eieio-persistent-save db)
@@ -205,8 +245,8 @@
     (should (= (registry-size back) n))
     (should (= (registry-size back) (registry-size db)))
     (delete-file tempfile)
-    (message "Pruning Gnus registry to 0 by setting :max-soft")
-    (oset db :max-soft 0)
+    (message "Pruning Gnus registry to 0 by setting :max-size")
+    (oset db :max-size 0)
     (registry-prune db)
     (should (= (registry-size db) 0)))
   (message "Done with Gnus registry usage testing."))

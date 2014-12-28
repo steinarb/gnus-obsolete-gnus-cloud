@@ -7334,6 +7334,7 @@ If FORCE (the prefix), also save the .newsrc file(s)."
 	 (gnus-group-is-exiting-without-update-p t)
 	 (quit-config (gnus-group-quit-config group)))
     (when (or no-questions
+	      (gnus-ephemeral-group-p group)
 	      gnus-expert-user
 	      (gnus-y-or-n-p "Discard changes to this group and exit? "))
       (gnus-async-halt-prefetch)
@@ -9333,7 +9334,7 @@ Obeys the standard process/prefix convention."
      ((gnus-group-read-ephemeral-group
        (setq vgroup (format
 		     "nnvirtual:%s-%s" gnus-newsgroup-name
-		     (format-time-string "%Y%m%dT%H%M%S" (current-time))))
+		     (format-time-string "%Y%m%dT%H%M%S")))
        `(nnvirtual ,vgroup (nnvirtual-component-groups ,groups))
        t
        (cons (current-buffer) 'summary)))
@@ -9869,6 +9870,7 @@ installed for this command to work."
   (if (not (and (condition-case nil (require 'idna)
 		  (file-error))
 		(mm-coding-system-p 'utf-8)
+		(symbol-value 'idna-program)
 		(executable-find (symbol-value 'idna-program))))
       (gnus-message
        5 "GNU Libidn not installed properly (`idn' or `idna.el' missing)")
