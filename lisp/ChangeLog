@@ -19,6 +19,12 @@
 	* registry.el (cl-remf, cl-loop, cl-subseq):
 	Alias to remf, loop, and subseq respectively for old Emacsen.
 
+2014-12-19  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* gnus-group.el (gnus-read-ephemeral-bug-group): Bind
+	coding-system-for-read and coding-system-for-write only around
+	with-temp-file, and make buffer unibyte.  Don't write temp file twice.
+
 2014-12-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* registry.el (registry-db): Set default slot later.
