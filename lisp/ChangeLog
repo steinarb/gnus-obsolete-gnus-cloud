@@ -1,3 +1,7 @@
+2015-01-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* registry.el: Don't use <class> as a variable.
+
 2014-12-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	system-name's returned value can vary
