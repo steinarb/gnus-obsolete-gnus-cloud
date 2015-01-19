@@ -272,6 +272,14 @@ in `defcustom' forms."
 		 (equal (nth 1 form) ''nconc))
 	(setq form (cons 'mapcan (cdr last)))))))
 
+(if (featurep 'emacs)
+    (defun dgnushack-compile-file (file)
+      "Byte-compile FILE after reporting that it's being compiled."
+      (message "Compiling %s..." file)
+      ;; The Emacs 25 version of it doesn't say much.
+      (byte-compile-file file))
+  (defalias 'dgnushack-compile-file 'byte-compile-file))
+
 (defun dgnushack-compile-verbosely ()
   "Call dgnushack-compile with warnings ENABLED.  If you are compiling
 patches to gnus, you should consider modifying make.bat to call
@@ -349,10 +357,10 @@ This means that every warning will be reported as an error."
 	(if error-on-warn
 	    (let ((byte-compile-error-on-warn t))
 	      (unless (ignore-errors
-			(byte-compile-file file))
+			(dgnushack-compile-file file))
 		(setq compilesuccess nil)))
 	  (ignore-errors
-	    (byte-compile-file file)))))
+	    (dgnushack-compile-file file)))))
     compilesuccess))
 
 (defun dgnushack-recompile ()

@@ -1,3 +1,8 @@
+2015-01-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* dgnushack.el (dgnushack-compile-file): New function.
+	(dgnushack-compile): Use it (bug#19514).
+
 2015-01-15  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
 	* nntp.el (nntp-send-authinfo): Error out if the password is wrong.
