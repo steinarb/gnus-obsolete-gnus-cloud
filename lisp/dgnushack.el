@@ -275,7 +275,7 @@ in `defcustom' forms."
 (if (featurep 'emacs)
     (defun dgnushack-compile-file (file)
       "Byte-compile FILE after reporting that it's being compiled."
-      (message "Compiling %s..." file)
+      (message "Compiling %s..." (file-name-nondirectory file))
       ;; The Emacs 25 version of it doesn't say much.
       (byte-compile-file file))
   (defalias 'dgnushack-compile-file 'byte-compile-file))
