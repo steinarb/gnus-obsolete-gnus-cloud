@@ -1,3 +1,7 @@
+2015-01-25  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-group.el (gnus-group-suspend): Close all backends.
+
 2015-01-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* dgnushack.el (dgnushack-compile-file): New function.
