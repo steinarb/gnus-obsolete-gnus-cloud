@@ -76,3 +76,4 @@ texi/ps/*.pdf
 texi/ps/Makefile
 lisp/*.orig
 texi/*.orig
+texi/*.info
