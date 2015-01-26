@@ -1134,8 +1134,11 @@ If LIMIT, first try to limit the search to the N last articles."
     (setq group
 	  (caar
 	   (nnmail-article-group
+	    ;; We don't really care about the article number, because
+	    ;; that's determined by the IMAP server later.  So just
+	    ;; return the group name.
 	    `(lambda (group)
-	       (nnml-active-number group ,server))))))
+	       (list (list group)))))))
   (setq group (nnimap-decode-gnus-group group))
   (when (nnimap-change-group nil server)
     (nnmail-check-syntax)

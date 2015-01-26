@@ -1,5 +1,8 @@
 2015-01-26  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* nnimap.el (nnimap-request-accept-article): Allow respooling using
+	nnimap.
+
 	* gnus-group.el (gnus-group-get-new-news-this-group): Explicitly
 	request rescans when being run interactively.
 
