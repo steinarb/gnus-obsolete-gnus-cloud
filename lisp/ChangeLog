@@ -1,3 +1,7 @@
+2015-01-26  Tassilo Horn  <tsdh@gnu.org>
+
+	* Makefile.in (all total, warn, fail-on-warning): 
+
 2015-01-26  Trevor Murphy  <trevor.m.murphy@gmail.com>
 
 	* nnimap.el (nnimap-header-parameters): Refactor and request
