@@ -1,6 +1,7 @@
 2015-01-26  Tassilo Horn  <tsdh@gnu.org>
 
-	* Makefile.in (all total, warn, fail-on-warning): 
+	* Makefile.in (all total, warn, fail-on-warning): Call gnus-load.el
+	target with a recursive make call.
 
 2015-01-26  Trevor Murphy  <trevor.m.murphy@gmail.com>
 
