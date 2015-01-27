@@ -150,7 +150,7 @@ one is kept."
 		    (ignore-errors
 		      (let (mucs-ignore-version-incompatibilities)
 			(require 'un-define))))
-		(encode-coding-string string 'utf-8)
+		(mm-encode-coding-string string 'utf-8)
 	      string))))
 
 (provide 'gnus-compat)
