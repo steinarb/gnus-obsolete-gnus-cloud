@@ -144,6 +144,11 @@ one is kept."
 (unless (fboundp 'declare-function)
   (defmacro declare-function (&rest r)))
 
+(unless (fboundp 'string-bytes)
+  (defun string-bytes (string)
+    ;; This is a rather wrong definition that should be fixed.
+    (length string)))
+
 (provide 'gnus-compat)
 
 ;; gnus-compat.el ends here

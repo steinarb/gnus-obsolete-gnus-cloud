@@ -1,5 +1,7 @@
 2015-01-27  Lars Ingebrigtsen  <larsi@gnus.org>
 
+	* gnus-compat.el (fboundp): Avoid compilation error on XEmacs.
+
 	* nnir.el (nnir-imap-expr-to-imap): Check for literal+ capability in
 	IMAP.
 
