@@ -146,8 +146,12 @@ one is kept."
 
 (unless (fboundp 'string-bytes)
   (defun string-bytes (string)
-    ;; This is a rather wrong definition that should be fixed.
-    (length string)))
+    (length (if (or (mm-coding-system-p 'utf-8)
+		    (ignore-errors
+		      (let (mucs-ignore-version-incompatibilities)
+			(require 'un-define))))
+		(encode-coding-string string 'utf-8)
+	      string))))
 
 (provide 'gnus-compat)
 

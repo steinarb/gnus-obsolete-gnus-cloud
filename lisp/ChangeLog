@@ -1,6 +1,10 @@
+2015-01-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-compat.el (string-bytes): Work for XEmacs.
+
 2015-01-27  Lars Ingebrigtsen  <larsi@gnus.org>
 
-	* gnus-compat.el (fboundp): Avoid compilation error on XEmacs.
+	* gnus-compat.el (string-bytes): Avoid compilation error on XEmacs.
 
 	* nnir.el (nnir-imap-expr-to-imap): Check for literal+ capability in
 	IMAP.
