@@ -1,3 +1,8 @@
+2015-01-28  Elias Oltmanns  <eo@nebensachen.de>
+
+	* nnimap.el (nnimap-find-expired-articles): Fix handling of
+	(expiry-wait . never).
+
 2015-01-28  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-request-group): Clear the buffer before returning
