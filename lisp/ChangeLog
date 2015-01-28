@@ -1,3 +1,8 @@
+2015-01-28  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* nnimap.el (nnimap-request-group): Clear the buffer before returning
+	the data.
+
 2015-01-27  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-compat.el (string-bytes): Work for XEmacs.
