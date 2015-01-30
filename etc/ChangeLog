@@ -1,3 +1,8 @@
+2015-01-29  Francesc Rocher  <francesc.rocher@gmail.com>
+
+	* images/splash.svg, images/splash.png, images/README:
+	Splash images refurbished.
+
 2014-01-31  Alex Schroeder  <alex@gnu.org>  (tiny change)
 
 	* gnus-tut.txt (Message-ID): Typo fix (bug#15556).
