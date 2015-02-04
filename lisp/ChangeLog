@@ -1,3 +1,7 @@
+2015-02-04  Eric Abrahamsen  <eric@ericabrahamsen.net>
+
+	* nnir.el: Revert "Enable non-ASCII IMAP searches".
+
 2015-01-30  Glenn Morris  <rgm@gnu.org>
 
 	* gnus-registry.el (gnus-registry-max-pruned-entries)
@@ -37,6 +41,8 @@
 	IMAP.
 
 2015-01-27  Eric Abrahamsen  <eric@ericabrahamsen.net>
+
+	* nnir.el (nnir-run-imap): Enable non-ASCII IMAP searches.
 
 	* nnmairix.el ("nnmairix"): Declare nnmairix as virtual.
 
