@@ -1,3 +1,8 @@
+2015-02-05  Trevor Murphy  <trevor.m.murphy@gmail.com>
+
+	* gnus.texi (Support for IMAP Extensions): Document the Gmail label
+	extension.
+
 2014-12-18  Eric Abrahamsen <eric@ericabrahamsen.net>
 
 	* gnus.texi (Gnus Registry Setup): Explain pruning changes. Mention
