@@ -14182,7 +14182,7 @@ from different locations, or with different user agents.
 * Connecting to an IMAP Server::     Getting started with @acronym{IMAP}.
 * Customizing the IMAP Connection::  Variables for @acronym{IMAP} connection.
 * Client-Side IMAP Splitting::       Put mail in the correct mail box.
-* Support for IMAP extensions::      Getting extensions and labels from servers.
+* Support for IMAP Extensions::      Getting extensions and labels from servers.
 @end menu
 
 
