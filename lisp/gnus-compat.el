@@ -153,6 +153,16 @@ one is kept."
 		(mm-encode-coding-string string 'utf-8)
 	      string))))
 
+(unless (fboundp 'process-live-p)
+  (defun process-live-p (process)
+    "Returns non-nil if PROCESS is alive.
+A process is considered alive if its status is `run', `open',
+`listen', `connect' or `stop'.  Value is nil if PROCESS is not a
+process."
+    (and (processp process)
+	 (memq (process-status process)
+	       '(run open listen connect stop)))))
+
 (provide 'gnus-compat)
 
 ;; gnus-compat.el ends here

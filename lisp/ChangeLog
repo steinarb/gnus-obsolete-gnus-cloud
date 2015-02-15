@@ -1,3 +1,8 @@
+2015-02-15  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-compat.el (process-live-p): Added new compat function for Emacs
+	23.
+
 2015-02-14  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-retrieve-headers): If the server closes connection
