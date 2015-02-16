@@ -13,6 +13,15 @@
 	* mm-decode.el (mm-head-p): New function.
 	(mm-display-part): Go to a blank line when inserting parts internally.
 
+2015-02-13  Magnus Henoch  <magnus.henoch@gmail.com>
+
+	* sasl-scram-rfc.el: New file.
+
+	* sasl.el (sasl-mechanisms): Remove SCRAM-MD5.
+	Add SCRAM-SHA-1 first.
+	(sasl-mechanism-alist): Remove SCRAM-MD5 entry.  Add SCRAM-SHA-1
+	entry (bug#17636).
+
 2015-02-13  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-msg.el (gnus-msg-mail): Don't let-bind `gnus-newsgroup-name' so
