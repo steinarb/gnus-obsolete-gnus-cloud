@@ -1,3 +1,8 @@
+2015-02-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* sasl-scram-rfc.el (sasl-cl-coerce, sasl-cl-mapcar-many, sasl-cl-map)
+	(sasl-string-prefix-p): New compatibility functions.
+
 2015-02-15  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* gnus-compat.el (process-live-p): Added new compat function for Emacs
