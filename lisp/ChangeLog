@@ -59,6 +59,10 @@
 	(gnus-registry-remove-extra-data): Use slot names rather than initarg
 	names in `oref' and `oset'.
 
+2015-02-27  Eric Abrahamsen  <eric@ericabrahamsen.net>
+	* lisp/nnimap.el (nnimap-split-incoming-mail): If a message is already
+	in the group it should be split to, don't re-copy it into the group.
+
 2015-02-25  Adam Sjøgren  <asjo@koldfront.dk>
 
 	* message.el (message-insert-formatted-citation-line): Change %F to
