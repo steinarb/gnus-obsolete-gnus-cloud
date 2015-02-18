@@ -8,6 +8,11 @@
 	* gnus-compat.el (process-live-p): Added new compat function for Emacs
 	23.
 
+2015-02-14  Eric Abrahamsen  <eric@ericabrahamsen.net>
+
+	* nnimap.el (nnimap-get-groups): Correctly read unquoted group names
+	from the server LIST response.
+
 2015-02-14  Lars Ingebrigtsen  <larsi@gnus.org>
 
 	* nnimap.el (nnimap-retrieve-headers): If the server closes connection
