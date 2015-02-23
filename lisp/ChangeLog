@@ -4,6 +4,16 @@
 	Tools: https://github.com/politza/pdf-tools) for viewing PDF
 	attachments in emacs.
 
+2015-02-23  Magnus Henoch  <magnus.henoch@gmail.com>
+
+	* sasl.el (sasl-mechanism-alist): Refer to sasl-scram-rfc
+	instead of sasl-scram-sha-1, as the former is the name that can be
+	required.
+
+	* sasl-scram-rfc.el (sasl-scram-sha-1-steps)
+	(sasl-scram-sha-1-client-final-message)
+	(sasl-scram-sha-1-authenticate-server): Move to end of file.
+
 2015-02-23  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-mime-display-single): Avoid "End of buffer" error.
