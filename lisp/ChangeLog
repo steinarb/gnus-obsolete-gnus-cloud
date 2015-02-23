@@ -1,3 +1,7 @@
+2015-02-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-mime-display-single): Avoid "End of buffer" error.
+
 2015-02-16  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* sasl-scram-rfc.el (sasl-cl-coerce, sasl-cl-mapcar-many, sasl-cl-map)
