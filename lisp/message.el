@@ -1017,7 +1017,8 @@ are replaced:
   %n   The mail address, e.g. \"john.doe@example.invalid\".
   %N   The real name if present, e.g.: \"John Doe\", else fall
        back to the mail address.
-  %F   The first name if present, e.g.: \"John\".
+  %F   The first name if present, e.g.: \"John\", else fall
+       back to the mail address.
   %L   The last name if present, e.g.: \"Doe\".
   %Z, %z   The time zone in the numeric form, e.g.:\"+0000\".
 
@@ -4036,7 +4037,7 @@ See `message-citation-line-format'."
 			      from)
 		   (error nil)))
 	   (name (car data))
-	   (fname name)
+	   (fname-or-net (or name (car (cdr data)) from))
 	   (lname name)
 	   (net (car (cdr data)))
 	   (name-or-net (or (car data)
@@ -4083,7 +4084,7 @@ See `message-citation-line-format'."
                       (setq fname lname lname newlname)))))
 	      ;; The following letters are not used in `format-time-string':
 	      (push ?E lst) (push "<E>" lst)
-	      (push ?F lst) (push fname lst)
+	      (push ?F lst) (push fname-or-net lst)
 	      ;; We might want to use "" instead of "<X>" later.
 	      (push ?J lst) (push "<J>" lst)
 	      (push ?K lst) (push "<K>" lst)
