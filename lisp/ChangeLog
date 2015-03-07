@@ -2,6 +2,8 @@
 
 	* gnus-notifications.el (gnus-notifications-action): Raise window
 	frame.
+	(gnus-notifications-action): Allow mark as read.
+	(gnus-notifications-notify): Show uption to mark as read.
 
 2015-02-25  Adam Sjøgren  <asjo@koldfront.dk>
 
