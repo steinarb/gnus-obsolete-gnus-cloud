@@ -80,7 +80,8 @@ not get notifications."
       (when group-article
         (let ((group (cadr group-article))
               (article (nth 2 group-article)))
-          (gnus-fetch-group group (list article)))))))
+          (gnus-fetch-group group (list article))
+          (when (window-system) (x-focus-frame (selected-frame))))))))
 
 (defun gnus-notifications-notify (from subject photo-file)
   "Send a notification about a new mail.
