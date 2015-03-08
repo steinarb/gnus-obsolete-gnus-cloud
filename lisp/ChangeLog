@@ -5,6 +5,15 @@
 	(gnus-notifications-action): Allow mark as read.
 	(gnus-notifications-notify): Show uption to mark as read.
 
+2015-03-07  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* registry.el (registry-lookup-breaks-before-lexbind, registry-lookup)
+	(registry-search, registry-delete, registry-size, registry-insert)
+	(registry-reindex, registry-collect-prune-candidates):
+	* gnus-registry.el (gnus-registry-fixup-registry)
+	(gnus-registry-remove-extra-data): Use slot names rather than initarg
+	names in `oref' and `oset'.
+
 2015-02-25  Adam Sjøgren  <asjo@koldfront.dk>
 
 	* message.el (message-insert-formatted-citation-line): Change %F to
