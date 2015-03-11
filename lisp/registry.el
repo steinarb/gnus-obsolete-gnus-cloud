@@ -110,7 +110,7 @@
 (defvar registry-db-version 0.2
   "The current version of the registry format.")
 
-(eval (backquote
+(eval `
 (defclass registry-db (eieio-persistent)
   ((version :initarg :version
             :initform nil
@@ -147,7 +147,7 @@
    (data :initarg :data
          :type hash-table
          :documentation "The data hashtable.")))
-))
+)
 
 (defmethod initialize-instance :BEFORE ((this registry-db) slots)
   "Check whether a registry object needs to be upgraded."
