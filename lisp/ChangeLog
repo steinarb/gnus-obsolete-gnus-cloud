@@ -1,3 +1,7 @@
+2015-03-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* registry.el (registry-db): Temporary fix old Emacsen compilation.
+
 2015-03-11  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* gnus-registry.el (gnus-registry-handle-action)

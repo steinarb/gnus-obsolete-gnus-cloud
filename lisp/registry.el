@@ -110,6 +110,7 @@
 (defvar registry-db-version 0.2
   "The current version of the registry format.")
 
+(eval (backquote
 (defclass registry-db (eieio-persistent)
   ((version :initarg :version
             :initform nil
@@ -121,7 +122,7 @@
 	     ;; value rather than an expression, so in order to get the value
 	     ;; of `most-positive-fixnum', we need to use an
 	     ;; expression that's not just a symbol.
-             :initform (symbol-value 'most-positive-fixnum)
+             :initform ,(symbol-value 'most-positive-fixnum)
              :type integer
              :custom integer
              :documentation "The maximum number of registry entries.")
@@ -146,6 +147,7 @@
    (data :initarg :data
          :type hash-table
          :documentation "The data hashtable.")))
+))
 
 (defmethod initialize-instance :BEFORE ((this registry-db) slots)
   "Check whether a registry object needs to be upgraded."
