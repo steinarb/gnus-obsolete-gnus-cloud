@@ -568,17 +568,26 @@ but which should be robust in the unexpected case that an error is signaled."
 	   (progn ,@body)
 	 (error (message "Error: %S" ,err) nil)))))
 
-;; XEmacs's `define-obsolete-variable-alias' takes only two arguments:
+;; `define-obsolete-function-alias' and `define-obsolete-variable-alias'
+;; take only two arguments in XEmacs:
+;; (define-obsolete-function-alias OLDFUN NEWFUN)
 ;; (define-obsolete-variable-alias OLDVAR NEWVAR)
 (condition-case nil
-    (progn
-      (defvar dgnushack-obsolete-name nil)
-      (defvar dgnushack-current-name nil)
-      (unwind-protect
-	  (define-obsolete-variable-alias
-	    'dgnushack-obsolete-name 'dgnushack-current-name "0")
-	(makunbound 'dgnushack-obsolete-name)
-	(makunbound 'dgnushack-current-name)))
+    (define-obsolete-function-alias
+      'dgnushack-obsolete-name 'dgnushack-current-name "0")
+  (wrong-number-of-arguments
+   (defadvice define-obsolete-function-alias (around ignore-rest-args
+						     (oldfun newfun &rest args)
+						     activate)
+     "Ignore arguments other than the 1st and the 2nd ones."
+     ad-do-it)
+   (put 'define-obsolete-function-alias 'byte-optimizer
+	(lambda (form)
+	  (setcdr (nthcdr 2 form) nil)
+	  form))))
+(condition-case nil
+    (define-obsolete-variable-alias
+      'dgnushack-obsolete-name 'dgnushack-current-name "0")
   (wrong-number-of-arguments
    (defadvice define-obsolete-variable-alias (around ignore-rest-args
 						     (oldvar newvar &rest args)
