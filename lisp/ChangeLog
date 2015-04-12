@@ -1,3 +1,10 @@
+2015-04-12  João Távora  <joaotavora@gmail.com>
+
+	Improve sexp-based movement in message-mode
+	* message.el (message--syntax-propertize): New function.
+	(message-mode): Set syntax-related vars.d
+	(message-smileys): New variable.
+
 2015-04-10  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* gnus-art.el (gnus-hidden-properties): Simplify.
