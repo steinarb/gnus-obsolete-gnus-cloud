@@ -1,4 +1,9 @@
-2015-04-12  Jo„o T·vora  <joaotavora@gmail.com>
+2015-04-12  Johan Bockg√•rd  <bojohan@gnu.org>
+
+	* gnus-sum.el (gnus-summary-refer-thread):
+	Make sure gnus-newsgroup-unreads remains sorted.
+
+2015-04-12  Jo√£o T√°vora  <joaotavora@gmail.com>
 
 	Improve sexp-based movement in message-mode
 	* message.el (message--syntax-propertize): New function.
