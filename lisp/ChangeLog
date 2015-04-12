@@ -1,3 +1,8 @@
+2015-04-12  João Távora  <joaotavora@gmail.com>
+
+	* message.el (message-mode):
+	Use `set' and `make-local-variable' instead of `setq-local'.
+
 2015-04-12  Johan Bockgård  <bojohan@gnu.org>
 
 	* gnus-sum.el (gnus-summary-refer-thread):
