@@ -14,7 +14,7 @@
   (maybe-bind '(help-xref-stack-item url-version))
 
   (when (<= emacs-major-version 23)
-    (maybe-bind '(mail-encode-mml)))
+    (maybe-bind '(mail-encode-mml syntax-propertize-function)))
 
   (when (<= emacs-major-version 22)
     (defun ecomplete-add-item (type key text))
@@ -75,10 +75,10 @@
      read-char-choice read-event recenter-top-bottom
      rmail-msg-restore-non-pruned-header rmail-swap-buffers-maybe
      select-safe-coding-system set-network-process-option shr-insert-document
-     sort-coding-systems spam-initialize term-char-mode term-mode track-mouse
-     ucs-to-char url-generic-parse-url url-insert-file-contents
-     vcard-pretty-print w3m-detect-meta-charset w3m-region
-     window-edges network-interface-list))
+     sort-coding-systems spam-initialize string-to-syntax term-char-mode
+     term-mode track-mouse ucs-to-char url-generic-parse-url
+     url-insert-file-contents vcard-pretty-print w3m-detect-meta-charset
+     w3m-region window-edges network-interface-list))
   (maybe-bind
    '(adaptive-fill-first-line-regexp
      buffer-display-table buffer-save-without-query completion-styles
