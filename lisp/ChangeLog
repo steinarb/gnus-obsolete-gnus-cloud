@@ -1,3 +1,22 @@
+2015-04-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* gnus-group.el (gnus-tmp-*): Declare.
+	(gnus-update-group-mark-positions): Remove unused `topic' var.
+	(gnus-group-insert-group-line): Remove unused var `header'.
+	(gnus-group--setup-tool-bar-update): New function.
+	(gnus-group-insert-group-line): Use it.
+	(gnus-group-update-eval-form): Declare local
+	dynamically-bound variables.
+	(gnus-group-unsubscribe-group): Use \` and \' to match string bounds.
+
+	* gnus-topic.el (gnus-topic-jump-to-topic)
+	(gnus-group-prepare-topics, gnus-topic-update-topic)
+	(gnus-topic-change-level, gnus-topic-catchup-articles)
+	(gnus-topic-remove-group, gnus-topic-delete, gnus-topic-indent):
+	Use inhibit-read-only.
+	(gnus-topic-prepare-topic): Use gnus-group--setup-tool-bar-update.
+	(gnus-topic-mode): Use define-minor-mode and derived-mode-p.
+
 2015-04-12  João Távora  <joaotavora@gmail.com>
 
 	* message.el (message-mode):
