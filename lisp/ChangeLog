@@ -3,7 +3,7 @@
 	* gnus-art.el (gnus-use-idna):
 	* gnus-sum.el (gnus-summary-idna-message):
 	* message.el (message-use-idna):
-	Catch the invalid-operation that idna.el will issue.
+	Catch the invalid-operation error that idna.el will issue.
 
 2015-04-14  Stefan Monnier  <monnier@iro.umontreal.ca>
 
