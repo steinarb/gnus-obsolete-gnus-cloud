@@ -82,7 +82,7 @@
   (maybe-bind
    '(adaptive-fill-first-line-regexp
      buffer-display-table buffer-save-without-query completion-styles
-     completion-styles-alist cursor-in-non-selected-windows
+     completion-styles-alist cursor-in-non-selected-windows cursor-sensor-mode
      default-enable-multibyte-characters default-file-name-coding-system
      epa-file-encrypt-to eudc-protocol filladapt-mode
      gnus-agent-expire-current-dirs help-xref-stack-item idna-program
