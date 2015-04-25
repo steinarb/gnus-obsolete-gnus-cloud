@@ -252,7 +252,7 @@ Only start calculation.  Results are inserted when ready."
     (with-current-buffer buffer
       (save-excursion
 	(save-restriction
-	  (cl-letf (((mark)))
+	  (letf (((mark)))
 	    (setq hashcash-process-alist (delq
 					  (assq process hashcash-process-alist)
 					  hashcash-process-alist))
