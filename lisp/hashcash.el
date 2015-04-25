@@ -252,13 +252,12 @@ Only start calculation.  Results are inserted when ready."
     (with-current-buffer buffer
       (save-excursion
 	(save-restriction
-	  (letf (((mark)))
-	    (setq hashcash-process-alist (delq
-					  (assq process hashcash-process-alist)
-					  hashcash-process-alist))
-	    (message-goto-eoh)
-	    (when pay
-	      (insert-before-markers "X-Hashcash: " pay))))))))
+	  (setq hashcash-process-alist (delq
+					(assq process hashcash-process-alist)
+					hashcash-process-alist))
+	  (message-goto-eoh)
+	  (when pay
+	    (insert-before-markers "X-Hashcash: " pay)))))))
 
 (defun hashcash-cancel-async (&optional buffer)
   "Delete any hashcash processes associated with BUFFER.

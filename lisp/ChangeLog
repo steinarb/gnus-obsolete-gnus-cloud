@@ -2,6 +2,8 @@
 
 	* hashcash.el (hashcash-insert-payment-async-2): Save the mark when
 	altering the buffer.
+	(hashcash-insert-payment-async-2): Revert previous change because it
+	still means that the mark is moving around.
 
 2015-04-15  Lars Magne Ingebrigtsen  <larsi@gnus.org>
 
