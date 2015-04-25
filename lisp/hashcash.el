@@ -252,12 +252,13 @@ Only start calculation.  Results are inserted when ready."
     (with-current-buffer buffer
       (save-excursion
 	(save-restriction
-	  (setq hashcash-process-alist (delq
-					(assq process hashcash-process-alist)
-					hashcash-process-alist))
-	  (message-goto-eoh)
-	  (when pay
-	    (insert-before-markers "X-Hashcash: " pay)))))))
+	  (cl-letf (((mark)))
+	    (setq hashcash-process-alist (delq
+					  (assq process hashcash-process-alist)
+					  hashcash-process-alist))
+	    (message-goto-eoh)
+	    (when pay
+	      (insert-before-markers "X-Hashcash: " pay))))))))
 
 (defun hashcash-cancel-async (&optional buffer)
   "Delete any hashcash processes associated with BUFFER.
@@ -317,6 +318,7 @@ for each recipient address.  Prefix arg sets default payment temporarily.
 Set ASYNC to t to start asynchronous calculation.  (See
 `mail-add-payment-async')."
   (interactive "P")
+  (debug)
   (let ((hashcash-default-payment (if arg (prefix-numeric-value arg)
 				    hashcash-default-payment))
 	(addrlist nil))
