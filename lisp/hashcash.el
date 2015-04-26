@@ -317,7 +317,6 @@ for each recipient address.  Prefix arg sets default payment temporarily.
 Set ASYNC to t to start asynchronous calculation.  (See
 `mail-add-payment-async')."
   (interactive "P")
-  (debug)
   (let ((hashcash-default-payment (if arg (prefix-numeric-value arg)
 				    hashcash-default-payment))
 	(addrlist nil))
