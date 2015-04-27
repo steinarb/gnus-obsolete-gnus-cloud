@@ -4041,8 +4041,6 @@ This function uses `mail-citation-hook' if that is non-nil."
   "Cite function in the standard Message manner."
   (message-cite-original-1 nil))
 
-(defvar gnus-extract-address-components)
-
 (autoload 'format-spec "format-spec")
 (autoload 'gnus-date-get-time "gnus-util")
 
@@ -4064,7 +4062,7 @@ See `message-citation-line-format'."
     (unless from
       (setq from (mail-header-from message-reply-headers)))
     (let* ((data (condition-case ()
-		     (funcall (if (boundp gnus-extract-address-components)
+		     (funcall (if (boundp 'gnus-extract-address-components)
 				  gnus-extract-address-components
 				'mail-extract-address-components)
 			      from)
