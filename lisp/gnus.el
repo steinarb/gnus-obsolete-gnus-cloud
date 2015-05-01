@@ -290,7 +290,7 @@ is restarted, and sometimes reloaded."
   :link '(custom-manual "(gnus)Exiting Gnus")
   :group 'gnus)
 
-(defconst gnus-version-number "0.13"
+(defconst gnus-version-number "0.14"
   "Version number for this version of Gnus.")
 
 (defconst gnus-version (format "Ma Gnus v%s" gnus-version-number)
