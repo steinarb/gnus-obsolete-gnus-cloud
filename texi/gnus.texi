@@ -46,7 +46,7 @@ modify this GNU manual.''
 \begin{document}
 
 % Adjust ../Makefile.in if you change the following line:
-\newcommand{\gnusversionname}{Ma Gnus v0.12}
+\newcommand{\gnusversionname}{Ma Gnus v0.13}
 \newcommand{\gnuschaptername}{}
 \newcommand{\gnussectionname}{}
 
@@ -357,7 +357,7 @@ spool or your mbox file.  All at the same time, if you want to push your
 luck.
 
 @c Adjust ../Makefile.in if you change the following line:
-This manual corresponds to Ma Gnus v0.12
+This manual corresponds to Ma Gnus v0.13
 
 @ifnottex
 @insertcopying
@@ -391,7 +391,7 @@ people should be empowered to do what they want by using (or abusing)
 the program.
 
 @c Adjust ../Makefile.in if you change the following line:
-This manual corresponds to Ma Gnus v0.12
+This manual corresponds to Ma Gnus v0.13
 
 @heading Other related manuals
 @itemize
@@ -28996,7 +28996,7 @@ Gnus will work.
 @item
 Try doing an @kbd{M-x gnus-version}.  If you get something that looks
 like @c
-@samp{Ma Gnus v0.12} @c Adjust ../Makefile.in if you change this line!
+@samp{Ma Gnus v0.13} @c Adjust ../Makefile.in if you change this line!
 @c
 you have the right files loaded.  Otherwise you have some old @file{.el}
 files lying around.  Delete these.
