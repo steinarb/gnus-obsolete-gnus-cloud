@@ -1,3 +1,10 @@
+2015-05-01  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-util.el (iswitchb-read-buffer):
+	* mm-decode.el (libxml-parse-html-region):
+	* mml.el (libxml-parse-html-region):
+	* nnrss.el (libxml-parse-html-region): Update declaration.
+
 2015-04-27  Glenn Morris  <rgm@gnu.org>
 
 	* message.el (gnus-extract-address-components):
