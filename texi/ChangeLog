@@ -1,3 +1,10 @@
+2015-05-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* docstyle.texi: Use "@set txicodequoteundirected" and
+	"@set txicodequotebacktick" instead of "@codequotebacktick on" and
+	"@codequoteundirected on", respectively, to avoid requiring
+	Texinfo 5.x for Emacs documentation.
+
 2015-05-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* docstyle.texi: New file, which specifies treatment for grave accent
