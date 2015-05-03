@@ -1,3 +1,13 @@
+2015-05-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* docstyle.texi: New file, which specifies treatment for grave accent
+	and apostrophe, as well as the document encoding.
+
+	* auth.texi, emacs-mime.texi, epa.texi, gnus-coding.texi:
+	* gnus-faq.texi, gnus.texi, message.texi, sasl.texi, sieve.texi:
+	Use it instead of '@documentencoding UTF-8', to lessen the need for
+	global changes like this in the future.
+
 2015-02-05  Glenn Morris  <rgm@gnu.org>
 
 	* auth.texi (Multiple GMail accounts with Gnus): Markup fix.
