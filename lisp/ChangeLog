@@ -1,3 +1,47 @@
+2015-05-04  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-art.el (nneething-get-file-name): Declare rather than autoload.
+
+	* gnus-async.el (gnus-html-prefetch-images): Remove pointless autoload.
+
+	* gnus-sync.el (gnus-group-topic): Autoload at run-time.
+	(gnus-topic-create-topic, gnus-topic-enter-dribble):
+	Declare rather than autoload.
+
+	* mm-archive.el (gnus-recursive-directory-files)
+	(mailcap-extension-to-mime): Autoload at run-time.
+
+	* mm-util.el (latin-unity-massage-name)
+	(latin-unity-maybe-remap, latin-unity-representations-feasible-region)
+	(latin-unity-representations-present-region):
+	Declare rather than autoload.
+
+	* mml-smime.el (epg-make-context, epg-passphrase-callback-function):
+	Autoload at run-time.
+	(epg-context-set-signers, epg-context-result-for)
+	(epg-new-signature-digest-algorithm, epg-verify-result-to-string)
+	(epg-list-keys, epg-verify-string, epg-sign-string, epg-encrypt-string)
+	(epg-context-set-passphrase-callback, epg-sub-key-fingerprint)
+	(epg-configuration, epg-expand-group, epa-select-keys):
+	Declare rather than autoload.
+
+	* nnir.el (nnimap-change-group, nnimap-make-thread-query):
+	Autoload at run-time.
+	(gnus-group-topic-name, nnimap-buffer, nnimap-command)
+	(gnus-registry-get-id-key, gnus-registry-action):
+	Declare rather than autoload.
+
+	* nnmail.el (mail-send-and-exit): Autoload at run-time.
+
+	* spam.el (spam-stat-buffer-change-to-non-spam)
+	(spam-stat-buffer-change-to-spam, spam-stat-buffer-is-non-spam)
+	(spam-stat-buffer-is-spam, spam-stat-load, spam-stat-save)
+	(spam-stat-split-fancy): Remove pointless autoloads.
+
+	* mm-view.el (epg-decrypt-string): Autoload.
+	* mml-smime.el (epg-key-sub-key-list, epg-sub-key-capability)
+	(epg-sub-key-validity): Fix declarations.
+
 2015-05-01  Lars Magne Ingebrigtsen  <lars@ingebrigtsen.no>
 
 	* gnus.el: Ma Gnus v0.13 is released.
