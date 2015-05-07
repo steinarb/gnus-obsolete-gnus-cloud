@@ -43,6 +43,7 @@
   (defun canlock-insert-header (&optional id-for-key id-for-lock password))
   (defun ecomplete-add-item (type key text))
   (defun ecomplete-save nil)
+  (defun gnus-html-prefetch-images (summary))
   (defun hashcash-wait-async (&optional buffer))
   (defun mail-add-payment (&optional arg async))
   (defun mail-add-payment-async (&optional arg))

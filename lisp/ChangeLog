@@ -1,3 +1,8 @@
+2015-05-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* dgnushack.el (declare-function): Redefine it to use autoload.
+	* lpath.el (gnus-html-prefetch-images): Declare.
+
 2015-05-04  Glenn Morris  <rgm@gnu.org>
 
 	* gnus-art.el (nneething-get-file-name): Declare rather than autoload.
