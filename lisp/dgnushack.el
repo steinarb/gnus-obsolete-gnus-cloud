@@ -28,8 +28,8 @@
 
 (when (featurep 'xemacs)
   (defmacro declare-function (fn file &optional arglist fileonly)
-    `(eval-when-compile
-       (unless (fboundp ',fn) (autoload ',fn ,file)))))
+    (unless (fboundp fn) (autoload fn file))
+    nil))
 
 (defalias 'facep 'ignore)
 
