@@ -26,10 +26,10 @@
 
 (defvar dgnushack-default-load-path (copy-sequence load-path))
 
-(unless (fboundp 'declare-function)
+(when (featurep 'xemacs)
   (defmacro declare-function (fn file &optional arglist fileonly)
     `(eval-when-compile
-       (if (not (fboundp ',fn)) (autoload ',fn ,file)))))
+       (unless (fboundp ',fn) (autoload ',fn ,file)))))
 
 (defalias 'facep 'ignore)
 
