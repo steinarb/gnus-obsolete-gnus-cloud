@@ -43,7 +43,7 @@ the text that it generates."
        ;; Valid format spec.
        ((looking-at "\\([-0-9.]*\\)\\([a-zA-Z]\\)")
 	(let* ((num (match-string 1))
-	       (spec (string-to-char (match-string 2)))
+	       (spec (+ (string-to-char (match-string 2)) 0))
 	       (val (assq spec specification)))
 	  (unless val
 	    (error "Invalid format character: `%%%c'" spec))
@@ -70,7 +70,7 @@ starting with a character."
     (while pairs
       (unless (cdr pairs)
 	(error "Invalid list of pairs"))
-      (push (cons (car pairs) (cadr pairs)) alist)
+      (push (cons (+ (car pairs) 0) (cadr pairs)) alist)
       (setq pairs (cddr pairs)))
     (nreverse alist)))
 

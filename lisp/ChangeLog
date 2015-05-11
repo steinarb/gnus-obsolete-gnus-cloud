@@ -1,3 +1,8 @@
+2015-05-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* format-spec.el (format-spec, format-spec-make): Work for XEmacs.
+	Normalize characters into numbers in spec keys.
+
 2015-05-07  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* dgnushack.el (declare-function): Redefine it to use autoload.
