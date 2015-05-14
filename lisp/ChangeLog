@@ -1,3 +1,9 @@
+2015-05-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* format-spec.el (format-spec, format-spec-make): Work for XEmacs.
+	Use (char-to-int c) instead of (+ c 0) that the byte compiler optimizes
+	into just c.
+
 2015-05-11  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* format-spec.el (format-spec, format-spec-make): Work for XEmacs.
