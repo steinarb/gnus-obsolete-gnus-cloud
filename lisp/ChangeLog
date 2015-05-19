@@ -1,3 +1,11 @@
+2015-05-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-art.el (gnus-treat-strip-list-identifiers)
+	(gnus-article-mode-syntax-table):
+	* gnus-group.el (gnus-group-nnimap-edit-acl):
+	* canlock.el, deuglify.el: Fix minor quoting problems in doc strings,
+	e.g., missing quote, ``x'' where `x' was meant, etc.
+
 2015-05-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* format-spec.el (format-spec, format-spec-make): Work for XEmacs.
