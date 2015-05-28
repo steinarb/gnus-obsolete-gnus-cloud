@@ -1,5 +1,9 @@
 2015-05-28  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* gnus-art.el (gnus-button-alist): Revert last change.
+	It wasn't that important, and it caused a Gnus build to fail.  See:
+	http://www.randomsample.de:4456/builders/emacs-devel/builds/734
+
 	* gnus-art.el (gnus-button-alist):
 	Also treat "‘" and "’" as quoting chars.
 
