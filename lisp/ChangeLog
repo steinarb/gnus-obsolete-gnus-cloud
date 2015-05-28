@@ -1,3 +1,8 @@
+2015-05-29  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (gnus-button-alist): Re-revert last change.
+	cf. <http://news.gmane.org/group/gmane.emacs.devel/thread=186896>
+
 2015-05-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-art.el (gnus-button-alist): Revert last change.
