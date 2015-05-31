@@ -42,7 +42,8 @@
   (let* ((ping-program-options '("-c" "1"))
 	 (buf (ping host))
 	 proc)
-    (sleep-for 0.5)
+    ;; sleep-for does not work correctly with async processes running
+    (call-process "sleep" nil nil nil "2")
     (with-current-buffer buf
       (accept-process-output (get-buffer-process (current-buffer)) 2)
       (goto-char (point-min))

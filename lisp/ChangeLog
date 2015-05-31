@@ -1,3 +1,9 @@
+2015-05-31  David Engster  <deng@randomsample.de>
+
+	* tests/gnustest-nntp.el (gnustest-ping-host): Call 'sleep' binary
+	instead of using `sleep-for', as the latter does not seem to reliably
+	wait (see for instance bug 15990).
+
 2015-05-29  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-art.el (gnus-button-alist): Re-revert last change.
