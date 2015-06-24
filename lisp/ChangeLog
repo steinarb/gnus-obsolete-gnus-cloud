@@ -1,3 +1,28 @@
+2015-06-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nnmaildir.el (nnmaildir--prepare): Use a more functional style.
+	(nnmaildir--update-nov): Remove unused var `numdir'.
+	(nnmaildir-request-type, nnmaildir--scan, nnmaildir-request-newgroups)
+	(nnmaildir-request-group, nnmaildir-request-create-group)
+	(nnmaildir-request-post, nnmaildir-request-move-article)
+	(nnmaildir-request-accept-article, nnmaildir-active-number):
+	Mark unused args.
+	(nnmaildir-get-new-mail, nnmaildir-group-alist, nnmaildir-active-file):
+	Declare.
+	(nnmaildir-request-scan): Remove unused vars `group' and `grp-dir'.
+	(nnmaildir-request-update-info): Remove unused vars `dotfile', `num',
+	`mark', `end', `new-mark', and `mark-sym'.
+	(nnmaildir-retrieve-headers):
+	Remove unused args `srv-dir', `dir', `nlist2'.
+	(nnmaildir-request-expire-articles):
+	Remove unused vars `article', `stop' and `nlist2'.
+	(nnmaildir-request-set-mark): Remove unused vars `begin', `article' and
+	`end'.  Use nnmaildir--article when dyn-binding is needed.
+	Give the value directly in the `let' for `del-mark', `del-action',
+	`add-action', and `set-action'.  Don't use `add-to-list' on a local var.
+	(nnmaildir-close-server):
+	Declare those local vars that need to be dyn-bound.
+
 2015-06-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-art.el (gnus-button-alist): Also support quotes 'like this'.
