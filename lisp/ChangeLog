@@ -1,3 +1,15 @@
+2015-07-08  Eric Abrahamsen  <eric@ericabrahamsen.net>
+
+	Remove unused let variables
+	* nnimap.el (nnimap-request-group): Variables are not used.
+
+	Check if group names are already strings
+	* gnus-group.el (gnus-group-group-name):
+	The group name may already be a string.
+	Specifically, in the group list reached from the *Server* buffer,
+	the 'gnus-group text property returns a string.  Everywhere else
+	it returns a symbol.
+
 2015-06-24  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* nnmaildir.el (nnmaildir--prepare): Use a more functional style.
