@@ -1,9 +1,8 @@
 2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
 
-        * lisp/nnimap.el (nnimap-open-connection-1): Always query capabilities,
+	* nnimap.el (nnimap-open-connection-1): Always query capabilities,
 	so that a 'plain value for the `nnimap-stream' server variable is
 	handled correctly.
-        * texi/gnus.texi: Document the 'plain option.
 
 2015-07-08  Eric Abrahamsen  <eric@ericabrahamsen.net>
 

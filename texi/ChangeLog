@@ -1,3 +1,8 @@
+2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
+
+	* gnus.texi (Customizing the IMAP Connection):
+	Document the 'plain option.
+
 2015-05-02  Eli Zaretskii  <eliz@gnu.org>
 
 	* docstyle.texi: Use "@set txicodequoteundirected" and
