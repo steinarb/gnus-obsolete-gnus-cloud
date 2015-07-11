@@ -235,6 +235,7 @@ textual parts.")
 				      t)
 		   (match-string 1)))
 	(setq lines nil)
+	(beginning-of-line)
 	(setq size
 	      (and (re-search-forward "RFC822.SIZE \\([0-9]+\\)"
 				      (line-end-position)

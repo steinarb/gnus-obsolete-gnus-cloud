@@ -1,5 +1,10 @@
 2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
 
+	* nnimap.el (nnimap-transform-headers): Don't assume that UID comes
+	before RFC822.SIZE.
+
+2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
+
 	* nnimap.el (nnimap-open-connection-1): Always query capabilities,
 	so that a 'plain value for the `nnimap-stream' server variable is
 	handled correctly.
