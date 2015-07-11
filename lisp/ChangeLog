@@ -1,5 +1,11 @@
 2015-08-02  Nikolaus Rath  <Nikolaus@rath.org>
 
+	* nnimap.el (nnimap-request-move-article)
+	(nnimap-process-expiry-targets, nnimap-split-incoming-mail): Use MOVE
+	extension if available.
+
+2015-08-02  Nikolaus Rath  <Nikolaus@rath.org>
+
 	* nnimap.el (nnimap-open-connection-1): explicitly ask server for
 	capabilities instead of relying on LOGIN response.
 
