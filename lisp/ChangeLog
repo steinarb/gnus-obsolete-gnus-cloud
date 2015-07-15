@@ -8,6 +8,20 @@
 	* nnimap.el (nnimap-transform-headers): Don't assume that UID comes
 	before RFC822.SIZE.
 
+2015-07-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nnimap.el: Clean up "unused var" warnings.
+	(auth-source-creation-prompts): Declare.
+	(nnimap-retrieve-headers, nnimap-status-message)
+	(nnimap-request-create-group, nnimap-request-delete-group)
+	(nnimap-close-group, nnimap-request-move-article)
+	(nnimap-request-accept-article, nnimap-request-newgroups)
+	(nnimap-request-post, nnimap-dummy-active-number)
+	(nnimap-save-mail-spec, nnimap-get-groups): Add _ to unused vars.
+	(nnimap-parse-flags): Remove unused var `p'.
+	(nnimap-retrieve-group-data-early): Remove unused var `groups'.
+	(nnimap-flags-to-marks): Remove unused var `totalp'.
+
 2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
 
 	* nnimap.el (nnimap-open-connection-1): Always query capabilities,
