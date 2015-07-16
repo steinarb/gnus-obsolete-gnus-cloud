@@ -3,11 +3,6 @@
 	* gnus-registry.el (gnus-registry--set/remove-mark): Correct the order
 	of function arguments.
 
-2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
-
-	* nnimap.el (nnimap-transform-headers): Don't assume that UID comes
-	before RFC822.SIZE.
-
 2015-07-10  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* nnimap.el: Clean up "unused var" warnings.
@@ -21,6 +16,11 @@
 	(nnimap-parse-flags): Remove unused var `p'.
 	(nnimap-retrieve-group-data-early): Remove unused var `groups'.
 	(nnimap-flags-to-marks): Remove unused var `totalp'.
+
+2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
+
+	* nnimap.el (nnimap-transform-headers): Don't assume that UID comes
+	before RFC822.SIZE.
 
 2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
 
