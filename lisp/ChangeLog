@@ -1,3 +1,8 @@
+2015-07-17  Julien Danjou  <jd@abydos>
+
+	* sieve-mode.el (sieve-font-lock-keywords): Add missing "body" test
+	command.
+
 2015-07-11  Eric Abrahamsen  <eric@ericabrahamsen.net>
 
 	* gnus-registry.el (gnus-registry--set/remove-mark): Correct the order
