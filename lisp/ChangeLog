@@ -1,3 +1,21 @@
+2015-07-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* nnbabyl.el (nnbabyl-retrieve-headers):
+	* nndiary.el (nndiary-retrieve-headers):
+	* nneething.el (nneething-retrieve-headers):
+	* nnmbox.el (nnmbox-retrieve-headers):
+	* nnmh.el (nnmh-retrieve-headers):
+	* nnml.el (nnml-retrieve-headers):
+	* nnspool.el (nnspool-retrieve-headers):
+	* nntp.el (nntp-retrieve-headers, nntp-retrieve-articles):
+	Prefer (floor (* 100.0 NUMERATOR) DENOMINATOR) when calculating
+	progress-report percentages and the like.  This avoids problems
+	if (* 100 NUMERATOR) would overflow.
+
+	* gnus-registry.el (gnus-registry-import-eld):
+	* registry.el (registry-reindex):
+	Use (* 100.0 ...) rather than (* 100 ...) to avoid int overflow issues.
+
 2015-07-17  Julien Danjou  <jd@abydos>
 
 	* sieve-mode.el (sieve-font-lock-keywords): Add missing "body" test
