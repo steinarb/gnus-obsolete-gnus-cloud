@@ -1,3 +1,9 @@
+2015-08-02  David Kastrup  <dak@gnu.org>
+
+	* gnus-art.el (gnus-article-describe-key)
+	(gnus-article-describe-key-briefly):
+	Do not overwrite preexisting contents of unread-command-events.
+
 2015-08-02  Nikolaus Rath  <Nikolaus@rath.org>
 
 	* nnimap.el (nnimap-request-move-article)
