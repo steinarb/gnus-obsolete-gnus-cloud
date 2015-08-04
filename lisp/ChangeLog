@@ -1,4 +1,4 @@
-2015-08-02  David Kastrup  <dak@gnu.org>
+2015-08-04  David Kastrup  <dak@gnu.org>
 
 	* gnus-art.el (gnus-article-describe-key)
 	(gnus-article-describe-key-briefly):
