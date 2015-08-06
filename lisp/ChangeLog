@@ -1,3 +1,9 @@
+2015-08-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* message.el (message-send-form-letter): Change (message (format ...))
+	to (message ...).  This lessens the probability of confusion when
+	the output of `format' contains `%'.
+
 2015-08-04  David Kastrup  <dak@gnu.org>
 
 	* gnus-art.el (gnus-article-describe-key)
