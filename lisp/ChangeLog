@@ -1,3 +1,7 @@
+2015-08-17  Lars Magne Ingebrigtsen  <larsi@gnus.org>
+
+	* message.el (message-toggle-image-thumbnails): New command.
+
 2015-08-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* message.el (message-send-form-letter): Change (message (format ...))
