@@ -182,9 +182,17 @@ If NOW, use that time instead."
     'region-exists-p)
   (defalias 'message-make-caesar-translation-table
     'message-xmas-make-caesar-translation-table)
-  (defalias 'message-make-overlay 'make-extent)
   (defalias 'message-delete-overlay 'delete-extent)
+  (defun message-make-overlay (beg end &optional buffer
+				   front-advance rear-advance)
+    "Create a new overlay with range BEG to END in BUFFER.
+FRONT-ADVANCE and REAR-ADVANCE are ignored."
+    (make-extent beg end buffer))
+  (defalias 'message-overlay-get 'extent-property)
   (defalias 'message-overlay-put 'set-extent-property)
+  (defun message-overlays-in (beg end)
+    "Return a list of the extents that overlap the region BEG ... END."
+    (mapcar-extents #'identity nil nil beg end))
   (defalias 'message-make-date 'message-xmas-make-date))
 
 (message-xmas-redefine)
