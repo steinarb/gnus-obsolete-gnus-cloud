@@ -1,3 +1,10 @@
+2015-08-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* message.el (message-overlay-put, message-make-overlay)
+	(message-kill-all-overlays, message-overlays-in, message-overlay-get)
+	(message-delete-overlay, message-window-inside-pixel-edges):
+	Declare before using.
+
 2015-08-17  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* message.el (message-overlay-get, message-overlays-in)
