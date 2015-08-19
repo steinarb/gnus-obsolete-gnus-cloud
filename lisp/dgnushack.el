@@ -233,17 +233,18 @@
     (defalias 'frame-char-height 'frame-height)
     (defalias 'frame-char-width 'frame-width)
     (defalias 'frame-parameter 'frame-property)
-    (defalias 'make-overlay 'ignore)
-    (defalias 'overlay-end 'ignore)
-    (defalias 'overlay-get 'ignore)
-    (defalias 'overlay-put 'ignore)
-    (defalias 'overlay-start 'ignore)
-    (defalias 'overlays-in 'ignore)
     (defalias 'replace-dehighlight 'ignore)
     (defalias 'replace-highlight 'ignore)
     (defalias 'gnutls-available-p 'ignore)
     (defvar timer-list nil)
-    (defvar scroll-margin 0)))
+    (defvar scroll-margin 0)
+    (dolist (fn '(copy-overlay
+		  delete-overlay make-overlay move-overlay next-overlay-change
+		  overlay-buffer overlay-end overlay-get overlay-lists
+		  overlay-properties overlay-put overlay-recenter overlay-start
+		  overlayp overlays-at overlays-in previous-overlay-change
+		  remove-overlays))
+      (autoload fn "overlay"))))
 
 (defun dgnushack-emacs-compile-defcustom-p ()
   "Return non-nil if Emacs byte compiles `defcustom' forms.

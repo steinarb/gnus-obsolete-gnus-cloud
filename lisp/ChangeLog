@@ -1,3 +1,46 @@
+2015-08-19  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	Use overlay functions directly
+
+	* dgnushack.el (overlay): Autoload overlay functions for XEmacs.
+	* lpath.el (delete-overlay, overlay-lists): Remove Fibnd.
+
+	* gnus-art.el (gnus-mime-inline-part, gnus-mm-display-part)
+	(gnus-insert-mime-button, gnus-mime-buttonize-attachments-in-header)
+	(gnus-article-highlight-signature, gnus-article-extend-url-button)
+	(gnus-article-add-button, gnus-insert-prev-page-button)
+	(gnus-insert-next-page-button, gnus-insert-mime-security-button):
+	* gnus-cite.el (gnus-cite-delete-overlays, gnus-cite-add-face):
+	* gnus-html.el (gnus-html-wash-tags):
+	* gnus-salt.el (gnus-tree-read-summary-keys, gnus-tree-recenter)
+	(gnus-highlight-selected-tree):
+	* gnus-sum.el (gnus-summary-show-all-threads, gnus-summary-show-thread)
+	(gnus-summary-hide-thread, gnus-highlight-selected-summary):
+	* gnus-util.el (gnus-put-overlay-excluding-newlines):
+	* message.el (message-fix-before-sending)
+	(message-toggle-image-thumbnails):
+	* mm-decode.el (mm-convert-shr-links):
+	* sieve.el (sieve-highlight, sieve-insert-scripts):
+	Use overlay functions directly instead of using gnus-overlay-*,
+	message-overlay-*, and sieve-overlay-*.
+
+	* gnus-sum.el (gnus-remove-overlays):
+	* gnus-xmas.el (gnus-xmas-move-overlay, gnus-xmas-overlays-at)
+	(gnus-xmas-overlays-in, gnus-make-overlay, gnus-copy-overlay)
+	(gnus-delete-overlay, gnus-overlay-get, gnus-overlay-put)
+	(gnus-move-overlay, gnus-overlay-buffer, gnus-overlay-start)
+	(gnus-overlay-end, gnus-overlays-at, gnus-overlays-in):
+	* gnus.el (gnus-make-overlay, gnus-copy-overlay, gnus-delete-overlay)
+	(gnus-overlay-get, gnus-overlay-put, gnus-move-overlay)
+	(gnus-overlay-buffer, gnus-overlay-start, gnus-overlay-end)
+	(gnus-overlays-at, gnus-overlays-in):
+	* message.el (message-delete-overlay, message-make-overlay)
+	(message-overlay-get, message-overlay-put, message-overlays-in):
+	* messagexmas.el (message-delete-overlay, message-make-overlay)
+	(message-overlay-get, message-overlay-put, message-overlays-in):
+	* sieve.el (sieve-make-overlay, sieve-overlay-put, sieve-overlays-at):
+	Remove.
+
 2015-08-19  Glenn Morris  <rgm@gnu.org>
 
 	* nnmaildir.el (nnmaildir-flag-mark-mapping): Add "P".

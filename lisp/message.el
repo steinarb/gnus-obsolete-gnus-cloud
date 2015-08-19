@@ -2052,13 +2052,8 @@ You must have the \"hashcash\" binary installed, see `hashcash-path'."
 (eval-and-compile
   (if (featurep 'emacs)
       (progn
-	(defalias 'message-delete-overlay 'delete-overlay)
 	(defun message-kill-all-overlays ()
 	  (mapcar #'delete-overlay (overlays-in (point-min) (point-max))))
-	(defalias 'message-make-overlay 'make-overlay)
-	(defalias 'message-overlay-get 'overlay-get)
-	(defalias 'message-overlay-put 'overlay-put)
-	(defalias 'message-overlays-in 'overlays-in)
 	(defalias 'message-window-inside-pixel-edges
 	  'window-inside-pixel-edges))
     (defun message-kill-all-overlays ()
@@ -4440,8 +4435,7 @@ conformance."
 		to (cdar regions)
 		regions (cdr regions))
 	  (put-text-property from to 'invisible nil)
-	  (message-overlay-put (message-make-overlay from to)
-			       'face 'highlight))
+	  (overlay-put (make-overlay from to) 'face 'highlight))
 	(unless (yes-or-no-p
 		 "Invisible text found and made visible; continue sending? ")
 	  (error "Invisible text found and made visible")))))
@@ -4468,8 +4462,7 @@ conformance."
 						 control-1))
 		       (not (get-text-property
 			     (point) 'untranslated-utf-8))))
-	  (message-overlay-put (message-make-overlay (point) (1+ (point)))
-			       'face 'highlight)
+	  (overlay-put (make-overlay (point) (1+ (point))) 'face 'highlight)
 	  (setq found t))
 	(forward-char))
       (when found
@@ -8612,12 +8605,12 @@ Used in `message-simplify-recipients'."
 (defun message-toggle-image-thumbnails ()
   "For any included image files, insert a thumbnail of that image."
   (interactive)
-  (let ((overlays (message-overlays-in (point-min) (point-max)))
+  (let ((overlays (overlays-in (point-min) (point-max)))
 	(displayed nil))
     (while overlays
       (let ((overlay (car overlays)))
-	(when (message-overlay-get overlay 'put-image)
-	  (message-delete-overlay overlay)
+	(when (overlay-get overlay 'put-image)
+	  (delete-overlay overlay)
 	  (setq displayed t)))
       (setq overlays (cdr overlays)))
     (unless displayed
