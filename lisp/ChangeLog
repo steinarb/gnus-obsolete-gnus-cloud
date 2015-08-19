@@ -1,3 +1,7 @@
+2015-08-19  Glenn Morris  <rgm@gnu.org>
+
+	* nnmaildir.el (nnmaildir-flag-mark-mapping): Add "P".
+
 2015-08-18  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* message.el (message-overlay-put, message-make-overlay)
