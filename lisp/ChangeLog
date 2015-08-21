@@ -1,3 +1,10 @@
+2015-08-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* nnmairix.el (nnmairix-propagate-marks-upon-close):
+	* pop3.el (pop3-authentication-scheme):
+	Don't quote symbols with apostrophes in doc strings.
+	Use asymmetric quotes instead.
+
 2015-08-19  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	Use overlay functions directly
