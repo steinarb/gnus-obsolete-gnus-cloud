@@ -1,5 +1,12 @@
 2015-08-21  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* auth-source.el (auth-sources):
+	Prefer (substitute-command-keys "`\\[foo-command]'")
+	to "`M-x foo-command'" in docstring.
+
+	* time-date.el (format-seconds):
+	Use curved quotes in diagnostic format strings.
+
 	* nnmairix.el (nnmairix-propagate-marks-upon-close):
 	* pop3.el (pop3-authentication-scheme):
 	Don't quote symbols with apostrophes in doc strings.
