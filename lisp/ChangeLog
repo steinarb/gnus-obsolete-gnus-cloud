@@ -1,3 +1,22 @@
+2015-08-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Prefer directed to neutral quotes in docstings and diagnostics.
+	In docstrings, escape apostrophes that would otherwise be translated
+	to curved quotes using the newer, simpler rules.
+
+	* auth-source.el (auth-source-netrc-parse-entries):
+	* gnus-agent.el (gnus-agent-check-overview-buffer)
+	(gnus-agent-fetch-headers):
+	* gnus-int.el (gnus-start-news-server):
+	* gnus-registry.el (gnus-registry--split-fancy-with-parent-internal):
+	* gnus-score.el (gnus-summary-increase-score):
+	* gnus-start.el (gnus-convert-old-newsrc):
+	* gnus-topic.el (gnus-topic-rename):
+	* legacy-gnus-agent.el (gnus-agent-unlist-expire-days):
+	* nnmairix.el (nnmairix-widget-create-query):
+	* spam.el (spam-check-blackholes):
+	Use directed rather than neutral quotes in diagnostics.
+
 2015-08-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* auth-source.el (auth-sources):
