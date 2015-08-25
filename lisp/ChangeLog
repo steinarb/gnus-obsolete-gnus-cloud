@@ -1,5 +1,8 @@
 2015-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* gnus-util.el (gnus-format-message):
+	Fix typo when running in older Emacs.
+
 	Prefer directed to neutral quotes in docstings and diagnostics.
 	In docstrings, escape apostrophes that would otherwise be translated
 	to curved quotes using the newer, simpler rules.
