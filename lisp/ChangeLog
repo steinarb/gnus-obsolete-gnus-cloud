@@ -1,3 +1,21 @@
+2015-08-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Go back to grave quoting in Gnus
+
+	* auth-source.el (auth-source-netrc-parse-entries):
+	* gnus-agent.el (gnus-agent-check-overview-buffer)
+	(gnus-agent-fetch-headers):
+	* gnus-int.el (gnus-start-news-server):
+	* gnus-registry.el (gnus-registry--split-fancy-with-parent-internal)
+	(gnus-registry-post-process-groups):
+	* gnus-score.el (gnus-summary-increase-score):
+	* gnus-start.el (gnus-convert-old-newsrc):
+	* gnus-topic.el (gnus-topic-rename):
+	* legacy-gnus-agent.el (gnus-agent-unlist-expire-days):
+	* spam.el (spam-check-blackholes):
+	Stick with grave quoting in diagnostics strings.  This is more
+	portable to older Emacs, desirable for Gnus.
+
 2015-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Prefer directed to neutral quotes in docstings and diagnostics.
