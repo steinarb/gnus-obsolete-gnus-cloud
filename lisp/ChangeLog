@@ -1,3 +1,26 @@
+2015-08-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-agent.el (gnus-agent-possibly-synchronize-flags-server):
+	* gnus-art.el (gnus-article-browse-delete-temp-files):
+	* gnus-eform.el (gnus-edit-form):
+	* gnus-fun.el (gnus-display-x-face-in-from):
+	* gnus-group.el (gnus-group-edit-group, gnus-group-nnimap-edit-acl):
+	* gnus-topic.el (gnus-topic-edit-parameters):
+	* mail-source.el (mail-source-delete-old-incoming):
+	* message.el (message-strip-subject-encoded-words)
+	(message-check-recipients, message-send-form-letter):
+	* mm-decode.el (mm-display-part):
+	* mm-uu.el (mm-uu-pgp-signed-extract-1):
+	* mml-smime.el (mml-smime-get-dns-cert, mml-smime-get-ldap-cert):
+	* spam-report.el (spam-report-process-queue):
+	* tls.el (open-tls-stream):
+	Respect ‘text-quoting-style’ in diagnostics.
+	* gnus-art.el (article-display-face):
+	* gnus-fun.el (gnus-display-x-face-in-from):
+	Use straight quoting in email.
+	* rfc2231.el (rfc2231-decode-encoded-string):
+	Escape apostrophes in doc strings.
+
 2015-08-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Go back to grave quoting in Gnus
