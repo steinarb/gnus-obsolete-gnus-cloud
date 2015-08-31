@@ -1,3 +1,9 @@
+2015-08-31  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* tls.el (tls-format-message):
+	Alias to format-message, or format if not available.
+	(open-tls-stream): Use it.
+
 2015-08-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-agent.el (gnus-agent-possibly-synchronize-flags-server):
