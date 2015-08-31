@@ -1,3 +1,10 @@
+2015-08-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-faq.texi (FAQ 5-13, FAQ 6-2):
+	* gnus.texi (Score Decays, SpamAssassin):
+	Prefer curved quotes in examples if users will typically see curved
+	quotes when the examples run.
+
 2015-07-09  Nikolaus Rath  <Nikolaus@rath.org>
 
 	* gnus.texi (Customizing the IMAP Connection):
