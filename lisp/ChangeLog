@@ -1,3 +1,9 @@
+2015-09-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-sum.el (gnus-summary-search-article):
+	Ensure that the article where the search word is found is displayed
+	and pointed to in the summary buffer.
+
 2015-08-31  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* tls.el (tls-format-message):
