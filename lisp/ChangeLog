@@ -1,5 +1,9 @@
 2015-09-01  Katsumi Yamaoka  <yamaoka@jpl.org>
 
+	* gnus-util.el (gnus-format-message):
+	* tls.el (tls-format-message): Use defalias at the top level so as to
+	make eval-and-compile unnecessary.  Thanks to Stefan Monnier.
+
 	* gnus-sum.el (gnus-summary-search-article):
 	Ensure that the article where the search word is found is displayed
 	and pointed to in the summary buffer.
