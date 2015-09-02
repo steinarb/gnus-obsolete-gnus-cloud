@@ -1,3 +1,18 @@
+2015-09-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Escape ` and ' in doc
+	* gnus-art.el (gnus-article-address-banner-alist)
+	(gnus-face-properties-alist):
+	* gnus-sum.el (gnus-newsgroup-variables):
+	* nndiary.el (nndiary-reminders):
+	* nnmail.el (nnmail-fancy-expiry-targets, nnmail-split-fancy):
+	Escape apostrophes and grave accents in docstrings if they
+	are supposed to stand for themselves and are not quotes.  Remove
+	apostrophes from docstring examples like ‘'(calendar-nth-named-day
+	-1 0 10 year)’ that confuse source code with data.  Do some other
+	minor docstring fixups as well, e.g., insert a missing close
+	quote.
+
 2015-09-01  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-util.el (gnus-format-message):
