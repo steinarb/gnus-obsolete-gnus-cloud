@@ -124,7 +124,7 @@ servers.
 
 E.g.:
   (setq gnus-check-new-newsgroups
-	'((nntp \"some.server\") (nntp \"other.server\")))
+	\\='((nntp \"some.server\") (nntp \"other.server\")))
 
 If this variable is nil, then you have to tell Gnus explicitly to
 check for new newsgroups with \\<gnus-group-mode-map>\\[gnus-find-new-newsgroups]."

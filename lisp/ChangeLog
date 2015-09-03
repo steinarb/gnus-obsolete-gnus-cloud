@@ -1,3 +1,25 @@
+2015-09-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gmm-utils.el (gmm-image-load-path-for-library):
+	* gnus-art.el (gnus-boring-article-headers, gnus-split-methods):
+	* gnus-registry.el (gnus-registry-split-strategy):
+	* gnus-start.el (gnus-check-new-newsgroups):
+	* gnus-sum.el (gnus-select-group-hook):
+	* gnus-uu.el (gnus-uu-user-archive-rules):
+	* gnus.el (gnus-message-archive-group, gnus-visual):
+	* message.el (message-cite-style):
+	* nnir.el (nnir-swish++-additional-switches)
+	(nnir-swish-e-additional-switches, nnir-hyrex-additional-switches)
+	(nnir-namazu-additional-switches, nnir-notmuch-additional-switches):
+	* nnmail.el (nnmail-split-methods, nnmail-expiry-wait-function):
+	* nntp.el (nntp-server-action-alist):
+	* tls.el (tls-checktrust):
+	Fix some more docstring etc. quoting problems.
+	Mostly these fixes prevent the transliteration of apostrophes
+	that should stay apostrophes.  Also, prefer curved quotes in
+	Bahá’í proper names, as that’s the preferred Bahá’í style and
+	these names are chock-full of non-ASCII characters anyway.
+
 2015-09-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Escape ` and ' in doc
