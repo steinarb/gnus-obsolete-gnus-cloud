@@ -1,3 +1,7 @@
+2015-09-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* ntlm.el (ntlm-unibyte-string): New compatibility function.
+
 2015-09-06  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
 
 	Add support for NTLMv2 authentication.
