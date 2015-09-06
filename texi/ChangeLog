@@ -1,3 +1,8 @@
+2015-09-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-faq.texi (FAQ 4-8, FAQ 4-12, FAQ 4-14):
+	* gnus.texi (Archived Messages): Fix minor problems with " in manual.
+
 2015-08-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-faq.texi (FAQ 5-13, FAQ 6-2):
