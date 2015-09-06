@@ -1,9 +1,13 @@
 2015-09-05  Eric Abrahamsen  <eric@ericabrahamsen.net>
 
-	* nnimap.el (nnimap-request-group):  Handle nil "info" arg.  This arg
+	* nnimap.el (nnimap-request-group): Handle nil "info" arg.  This arg
 	isn't always passed in, check it's not nil before making it into a
 	list.  The active arg will also be nil if the group is new, check for
 	that.
+
+2015-09-04  Adam Sjøgren  <asjo@koldfront.dk>
+
+	* mail-source.el (mail-source-fetch-imap): allow :mailbox to be a list.
 
 2015-09-03  Paul Eggert  <eggert@cs.ucla.edu>
 
