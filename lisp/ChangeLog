@@ -1,3 +1,12 @@
+2015-09-06  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
+
+	Add support for NTLMv2 authentication.
+	* ntlm.el (ntlm): New customization group.
+	(ntlm-compatibility-level): New defcustom.
+	(ntlm-compute-timestamp): New function.
+	(ntlm-generate-nonce): Likewise.
+	(ntlm-build-auth-response): Add support for NTLMv2 authentication.
+
 2015-09-05  Eric Abrahamsen  <eric@ericabrahamsen.net>
 
 	* nnimap.el (nnimap-request-group): Handle nil "info" arg.  This arg
