@@ -136,11 +136,10 @@ is not given."
     (if (fboundp 'string-make-unibyte)
 	`(string-make-unibyte ,string)
       string))
-  (defalias 'ntlm-unibyte-string
+  (defmacro ntlm-unibyte-string (&rest bytes)
     (if (fboundp 'unibyte-string)
-	'unibyte-string
-      (lambda (&rest bytes)
-	(concat (apply #'vector bytes))))))
+	`(unibyte-string ,@bytes)
+      `(concat (vector ,@bytes)))))
 
 (eval-and-compile
   (autoload 'sha1 "sha1")
