@@ -1,3 +1,7 @@
+2015-09-07  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
+
+	* ntlm.el: Bump version to 2.00.  New maintainer.  Add comm keyword.
+
 2015-09-06  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* ntlm.el (ntlm-unibyte-string): New compatibility function.
