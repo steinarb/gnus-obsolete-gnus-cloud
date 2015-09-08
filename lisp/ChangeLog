@@ -1,3 +1,7 @@
+2015-09-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* time-date.el (with-decoded-time-value): Fix debug spec.
+
 2015-09-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* nnmairix.el (nnmairix-widget-create-query):
