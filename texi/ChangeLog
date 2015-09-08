@@ -1,3 +1,9 @@
+2015-09-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-faq.texi (FAQ 5-13, FAQ 6-2):
+	* gnus.texi (Score Decays, SpamAssassin): Prefer grave quoting in
+	source-code strings used to generate help and diagnostics.
+
 2015-09-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-faq.texi (FAQ 4-8, FAQ 4-12, FAQ 4-14):

@@ -1,3 +1,9 @@
+2015-09-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* nnmairix.el (nnmairix-widget-create-query):
+	* time-date.el (format-seconds): Prefer grave quoting in source-code
+	strings used to generate help and diagnostics.
+
 2015-09-07  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
 
 	* ntlm.el: Bump version to 2.00.  New maintainer.  Add comm keyword.
