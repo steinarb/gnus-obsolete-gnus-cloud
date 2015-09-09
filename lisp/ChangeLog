@@ -1,3 +1,8 @@
+2015-09-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* time-date.el (time-to-seconds, time-less-p):
+	Mark unused vars with underscore.
+
 2015-09-08  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* time-date.el (with-decoded-time-value): Fix debug spec.
