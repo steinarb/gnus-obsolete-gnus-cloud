@@ -1,3 +1,8 @@
+2015-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* message.el (message-hide-headers): Bind inhibit-modification-hooks to
+	t rather than after-change-functions to nil.
+
 2015-09-09  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* time-date.el (time-to-seconds, time-less-p):
