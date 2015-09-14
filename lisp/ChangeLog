@@ -1,3 +1,7 @@
+2015-09-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-compat.el: Require overlay for XEmacs.
+
 2015-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* message.el (message-hide-headers): Bind inhibit-modification-hooks to

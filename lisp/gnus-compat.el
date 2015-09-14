@@ -163,6 +163,10 @@ process."
 	 (memq (process-status process)
 	       '(run open listen connect stop)))))
 
+;; XEmacs doesn't have auto-autoloads for overlay functions.
+(when (featurep 'xemacs)
+  (require 'overlay))
+
 (provide 'gnus-compat)
 
 ;; gnus-compat.el ends here
