@@ -1,3 +1,8 @@
+2015-09-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-faq.texi (FAQ 5-8):
+	Avoid undefined behavior in suggested sed backslash usage.
+
 2015-09-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-faq.texi (FAQ 5-13, FAQ 6-2):
