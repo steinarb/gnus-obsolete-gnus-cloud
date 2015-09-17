@@ -1,3 +1,17 @@
+2015-09-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* gnus-art.el (gnus-button-handle-library):
+	* gnus-group.el (gnus-read-ephemeral-gmane-group-url):
+	* nntp.el (nntp-via-shell-prompt, nntp-telnet-shell-prompt):
+	* spam-report.el (spam-report-gmane-regex):
+	Fix typo by replacing ‘\’ with ‘\\’ in a string literal.
+	For example, to get the regular expression ‘\.’ use the string
+	literal "\\.", not "\." (which is equivalent to ".").
+
+	* auth-source.el (auth-source-read-char-choice):
+	* nnmaildir.el (NOV example):
+	* registry.el (registry-search): Doc fix.
+
 2015-09-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gnus-compat.el: Require overlay for XEmacs.
