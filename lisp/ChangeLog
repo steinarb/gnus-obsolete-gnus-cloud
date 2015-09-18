@@ -1,5 +1,47 @@
 2015-09-17  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Backslash cleanup in Elisp source files
+
+	This patch should not change behavior.  It typically omits backslashes
+	where they are redundant (e.g., in the string literal "^\$").
+	In a few places, insert backslashes where they make regular expressions
+	clearer: e.g., replace "^\*" (equivalent to "^*") with "^\\*", which
+	has the same effect as a regular expression.
+	Also, use ‘\ %’ instead of ‘\%’ when avoiding confusion with SCCS IDs,
+	and similarly use ‘\ $’ instead of ‘\$’ when avoiding confusion
+	with RCS IDs, as that makes it clearer that the backslash is intended.
+	* auth-source.el (auth-source-secrets-search)
+	(auth-source-macos-keychain-search):
+	* gnus-art.el (gnus-mime-action-on-part)
+	(gnus-mime-display-multipart-related-as-mixed)
+	(gnus-button-mid-or-mail-heuristic-alist)
+	(gnus-button-mid-or-mail-heuristic, gnus-article-extend-url-button):
+	* gnus-bookmark.el (gnus-bookmark-bmenu-toggle-infos)
+	(gnus-bookmark-bookmark-inline-details, gnus-bookmark-bookmark-details)
+	(gnus-bookmark-alist, gnus-bookmark-name-from-full-record)
+	(gnus-bookmark-bmenu-mode, gnus-bookmark-delete):
+	* gnus-cus.el (gnus-group-customize):
+	* gnus-group.el (gnus-group-line-format, gnus-group-mode-line-format)
+	(gnus-group-jump-to-group-prompt, gnus-group-name-at-point):
+	* gnus-mlspl.el (gnus-group-split-fancy):
+	* gnus-registry.el (gnus-registry-prune-factor):
+	* gnus-salt.el (gnus-summary-pick-line-format):
+	* gnus-sieve.el (gnus-sieve-update, gnus-sieve-generate)
+	(gnus-sieve-script):
+	* gnus-util.el (gnus-directory-sep-char-regexp):
+	* gnus.el (gnus-message-archive-group, gnus-user-agent):
+	* message.el (message-archive-header, message-reply-headers)
+	(message-send-method-alist):
+	* mm-decode.el (mm-add-meta-html-tag):
+	* nndoc.el (nndoc-generate-lanl-gov-head):
+	* nnheader.el (nnheader-max-head-length):
+	* registry.el (registry-db, registry-prune):
+	* rfc1843.el (rfc1843-hzp-word-regexp)
+	(rfc1843-hzp-word-regexp-strictly):
+	* rfc2047.el (rfc2047-encoded-word-regexp)
+	(rfc2047-encoded-word-regexp-loose):
+
+	Fix several backslash typos in Elisp strings
 	* gnus-art.el (gnus-button-handle-library):
 	* gnus-group.el (gnus-read-ephemeral-gmane-group-url):
 	* nntp.el (nntp-via-shell-prompt, nntp-telnet-shell-prompt):
