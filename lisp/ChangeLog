@@ -1,3 +1,7 @@
+2015-09-30  Wieland Hoffmann  <themineo@gmail.com>
+
+	* auth-source.el (auth-source-search): Clarify :create's meaning.
+
 2015-09-17  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Backslash cleanup in Elisp source files
