@@ -350,12 +350,12 @@ If the value is not a list, symmetric encryption will be used."
 ;; (let ((auth-source-debug nil)) (auth-source-do-debug "hello"))
 (defun auth-source-do-debug (&rest msg)
   (when auth-source-debug
-    (apply 'auth-source-do-warn msg)))
+    (apply #'auth-source-do-warn msg)))
 
 (defun auth-source-do-trivia (&rest msg)
   (when (or (eq auth-source-debug 'trivia)
             (functionp auth-source-debug))
-    (apply 'auth-source-do-warn msg)))
+    (apply #'auth-source-do-warn msg)))
 
 (defun auth-source-do-warn (&rest msg)
   (apply
@@ -375,7 +375,7 @@ Only one of CHOICES will be returned.  The PROMPT is augmented
 with \"[a/b/c] \" if CHOICES is \(?a ?b ?c)."
   (when choices
     (let* ((prompt-choices
-            (apply 'concat (loop for c in choices
+            (apply #'concat (loop for c in choices
                                  collect (format "%c/" c))))
            (prompt-choices (concat "[" (substring prompt-choices 0 -1) "] "))
            (full-prompt (concat prompt prompt-choices))
@@ -695,7 +695,7 @@ actually useful.  So the caller must arrange to call this function.
 
 The token's :secret key can hold a function.  In that case you
 must call it to obtain the actual value."
-  (let* ((backends (mapcar 'auth-source-backend-parse auth-sources))
+  (let* ((backends (mapcar #'auth-source-backend-parse auth-sources))
          (max (or max 1))
          (ignored-keys '(:require :create :delete :max))
          (keys (loop for i below (length spec) by 2
@@ -912,7 +912,7 @@ while \(:host t) would find all host entries."
 ;; (auth-source-pick-first-password :port "imap")
 (defun auth-source-pick-first-password (&rest spec)
   "Pick the first secret found from applying SPEC to `auth-source-search'."
-  (let* ((result (nth 0 (apply 'auth-source-search (plist-put spec :max 1))))
+  (let* ((result (nth 0 (apply #'auth-source-search (plist-put spec :max 1))))
          (secret (plist-get result :secret)))
 
     (if (functionp secret)
@@ -1021,8 +1021,8 @@ Note that the MAX parameter is used so we can exit the parse early."
             (auth-source--aput
              auth-source-netrc-cache file
              (list :mtime (nth 5 (file-attributes file))
-                   :secret (lexical-let ((v (mapcar '1+ (buffer-string))))
-                             (lambda () (apply 'string (mapcar '1- v)))))))
+                   :secret (lexical-let ((v (mapcar #'1+ (buffer-string))))
+                             (lambda () (apply #'string (mapcar #'1- v)))))))
           (goto-char (point-min))
           (let ((entries (auth-source-netrc-parse-entries check max))
                 alist)
@@ -1251,7 +1251,7 @@ See `auth-source-search' for details on SPEC."
                      ;; to get the updated data.
 
                      ;; the result will be returned, even if the search fails
-                     (apply 'auth-source-netrc-search
+                     (apply #'auth-source-netrc-search
                             (plist-put spec :create nil)))))
     results))
 
@@ -1601,7 +1601,7 @@ authentication tokens:
          ;; build a search spec without the ignored keys
          ;; if a search key is nil or t (match anything), we skip it
          (search-specs (auth-source-secrets-listify-pattern
-                        (apply 'append (mapcar
+                        (apply #'append (mapcar
                                       (lambda (k)
                                         (if (or (null (plist-get spec k))
                                                 (eq t (plist-get spec k)))
@@ -1615,7 +1615,7 @@ authentication tokens:
          (items
           (loop for search-spec in search-specs
                nconc
-               (loop for item in (apply 'secrets-search-items coll search-spec)
+               (loop for item in (apply #'secrets-search-items coll search-spec)
                   unless (and (stringp label)
                               (not (string-match label item)))
                   collect item)))
@@ -1630,7 +1630,7 @@ authentication tokens:
                             (lexical-let ((v (secrets-get-secret coll item)))
                               (lambda () v)))
                            ;; rewrite the entry from ((k1 v1) (k2 v2)) to plist
-                           (apply 'append
+                           (apply #'append
                                   (mapcar (lambda (entry)
                                             (list (car entry) (cdr entry)))
                                           (secrets-get-attributes coll item)))))
@@ -1638,7 +1638,7 @@ authentication tokens:
          ;; ensure each item has each key in `returned-keys'
          (items (mapcar (lambda (plist)
                           (append
-                           (apply 'append
+                           (apply #'append
                                   (mapcar (lambda (req)
                                             (if (plist-get plist req)
                                                 nil
@@ -1732,7 +1732,7 @@ entries for git.gnus.org:
                             collect (nth i spec)))
          ;; build a search spec without the ignored keys
          ;; if a search key is nil or t (match anything), we skip it
-         (search-spec (apply 'append (mapcar
+         (search-spec (apply #'append (mapcar
                                       (lambda (k)
                                         (if (or (null (plist-get spec k))
                                                 (eq t (plist-get spec k)))
@@ -1743,7 +1743,7 @@ entries for git.gnus.org:
          (returned-keys (mm-delete-duplicates (append
                                                '(:host :login :port :secret)
                                                search-keys)))
-         (items (apply 'auth-source-macos-keychain-search-items
+         (items (apply #'auth-source-macos-keychain-search-items
                        coll
                        type
                        max
@@ -1752,7 +1752,7 @@ entries for git.gnus.org:
          ;; ensure each item has each key in `returned-keys'
          (items (mapcar (lambda (plist)
                           (append
-                           (apply 'append
+                           (apply #'append
                                   (mapcar (lambda (req)
                                             (if (plist-get plist req)
                                                 nil
@@ -1792,7 +1792,7 @@ entries for git.gnus.org:
         (setq args (append args (list coll))))
 
       (with-temp-buffer
-        (apply 'call-process "/usr/bin/security" nil t nil args)
+        (apply #'call-process "/usr/bin/security" nil t nil args)
         (goto-char (point-min))
         (while (not (eobp))
           (cond
@@ -1860,7 +1860,7 @@ entries for git.gnus.org:
                             collect (nth i spec)))
          ;; build a search spec without the ignored keys
          ;; if a search key is nil or t (match anything), we skip it
-         (search-spec (apply 'append (mapcar
+         (search-spec (apply #'append (mapcar
                                       (lambda (k)
                                         (let ((v (plist-get spec k)))
                                           (if (or (null v)
@@ -1891,7 +1891,7 @@ entries for git.gnus.org:
          ;; ensure each item has each key in `returned-keys'
          (items (mapcar (lambda (plist)
                           (append
-                           (apply 'append
+                           (apply #'append
                                   (mapcar (lambda (req)
                                             (if (plist-get plist req)
                                                 nil
@@ -1913,7 +1913,7 @@ entries for git.gnus.org:
                    ;; to get the updated data.
 
                    ;; the result will be returned, even if the search fails
-                   (apply 'auth-source-plstore-search
+                   (apply #'auth-source-plstore-search
                           (plist-put spec :create nil)))))
      ((and delete
            item-names)
@@ -2113,7 +2113,7 @@ MODE can be \"login\" or \"password\"."
            host port username)
           found)                        ; return the found data
       ;; else, if not found, search with a max of 1
-      (let ((choice (nth 0 (apply 'auth-source-search
+      (let ((choice (nth 0 (apply #'auth-source-search
                                   (append '(:max 1) search)))))
         (when choice
           (dolist (m mode)

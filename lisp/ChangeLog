@@ -1,3 +1,13 @@
+2015-10-12  Nicolas Petton  <petton.nicolas@gmail.com>
+
+	* auth-source.el (auth-source-do-debug, auth-source-do-trivia)
+	(auth-source-read-char-choice, auth-source-search)
+	(auth-source-pick-first-password, auth-source-netrc-parse)
+	(auth-source-netrc-search, auth-source-secrets-search)
+	(auth-source-macos-keychain-search)
+	(auth-source-macos-keychain-search-items, auth-source-plstore-search)
+	(auth-source-user-or-password): Use sharp-quoting with functions.
+
 2015-09-30  Wieland Hoffmann  <themineo@gmail.com>
 
 	* auth-source.el (auth-source-search): Clarify :create's meaning.
