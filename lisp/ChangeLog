@@ -1,6 +1,8 @@
 2015-10-12  Nicolas Petton  <petton.nicolas@gmail.com>
 
-	* auth-source.el (auth-source-do-debug, auth-source-do-trivia)
+	* auth-source.el (auth-source-epa-make-gpg-token):
+	Replace an usage of `epg-context-set-armor' with `setf'.
+	(auth-source-do-debug, auth-source-do-trivia)
 	(auth-source-read-char-choice, auth-source-search)
 	(auth-source-pick-first-password, auth-source-netrc-parse)
 	(auth-source-netrc-search, auth-source-secrets-search)
