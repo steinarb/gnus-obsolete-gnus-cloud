@@ -1,3 +1,7 @@
+2015-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* auth-source.el (auth-source-epa-make-gpg-token): Revert.
+
 2015-10-11  Nicolas Petton  <petton.nicolas@gmail.com>
 
 	* auth-source.el (auth-source-epa-make-gpg-token):
