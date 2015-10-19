@@ -1,3 +1,9 @@
+2015-10-18  Michael Sperber  <mike@xemacs.org>
+
+	* nnml.el (nnml-retrieve-groups, nnml-request-scan):
+	* nnmail.el (nnmail-get-new-mail-per-group):
+	(nnmail-get-new-mail-1): Unbreak `group' option for `mail-sources'.
+
 2015-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* auth-source.el (auth-source-epa-make-gpg-token): Revert.
