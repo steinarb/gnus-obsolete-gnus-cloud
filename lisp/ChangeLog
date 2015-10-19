@@ -4,6 +4,12 @@
 	* nnmail.el (nnmail-get-new-mail-per-group):
 	(nnmail-get-new-mail-1): Unbreak `group' option for `mail-sources'.
 
+2015-10-18  Michael Sperber  <mike@xemacs.org>
+
+	* message.el (message-get-reply-headers): In addition to
+	`mail-dont-reply-to-names', bind `rmail-dont-reply-to-names', which is
+	used in XEmacs.
+
 2015-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* auth-source.el (auth-source-epa-make-gpg-token): Revert.

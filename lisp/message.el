@@ -6974,7 +6974,8 @@ want to get rid of this query permanently.")))
       (while (string-match "[ \t][ \t]+" recipients)
 	(setq recipients (replace-match " " t t recipients)))
       ;; Remove addresses that match `mail-dont-reply-to-names'.
-      (let ((mail-dont-reply-to-names (message-dont-reply-to-names)))
+      (let* ((mail-dont-reply-to-names (message-dont-reply-to-names))
+	     (rmail-dont-reply-to-names mail-dont-reply-to-names))
 	(setq recipients (mail-dont-reply-to recipients)))
       ;; Perhaps "Mail-Copies-To: never" removed the only address?
       (if (string-equal recipients "")
