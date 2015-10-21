@@ -1,3 +1,7 @@
+2015-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mailcap.el (mailcap-mailcap-entry-passes-test): Doc fix.
+
 2015-10-20  Michael Sperber  <mike@xemacs.org>
 
 	* mailcap.el (mailcap-mime-data): Conditonalize `doc-view-mode', which
