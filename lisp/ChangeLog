@@ -1,3 +1,8 @@
+2015-10-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mailcap.el (mailcap-mime-data): Remove fboundp checks.
+	(mailcap-viewer-passes-test): Do it instead.  Thanks to Stefan Monnier.
+
 2015-10-21  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mailcap.el (mailcap-mailcap-entry-passes-test): Doc fix.
