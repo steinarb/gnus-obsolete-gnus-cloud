@@ -73,11 +73,12 @@
 (autoload 'plstore-save "plstore")
 (autoload 'plstore-get-file "plstore")
 
-(autoload 'epg-make-context "epg")
-(autoload 'epg-context-set-passphrase-callback "epg")
-(autoload 'epg-decrypt-string "epg")
-(autoload 'epg-context-set-armor "epg")
-(autoload 'epg-encrypt-string "epg")
+(eval-and-compile
+  (autoload 'epg-make-context "epg")
+  (autoload 'epg-context-set-passphrase-callback "epg")
+  (autoload 'epg-decrypt-string "epg")
+  (autoload 'epg-encrypt-string "epg")
+  (autoload 'epg-context-set-armor "epg"))
 
 (autoload 'help-mode "help-mode" nil t)
 
