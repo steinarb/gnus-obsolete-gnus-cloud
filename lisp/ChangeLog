@@ -1,5 +1,7 @@
 2015-10-23  Katsumi Yamaoka  <yamaoka@jpl.org>
 
+	* auth-source.el: Revert.
+
 	* auth-source.el: Add eval-and-compile to autoloads for
 	epg-context-set-passphrase-callback, epg-decrypt-string,
 	epg-encrypt-string, and epg-context-set-armor.
