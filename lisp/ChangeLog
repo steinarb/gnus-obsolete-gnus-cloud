@@ -1,3 +1,35 @@
+2015-10-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Silence lexical-binding warnings
+
+	* auth-source.el (auth-source-netrc-use-gpg-tokens):
+	Simplify (symbol-value 'VAR) to just VAR.
+	(auth-source-backend-parse): Use make-instance.
+	(auth-source-search): Remove unused key args.
+	Remove unused vars `accessor-key' and `backend'.  Avoid `eval'.
+	(auth-source-search-backends): Use slot names rather than their initarg.
+	(auth-source-netrc-create):
+	(auth-source-delete):
+	(auth-source-secrets-create, auth-source-plstore-search)
+	(auth-source-macos-keychain-create, auth-source-macos-keychain-search)
+	(auth-source-plstore-create, auth-source-netrc-search)
+	(auth-source-netrc-parse): Remove unused key args.
+	(auth-source-forget+): Simplify the arglist.
+	(auth-source-macos-keychain-search-items)
+	(auth-source-token-passphrase-callback-function): Mark unused args.
+	(auth-source-epa-extract-gpg-token): Remove unused var `plain'.
+	(pp-escape-newlines): Declare.
+	(auto-source--symbol-keyword): New function.
+	(auth-source-plstore-create, auth-source-netrc-create)
+	(auth-source-netrc-normalize): Use it.
+	(auth-source-netrc-search): Don't pass :delete to
+	auth-source-netrc-parse since it doesn't use it.
+	(auth-source-plstore-create, auth-source-netrc-create): Use plist-get
+	symbol-value to index in keyword args.
+	(auth-source-macos-keychain-result-append): Avoid setq.
+	(auth-source-netrc-create): Remove unused vars `file' and `add'.
+	(auth-source-user-or-password): Remove unused var `cname'.
+
 2015-10-28  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* gnus-topic.el (gnus-topic-prepare-topic): Remove unused var `topic'.
