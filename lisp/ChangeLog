@@ -1,3 +1,8 @@
+2015-11-08  Michael Sperber  <mike@xemacs.org>
+
+	* gnus-sum.el (gnus-summary-backend-map): Bind B-backspace to
+	`gnus-summary-delete-article` in a way that also works on XEmacs.
+
 2015-11-01  Thomas Fitzsimmons  <fitzsim@fitzsim.org>
 
 	* ntlm.el: Change version to 2.0.0.
