@@ -1,3 +1,8 @@
+2015-11-11  Eli Zaretskii  <eliz@gnu.org>
+
+	* mm-url.el (mm-url-form-encode-xwfu): Allow argument CHUNK to be nil.
+	(Bug#21881)
+
 2015-11-08  Michael Sperber  <mike@xemacs.org>
 
 	* gnus-sum.el (gnus-summary-backend-map): Bind B-backspace to
