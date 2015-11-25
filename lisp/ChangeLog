@@ -1,3 +1,9 @@
+2015-11-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* nnml.el (nnml-retrieve-groups): Remove.  See:
+	<http://thread.gmane.org/gmane.emacs.gnus.general/86308> and
+	<http://thread.gmane.org/gmane.emacs.gnus.general/86321>
+
 2015-11-11  Eli Zaretskii  <eliz@gnu.org>
 
 	* mm-url.el (mm-url-form-encode-xwfu): Allow argument CHUNK to be nil.
