@@ -1,3 +1,8 @@
+2015-12-04  Daiki Ueno  <ueno@gnu.org>
+
+	* qp.el (quoted-printable-encode-region): Bind `case-fold-search' to
+	nil when looking for "^From ".  Problem reported by Simon Josefsson.
+
 2015-11-25  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* nnml.el (nnml-retrieve-groups): Remove.  See:
