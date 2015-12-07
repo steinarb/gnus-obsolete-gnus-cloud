@@ -3,11 +3,30 @@
 	* qp.el (quoted-printable-encode-region): Bind `case-fold-search' to
 	nil when looking for "^From ".  Problem reported by Simon Josefsson.
 
+2015-12-04  Artur Malabarba  <bruce.connor.am@gmail.com>
+
+	* sasl-scram-rfc.el: Add a "Package:" header.
+
 2015-11-25  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* nnml.el (nnml-retrieve-groups): Remove.  See:
 	<http://thread.gmane.org/gmane.emacs.gnus.general/86308> and
 	<http://thread.gmane.org/gmane.emacs.gnus.general/86321>
+
+2015-11-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix docstring quoting problems with ‘ '’
+
+	Problem reported by Artur Malabarba in:
+	http://lists.gnu.org/archive/html/emacs-devel/2015-11/msg01513.html
+	Most of these fixes are to documentation; many involve fixing
+	longstanding quoting glitches that are independent of the
+	recent substitute-command-keys changes.  The changes to code are:
+	* gnus-mlspl.el (gnus-group-split-fancy):
+	* hashcash.el (hashcash-extra-generate-parameters):
+	* message.el (message-qmail-inject-args, message-cite-reply-position):
+	* mm-decode.el (mm-inline-large-images):
+	* mm-util.el (mm-xemacs-find-mime-charset-1):
 
 2015-11-11  Eli Zaretskii  <eliz@gnu.org>
 
