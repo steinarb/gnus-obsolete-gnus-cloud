@@ -1,0 +1,45 @@
+* Prerequisites
+I tested against Emacs versions 24.3 (precompiled on my system, with Gnus
+v5.13) and 25.0.50 (compiled from git source, with the included v5.13 and with
+Ma Gnus v0.14).
+In general, I recommend that you use GnuPG version 1.x for tests.  Obviously,
+for gpgsm you need 2.x, which works for me with 2.0.x but not 2.1.x; see
+mml-secure-run-tests-with-gpg2 in gnustest-mml-sec.el.  When running tests
+with different versions of GnuPG make sure that proper versions of gpg-agent
+are running (kill all prior to testing, if in doubt).
+
+
+* Test keys
+The subdirectory mml-gpghome contains OpenPGP and S/MIME test keyrings for
+GnuPG’s gpg and gpgsm commands.  In addition, it contains a file
+gpg-agent.conf where all options are commented out.  In particular, by
+activating the debug settings one can verify whether the correct version of
+gpg-agent is running and whether pinentry problems arise with the current
+setup.
+
+Most keys in the test keyrings come with empty passphrases, while the keys
+associated with the user ID “No Expiry two UIDs” have the passphrase
+“Passphrase”.  You can see all public keys and user IDs as follows:
+$ gpg --homedir ./mml-gpghome --fingerprint -k --list-options show-unusable-subkeys,show-unusable-uids
+$ gpgsm --homedir ./mml-gpghome -k
+
+
+* Running tests
+To run all tests:
+$ cd <path-to-gnus/lisp/test>
+$ emacs -Q -batch -L .. -l gnustest-mml-sec.el -f mml-secure-run-tests
+
+However, in the above case gpgsm will ask for passphrases, even empty ones.
+To omit those tests:
+$ emacs -Q -batch -L .. -l gnustest-mml-sec.el -f mml-secure-run-tests-without-smime
+
+To run all tests with epg-gpg-program set to "gpg2":
+$ emacs -Q -batch -L .. -l gnustest-mml-sec.el -f mml-secure-run-tests-with-gpg2
+
+To check an issue with truncation of y-or-n-p questions:
+$ emacs -Q -L .. -l gnustest-mml-sec.el -f mml-secure-select-preferred-keys-todo
+Then mark one or two keys and select “OK”.  The following question should be
+truncated.  Answer “n” to avoid storage of that choice in your ~/.emacs.
+
+To see that question entirely (outside an encryption context):
+$ emacs -Q -L .. -l gnustest-mml-sec.el -f mml-secure-select-preferred-keys-ok
