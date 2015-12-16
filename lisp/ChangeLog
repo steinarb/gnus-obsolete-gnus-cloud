@@ -1,3 +1,8 @@
+2015-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* dgnushack.el (byte-optimize-apply): Make the use-mapcan advice work
+	for (function nconc) as well as (quote nconc).
+
 2015-12-04  Daiki Ueno  <ueno@gnu.org>
 
 	* qp.el (quoted-printable-encode-region): Bind `case-fold-search' to

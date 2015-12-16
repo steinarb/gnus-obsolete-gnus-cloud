@@ -272,7 +272,7 @@ in `defcustom' forms."
       (when (and (eq last (third form))
 		 (consp last)
 		 (eq 'mapcar (car last))
-		 (equal (nth 1 form) ''nconc))
+		 (member (nth 1 form) '(''nconc #'nconc)))
 	(setq form (cons 'mapcan (cdr last)))))))
 
 (if (featurep 'emacs)
