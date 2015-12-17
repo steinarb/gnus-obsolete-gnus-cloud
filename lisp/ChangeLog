@@ -30,6 +30,10 @@
 	* dgnushack.el (byte-optimize-apply): Make the use-mapcan advice work
 	for (function nconc) as well as (quote nconc).
 
+2015-12-17  Jens Lechtenboerger  <jens.lechtenboerger@fsfe.org>
+
+	* gnustest-mml-sec.el: Remove require cl.
+
 2015-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mml-sec.el (mml-secure-smime-sign-with-sender): Remove duplicate.

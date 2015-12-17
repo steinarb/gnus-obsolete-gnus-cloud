@@ -24,7 +24,6 @@
 
 (require 'ert)
 
-(require 'cl); mapcan
 (require 'message)
 (require 'epa)
 (require 'epg)
