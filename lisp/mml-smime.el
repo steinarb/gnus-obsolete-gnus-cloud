@@ -67,7 +67,7 @@ for the `smime' command coming with OpenSSL first.  EasyPG is recommended."
   :type 'boolean)
 (make-obsolete-variable 'mml-smime-cache-passphrase
 			'mml-secure-cache-passphrase
-			"25.0.50")
+			"25.1")
 
 (defcustom mml-smime-passphrase-cache-expiry mml-secure-passphrase-cache-expiry
   "How many seconds the passphrase is cached.
@@ -77,7 +77,7 @@ Whether the passphrase is cached at all is controlled by
   :type 'integer)
 (make-obsolete-variable 'mml-smime-passphrase-cache-expiry
 			'mml-secure-passphrase-cache-expiry
-			"25.0.50")
+			"25.1")
 
 (defcustom mml-smime-signers nil
   "A list of your own key ID which will be used to sign a message."

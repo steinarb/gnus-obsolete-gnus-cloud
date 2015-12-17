@@ -30,6 +30,109 @@
 	* dgnushack.el (byte-optimize-apply): Make the use-mapcan advice work
 	for (function nconc) as well as (quote nconc).
 
+2015-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mml-sec.el (mml-secure-smime-sign-with-sender): Remove duplicate.
+	(mml-secure-cust-record-keys): Use gnus-union instead of cl-union.
+	(mml1991-cache-passphrase, mml1991-passphrase-cache-expiry):
+	Suppress byte-compile warning for old (X)Emacsen.
+	(mml-secure-check-sub-key):
+	Use gnus-string-match-p instead of string-match-p.
+	(mml-secure-select-preferred-keys):
+	Don't use mapcan that is a cl runtime function.
+
+	* mml-smime.el (mml-smime-cache-passphrase)
+	(mml-smime-passphrase-cache-expiry):
+	* mml1991.el (mml1991-cache-passphrase)
+	(mml1991-passphrase-cache-expiry):
+	* mml2015.el (mml2015-cache-passphrase)
+	(mml2015-passphrase-cache-expiry):
+	Fix version that indicates when those variables were made obsolete.
+
+2015-12-13  Jens Lechtenboerger  <jens.lechtenboerger@fsfe.org>
+
+	Refactor mml-smime.el, mml1991.el, mml2015.el
+
+	Cf. discussion on ding mailing list, messages in
+	<http://thread.gmane.org/gmane.emacs.gnus.general/86228>.
+	Common code from the three files mml-smime.el, mml1991.el, and
+	mml2015.el is moved to mml-sec.el.  Auxiliary functions are added
+	to gnus-util.el.
+
+	The code is supported by test cases with necessary test keys.
+
+	Documentation in message.texi is updated.
+
+	* gnus-util.el (gnus-test-list, gnus-subsetp, gnus-setdiff):
+	New functions.
+
+	* mml-sec.el: Require gnus-util and epg.
+	(epa--select-keys): Autoload.
+	(mml-signencrypt-style-alist, mml-secure-cache-passphrase): Doc fix.
+	(mml-secure-openpgp-signers): New user option;
+	make mml1991-signers and mml2015-signers obsolete aliases to it.
+	(mml-secure-smime-signers): New user option;
+	make mml-smime-signers an obsolete alias to it.
+	(mml-secure-openpgp-encrypt-to-self): New user option;
+	make mml1991-encrypt-to-self and mml2015-encrypt-to-self obsolete
+	aliases to it.
+	(mml-secure-smime-encrypt-to-self): New user option;
+	make mml-smime-encrypt-to-self an obsolete alias to it.
+	(mml-secure-openpgp-sign-with-sender): New user option;
+	make mml2015-sign-with-sender an obsolete alias to it.
+	(mml-secure-smime-sign-with-sender): New user option;
+	make mml-smime-sign-with-sender an obsolete alias to it.
+	(mml-secure-openpgp-always-trust): New user option;
+	make mml2015-always-trust an obsolete alias to it.
+	(mml-secure-fail-when-key-problem, mml-secure-key-preferences):
+	New user options.
+	(mml-secure-cust-usage-lookup, mml-secure-cust-fpr-lookup)
+	(mml-secure-cust-record-keys, mml-secure-cust-remove-keys)
+	(mml-secure-add-secret-key-id, mml-secure-clear-secret-key-id-list)
+	(mml-secure-cache-passphrase-p, mml-secure-cache-expiry-interval)
+	(mml-secure-passphrase-callback, mml-secure-check-user-id)
+	(mml-secure-secret-key-exists-p, mml-secure-check-sub-key)
+	(mml-secure-find-usable-keys, mml-secure-select-preferred-keys)
+	(mml-secure-fingerprint, mml-secure-filter-keys)
+	(mml-secure-normalize-cust-name, mml-secure-select-keys)
+	(mml-secure-select-keys-1, mml-secure-signer-names, mml-secure-signers)
+	(mml-secure-self-recipients, mml-secure-recipients)
+	(mml-secure-epg-encrypt, mml-secure-epg-sign): New functions.
+
+	* mml-smime.el: Require epg;
+	refactor declaration and autoloading of epg functions.
+	(mml-smime-use): Doc fix.
+	(mml-smime-cache-passphrase, mml-smime-passphrase-cache-expiry):
+	Obsolete.
+	(mml-smime-get-dns-cert, mml-smime-get-ldap-cert):
+	Use format instead of gnus-format-message.
+	(mml-smime-epg-secret-key-id-list): Remove variable.
+	(mml-smime-epg-passphrase-callback, mml-smime-epg-find-usable-key)
+	(mml-smime-epg-find-usable-secret-key): Remove functions.
+	(mml-smime-epg-sign, mml-smime-epg-encrypt): Refactor.
+
+	* mml1991.el (mml1991-cache-passphrase)
+	(mml1991-passphrase-cache-expiry): Obsolete.
+	(mml1991-epg-secret-key-id-list): Remove variable.
+	(mml1991-epg-passphrase-callback, mml1991-epg-find-usable-key)
+	(mml1991-epg-find-usable-secret-key): Remove functions.
+	(mml1991-epg-sign, mml1991-epg-encrypt): Refactor.
+
+	* mml2015.el (mml2015-cache-passphrase)
+	(mml2015-passphrase-cache-expiry): Obsolete.
+	(mml2015-epg-secret-key-id-list): Remove variable.
+	(mml2015-epg-passphrase-callback, mml2015-epg-check-user-id)
+	(mml2015-epg-check-sub-key, mml2015-epg-find-usable-key)
+	(mml2015-epg-find-usable-secret-key): Remove functions.
+	(mml2015-epg-decrypt, mml2015-epg-clear-decrypt, mml2015-epg-sign)
+	(mml2015-epg-encrypt): Refactor.
+
+	* tests/gnustest-gnus-util.el:
+	* tests/gnustest-mml-sec.README:
+	* tests/gnustest-mml-sec.el:
+	* tests/mml-gpghome/gpg-agent.conf:
+	* tests/mml-gpghome/trustlist.txt: New files.
+
 2015-12-04  Daiki Ueno  <ueno@gnu.org>
 
 	* qp.el (quoted-printable-encode-region): Bind `case-fold-search' to

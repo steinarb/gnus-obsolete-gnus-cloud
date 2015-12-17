@@ -65,7 +65,7 @@
   "If t, cache passphrase.")
 (make-obsolete-variable 'mml1991-cache-passphrase
 			'mml-secure-cache-passphrase
-			"25.0.50")
+			"25.1")
 
 (defvar mml1991-passphrase-cache-expiry mml-secure-passphrase-cache-expiry
   "How many seconds the passphrase is cached.
@@ -73,7 +73,7 @@ Whether the passphrase is cached at all is controlled by
 `mml1991-cache-passphrase'.")
 (make-obsolete-variable 'mml1991-passphrase-cache-expiry
 			'mml-secure-passphrase-cache-expiry
-			"25.0.50")
+			"25.1")
 
 (defvar mml1991-signers nil
   "A list of your own key ID which will be used to sign a message.")

@@ -502,10 +502,6 @@ https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18718"
   :group 'mime-security
   :type 'boolean)
 
-(defcustom mml-secure-smime-sign-with-sender nil
-  "If t, use message sender to find an S/MIME key to sign with."
-  :group 'mime-security
-  :type 'boolean)
 (define-obsolete-variable-alias
   'mml2015-always-trust 'mml-secure-openpgp-always-trust)
 ;mml1991-always-trust did never exist.
@@ -554,7 +550,7 @@ Return keys."
   (let* ((usage-prefs (mml-secure-cust-usage-lookup context usage))
 	 (curr-fprs (cdr (assoc name (cdr usage-prefs))))
 	 (key-fprs (mapcar 'mml-secure-fingerprint keys))
-	 (new-fprs (cl-union curr-fprs key-fprs :test 'equal)))
+	 (new-fprs (gnus-union curr-fprs key-fprs)))
     (if curr-fprs
 	(setcdr (assoc name (cdr usage-prefs)) new-fprs)
       (setcdr usage-prefs (cons (cons name new-fprs) (cdr usage-prefs))))
@@ -585,6 +581,9 @@ Return t if a customization for NAME was present (and has been removed)."
   (dolist (key-id mml-secure-secret-key-id-list nil)
     (password-cache-remove key-id))
   (setq mml-secure-secret-key-id-list nil))
+
+(defvar mml1991-cache-passphrase)
+(defvar mml1991-passphrase-cache-expiry)
 
 (defun mml-secure-cache-passphrase-p (protocol)
   "Return t if OpenPGP or S/MIME passphrases should be cached for PROTOCOL.
@@ -698,9 +697,9 @@ be present in the keyring."
 		       ;; In contrast, signing requires secret key.
 		       (mml-secure-secret-key-exists-p context subkey))
 		   (or (not fingerprint)
-		       (string-match-p (concat fingerprint "$") fpr)
-		       (string-match-p (concat fingerprint "$")
-				       (epg-sub-key-fingerprint subkey))))
+		       (gnus-string-match-p (concat fingerprint "$") fpr)
+		       (gnus-string-match-p (concat fingerprint "$")
+					    (epg-sub-key-fingerprint subkey))))
 	      (throw 'break t)))))))
 
 (defun mml-secure-find-usable-keys (context name usage &optional justone)
@@ -740,19 +739,21 @@ When `mml-secure-fail-when-key-problem' is t, fail with an error in
 case of missing, outdated, or multiple keys."
   ;; Loosely based on code appearing inside mml2015-epg-sign and
   ;; mml2015-epg-encrypt.
-  (mapcan
-   (lambda (name)
-     (let* ((keys (mml-secure-find-usable-keys context name usage))
-	    (keyno (length keys)))
-       (cond ((= 0 keyno)
-	      (when (or mml-secure-fail-when-key-problem
-			(not (y-or-n-p
-			      (format "No %s key for %s; skip it? "
-				      usage name))))
-		(error "No %s key for %s" usage name)))
-	     ((= 1 keyno) keys)
-	     (t (mml-secure-select-keys context name keys usage)))))
-   names))
+  (apply
+   #'nconc
+   (mapcar
+    (lambda (name)
+      (let* ((keys (mml-secure-find-usable-keys context name usage))
+	     (keyno (length keys)))
+	(cond ((= 0 keyno)
+	       (when (or mml-secure-fail-when-key-problem
+			 (not (y-or-n-p
+			       (format "No %s key for %s; skip it? "
+				       usage name))))
+		 (error "No %s key for %s" usage name)))
+	      ((= 1 keyno) keys)
+	      (t (mml-secure-select-keys context name keys usage)))))
+    names)))
 
 (defun mml-secure-fingerprint (key)
   "Return fingerprint for public KEY."

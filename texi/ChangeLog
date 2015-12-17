@@ -1,3 +1,10 @@
+2015-12-13  Jens Lechtenboerger  <jens.lechtenboerger@fsfe.org>
+
+	* message.texi (Security, Using S/MIME):
+	Update for refactoring mml-smime.el, mml1991.el, mml2015.el.
+	(Using OpenPGP): Rename from "Using PGP/MIME"; update contents.
+	(Passphrase caching, Encrypt-to-self, Bcc Warning): New sections.
+
 2015-09-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* gnus-faq.texi (FAQ 5-8):
