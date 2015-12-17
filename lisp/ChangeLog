@@ -1,3 +1,8 @@
+2015-12-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* auth-source.el (auth-source-ensure-strings):
+	Don't make a list out of 't'.  (Bug#22188)
+
 2015-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* dgnushack.el (byte-optimize-apply): Make the use-mapcan advice work
