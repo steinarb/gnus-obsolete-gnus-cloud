@@ -1,3 +1,12 @@
+2015-12-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	Fix `gnus-union' so as to behave like `cl-union'.
+
+	* gnus-group.el (gnus-group-prepare-flat):
+	Make gnus-union use `equal' to compare items in lists.
+
+	* gnus-util.el (gnus-union): Make it behave like cl-union partially.
+
 2015-12-17  Eli Zaretskii  <eliz@gnu.org>
 
 	* auth-source.el (auth-source-ensure-strings):
