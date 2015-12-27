@@ -11,6 +11,11 @@
 	(mml-secure-safe-bcc-list): New variable.
 	(mml-secure-is-encrypted-p, mml-secure-bcc-is-safe): New functions.
 
+2015-12-27  Jens Lechtenboerger  <jens.lechtenboerger@fsfe.org>
+
+	* mml-sec.el (mml-secure-cust-record-keys):
+	Make gnus-union use `equal' to compare items in lists.
+
 2015-12-23  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	Fix `gnus-union' so as to behave like `cl-union'.
