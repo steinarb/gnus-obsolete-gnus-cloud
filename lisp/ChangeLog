@@ -1,3 +1,11 @@
+2015-12-27  Jens Lechtenboerger  <jens.lechtenboerger@fsfe.org>
+
+	* gnus-util.el (gnus-subsetp): New function.
+
+	* mml-sec.el: Fix warnings by adding autoloads (bug#18718).
+	(mml-secure-safe-bcc-list): New variable.
+	(mml-secure-is-encrypted-p, mml-secure-bcc-is-safe): New functions.
+
 2015-12-23  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	Fix `gnus-union' so as to behave like `cl-union'.
