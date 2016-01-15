@@ -1,3 +1,10 @@
+2016-01-15  Eric Abrahamsen  <eric@ericabrahamsen.net>
+
+	Honor docstring of gnus-group-get-new-news
+
+	* gnus-start.el (gnus-get-unread-articles): If the prefix arg is t,
+	but non-numeric, unconditionally consider all groups to need updating.
+
 2015-12-28  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mml-sec.el (mml-secure-bcc-is-safe):
