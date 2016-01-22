@@ -432,18 +432,15 @@ If called with a prefix argument, only encrypt (do NOT sign)."
 
 ;;; Common functionality for mml1991.el, mml2015.el, mml-smime.el
 
-(define-obsolete-variable-alias 'mml1991-signers 'mml-secure-openpgp-signers
-  "25.1")
-(define-obsolete-variable-alias 'mml2015-signers 'mml-secure-openpgp-signers
-  "25.1")
+(define-obsolete-variable-alias 'mml1991-signers 'mml-secure-openpgp-signers)
+(define-obsolete-variable-alias 'mml2015-signers 'mml-secure-openpgp-signers)
 (defcustom mml-secure-openpgp-signers nil
   "A list of your own key ID(s) which will be used to sign OpenPGP messages.
 If set, it is added to the setting of `mml-secure-openpgp-sign-with-sender'."
   :group 'mime-security
   :type '(repeat (string :tag "Key ID")))
 
-(define-obsolete-variable-alias 'mml-smime-signers 'mml-secure-smime-signers
-  "25.1")
+(define-obsolete-variable-alias 'mml-smime-signers 'mml-secure-smime-signers)
 (defcustom mml-secure-smime-signers nil
   "A list of your own key ID(s) which will be used to sign S/MIME messages.
 If set, it is added to the setting of `mml-secure-smime-sign-with-sender'."
@@ -451,9 +448,9 @@ If set, it is added to the setting of `mml-secure-smime-sign-with-sender'."
   :type '(repeat (string :tag "Key ID")))
 
 (define-obsolete-variable-alias
-  'mml1991-encrypt-to-self 'mml-secure-openpgp-encrypt-to-self "25.1")
+  'mml1991-encrypt-to-self 'mml-secure-openpgp-encrypt-to-self)
 (define-obsolete-variable-alias
-  'mml2015-encrypt-to-self 'mml-secure-openpgp-encrypt-to-self "25.1")
+  'mml2015-encrypt-to-self 'mml-secure-openpgp-encrypt-to-self)
 (defcustom mml-secure-openpgp-encrypt-to-self nil
   "List of own key ID(s) or t; determines additional recipients with OpenPGP.
 If t, also encrypt to key for message sender; if list, encrypt to those keys.
@@ -472,7 +469,7 @@ https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18718"
 		 (repeat (string :tag "Key ID"))))
 
 (define-obsolete-variable-alias
-  'mml-smime-encrypt-to-self 'mml-secure-smime-encrypt-to-self "25.1")
+  'mml-smime-encrypt-to-self 'mml-secure-smime-encrypt-to-self)
 (defcustom mml-secure-smime-encrypt-to-self nil
   "List of own key ID(s) or t; determines additional recipients with S/MIME.
 If t, also encrypt to key for message sender; if list, encrypt to those keys.
@@ -491,7 +488,7 @@ https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18718"
 		 (repeat (string :tag "Key ID"))))
 
 (define-obsolete-variable-alias
-  'mml2015-sign-with-sender 'mml-secure-openpgp-sign-with-sender "25.1")
+  'mml2015-sign-with-sender 'mml-secure-openpgp-sign-with-sender)
 ;mml1991-sign-with-sender did never exist.
 (defcustom mml-secure-openpgp-sign-with-sender nil
   "If t, use message sender to find an OpenPGP key to sign with."
@@ -499,14 +496,14 @@ https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18718"
   :type 'boolean)
 
 (define-obsolete-variable-alias
-  'mml-smime-sign-with-sender 'mml-secure-smime-sign-with-sender "25.1")
+  'mml-smime-sign-with-sender 'mml-secure-smime-sign-with-sender)
 (defcustom mml-secure-smime-sign-with-sender nil
   "If t, use message sender to find an S/MIME key to sign with."
   :group 'mime-security
   :type 'boolean)
 
 (define-obsolete-variable-alias
-  'mml2015-always-trust 'mml-secure-openpgp-always-trust "25.1")
+  'mml2015-always-trust 'mml-secure-openpgp-always-trust)
 ;mml1991-always-trust did never exist.
 (defcustom mml-secure-openpgp-always-trust t
   "If t, skip key validation of GnuPG on encryption."

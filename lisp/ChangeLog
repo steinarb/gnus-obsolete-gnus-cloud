@@ -1,3 +1,14 @@
+2016-01-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	Revert changes causing old Emacsen not to work
+
+	* mml-sec.el (mml1991-signers, mml2015-signers)
+	(mml-smime-signers, mml1991-encrypt-to-self, mml2015-encrypt-to-self)
+	(mml-smime-encrypt-to-self, mml2015-sign-with-sender)
+	(mml-smime-sign-with-sender, mml2015-always-trust)
+	(mml-secure-fail-when-key-problem, mml-secure-key-preferences):
+	* nntp.el (nntp-request-newgroups): Revert.
+
 2016-01-19  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* nnir.el (nnir-request-update-mark): Default to the original mark.
