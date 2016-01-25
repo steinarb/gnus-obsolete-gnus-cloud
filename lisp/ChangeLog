@@ -1,3 +1,10 @@
+2016-01-24  Alan Mackenzie  <acm@muc.de>
+
+	Expunge "allow" + infinitive without direct object from source and doc.
+
+	* gnus-agent.el (gnus-agent-queue-setup):
+	* mm-util.el (mm-charset-eval-alist): Dox fix.
+
 2016-01-22  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	Revert changes causing old Emacsen not to work
@@ -11,7 +18,8 @@
 
 2016-01-19  Katsumi Yamaoka  <yamaoka@jpl.org>
 
-	* nnir.el (nnir-request-update-mark): Default to the original mark.
+	* nnir.el (nnir-request-update-mark):
+	Default to the original mark (bug#22353).
 	cf. <http://thread.gmane.org/gmane.emacs.gnus.general/86583>
 	and <http://thread.gmane.org/gmane.emacs.gnus.general/86640>
 
