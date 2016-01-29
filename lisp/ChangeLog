@@ -1,3 +1,11 @@
+2016-01-29  Glenn Morris  <rgm@gnu.org>
+
+	Remove some useless-use-of eval.
+
+	* gnus.el (gnus-load-hook): Don't use eval.
+	* nnrss.el (xml): Simply require it.
+	(xml-rpc-method-call): Use declare-function.
+
 2016-01-25  Teodor Zlatanov  <tzz@lifelogs.com>
 
 	* gnus-art.el (gnus-blocked-images): Add explicit nil choice and tags.
