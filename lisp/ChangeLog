@@ -1,3 +1,15 @@
+2016-01-30  Glenn Morris  <rgm@gnu.org>
+
+	* message.el (message-deletable-headers, message-signature):
+	Improve custom type.
+
+	* gnus-kill.el (gnus-winconf-kill-file): Not user-serviceable.
+
+	Mark some user options that can get evalled as risky.
+
+	* message.el (message-signature, message-mailer-swallows-blank-line):
+	Mark as risky.
+
 2016-01-29  Glenn Morris  <rgm@gnu.org>
 
 	Remove some useless-use-of eval.
