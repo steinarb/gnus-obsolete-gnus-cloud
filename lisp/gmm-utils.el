@@ -34,6 +34,23 @@
   :version "22.1" ;; Gnus 5.10.9
   :group 'lisp)
 
+(eval-and-compile
+  (condition-case nil
+      (progn
+	(custom-declare-variable 'gnustest-risky-var nil "" :risky t)
+	(makunbound 'gnustest-risky-var))
+    (error
+     (defadvice custom-declare-variable (before
+					 ignore-risky-keyword
+					 (symbol default doc &rest args)
+					 activate)
+       "Ignore :risky keyword."
+       (let ((risk (memq :risky args)))
+	 (if (eq risk args)
+	     (setq args (cddr args))
+	   (setcdr (nthcdr (- (length args) (length risk) 1) args)
+		   (cddr risk))))))))
+
 ;; Helper functions from `gnus-utils.el': gmm-verbose, gmm-message, gmm-error
 
 (defcustom gmm-verbose 7

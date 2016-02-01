@@ -1,3 +1,7 @@
+2016-02-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gmm-utils.el (defcustom): Ignore :risky keyword under XEmacs.
+
 2016-01-30  Glenn Morris  <rgm@gnu.org>
 
 	* message.el (message-deletable-headers, message-signature):
