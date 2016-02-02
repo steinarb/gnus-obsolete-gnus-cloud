@@ -1,3 +1,11 @@
+2016-02-02  Glenn Morris  <rgm@gnu.org>
+
+	Improve the custom type of some user options.
+
+	* gnus-art.el (gnus-hidden-properties):
+	* gnus-gravatar.el (gnus-gravatar-properties):
+	* gnus-picon.el (gnus-picon-properties): Improve custom type.
+
 2016-02-01  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* gmm-utils.el (defcustom): Ignore :risky keyword under XEmacs.
