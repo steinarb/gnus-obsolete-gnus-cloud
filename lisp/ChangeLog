@@ -1,3 +1,10 @@
+2016-02-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Quoting fixes in doc strings and diagnostics.
+
+	* mml-smime.el (mml-smime-get-dns-cert, mml-smime-get-ldap-cert):
+	Follow user style preference when quoting diagnostics.
+
 2016-02-02  Glenn Morris  <rgm@gnu.org>
 
 	Improve the custom type of some user options.
