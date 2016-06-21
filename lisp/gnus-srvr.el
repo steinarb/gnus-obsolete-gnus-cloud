@@ -140,7 +140,8 @@ If nil, a faster, but more primitive, buffer is used instead."
        ["Close" gnus-server-close-server t]
        ["Offline" gnus-server-offline-server t]
        ["Deny" gnus-server-deny-server t]
-       ["Toggle Cloud" gnus-server-toggle-cloud-server t]
+       ["Toggle Cloud Sync for this server" gnus-server-toggle-cloud-server t]
+       ["Toggle Cloud Sync Host" gnus-server-toggle-cloud-method-server t]
        "---"
        ["Open All" gnus-server-open-all-servers t]
        ["Close All" gnus-server-close-all-servers t]
@@ -187,6 +188,7 @@ If nil, a faster, but more primitive, buffer is used instead."
     "z" gnus-server-compact-server
 
     "i" gnus-server-toggle-cloud-server
+    "I" gnus-server-toggle-cloud-method-server
 
     "\C-c\C-i" gnus-info-find-node
     "\C-c\C-b" gnus-bug))
@@ -205,7 +207,14 @@ If nil, a faster, but more primitive, buffer is used instead."
   '((((class color) (background light)) (:foreground "ForestGreen" :bold t))
     (((class color) (background dark)) (:foreground "PaleGreen" :bold t))
     (t (:bold t)))
-  "Face used for displaying AGENTIZED servers"
+  "Face used for displaying Cloud-synced servers"
+  :group 'gnus-server-visual)
+
+(defface gnus-server-cloud-host
+  '((((class color) (background light)) (:foreground "ForestGreen" :inverse-video t :italic t))
+    (((class color) (background dark)) (:foreground "PaleGreen" :inverse-video t :italic t))
+    (t (:inverse-video t :italic t)))
+  "Face used for displaying the Cloud Host"
   :group 'gnus-server-visual)
 
 (defface gnus-server-opened
@@ -251,7 +260,8 @@ If nil, a faster, but more primitive, buffer is used instead."
 
 (defvar gnus-server-font-lock-keywords
   '(("(\\(agent\\))" 1 'gnus-server-agent)
-    ("(\\(cloud\\))" 1 'gnus-server-cloud)
+    ("(\\(cloud[-]sync\\))" 1 'gnus-server-cloud)
+    ("(\\(CLOUD[-]HOST\\))" 1 'gnus-server-cloud-host)
     ("(\\(opened\\))" 1 'gnus-server-opened)
     ("(\\(closed\\))" 1 'gnus-server-closed)
     ("(\\(offline\\))" 1 'gnus-server-offline)
@@ -306,9 +316,13 @@ The following commands are available:
 				  (gnus-agent-method-p method))
 			     " (agent)"
 			   ""))
-	 (gnus-tmp-cloud (if (gnus-cloud-server-p gnus-tmp-name)
-			     " (cloud)"
-			   "")))
+	 (gnus-tmp-cloud (concat
+                          (if (gnus-cloud-host-server-p gnus-tmp-name)
+                              " (CLOUD-HOST)"
+                            "")
+                          (if (gnus-cloud-server-p gnus-tmp-name)
+			     " (cloud-sync)"
+			   ""))))
     (beginning-of-line)
     (add-text-properties
      (point)
@@ -1131,6 +1145,19 @@ Requesting compaction of %s... (this may take a long time)"
 			"Replication of %s in the cloud will start"
 		      "Replication of %s in the cloud will stop")
 		  server)))
+
+(defun gnus-server-toggle-cloud-method-server ()
+  "Set the server under point to host the Emacs Cloud."
+  (interactive)
+  (let ((server (gnus-server-server-name)))
+    (unless server
+      (error "No server on the current line"))
+    (unless (eq (car-safe (gnus-server-to-method server)) 'nnimap)
+      (error "The server under point is not IMAP, so it can't host the Emacs Cloud"))
+
+    (setq gnus-cloud-method server)
+    (gnus-message 1 "Uploading all data to Emacs Cloud with %S" gnus-cloud-method)
+    (gnus-cloud-upload-data t)))
 
 (provide 'gnus-srvr)
 
