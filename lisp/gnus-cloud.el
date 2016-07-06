@@ -57,6 +57,11 @@
                  (const :tag "Base64+gzip" base64-gzip)
                  (const :tag "EPG" epg)))
 
+(defcustom gnus-cloud-interactive t
+  "Whether Gnus Cloud changes should be confirmed."
+  :group 'gnus-cloud
+  :type 'boolean)
+
 (defvar gnus-cloud-group-name "Emacs-Cloud")
 (defvar gnus-cloud-covered-servers nil)
 
@@ -88,12 +93,10 @@
                           length))
           (insert data)
           (insert "\n")))
-       ((eq (plist-get elem :type) :data)
-        (insert (format "(:type :data :name %S :length %d)\n"
-                        (plist-get elem :name)
-                        (with-current-buffer (plist-get elem :buffer)
-                          (buffer-size))))
-        (insert-buffer-substring (plist-get elem :buffer))
+       ((eq (plist-get elem :type) :newsrc-data)
+        (let ((print-level nil)
+              (print-length nil))
+          (print elem (current-buffer)))
         (insert "\n"))
        ((eq (plist-get elem :type) :delete)
         (insert (format "(:type :delete :file-name %S)\n"
@@ -144,8 +147,8 @@
            (data (epg-decrypt-string context (buffer-substring-no-properties
                                               (point-min)
                                               (point-max)))))
-        (delete-region (point-min) (point-max))
-        (insert data)))
+      (delete-region (point-min) (point-max))
+      (insert data)))
 
    ((null gnus-cloud-storage-method)
     (gnus-message 5 "Reading cloud data as plaintext"))
@@ -179,47 +182,85 @@
       (unless (eobp)
         (let ((spec (ignore-errors (read (current-buffer))))
               length)
-          (when (and (consp spec)
-                     (memq (plist-get spec :type) '(:file :data :delete)))
-            (setq length (plist-get spec :length))
-            (push (append spec
-                          (list
-                           :contents (buffer-substring (1+ (point))
-                                                       (+ (point) 1 length))))
-                  elems)
-            (goto-char (+ (point) 1 length))))))
+          (when (consp spec)
+            (cond
+             ((memq (plist-get spec :type) '(:file :delete))
+              (setq length (plist-get spec :length))
+              (push (append spec
+                            (list
+                             :contents (buffer-substring (1+ (point))
+                                                         (+ (point) 1 length))))
+                    elems)
+              (goto-char (+ (point) 1 length)))
+             ((memq (plist-get spec :type) '(:newsrc-data))
+              (push spec elems)))))))
     (nreverse elems)))
 
 (defun gnus-cloud-update-all (elems)
   (dolist (elem elems)
     (let ((type (plist-get elem :type)))
       (cond
-       ((eq type :data)
-        (gnus-cloud-update-data elem))
+       ((eq type :newsrc-data)
+        (gnus-cloud-update-newsrc-data (plist-get elem :name) elem))
        ((memq type '(:delete :file))
         (gnus-cloud-update-file elem type))
        (t
         (gnus-message 1 "Unknown type %s; ignoring" type))))))
 
-(defun gnus-cloud-update-data (elem)
-  (gnus-error 1 "TODO: update newsrc data"))
+(defun gnus-cloud-update-newsrc-data (group elem &optional force-older)
+  "Update the newsrc data for GROUP from ELEM.
+Use old data if FORCE-OLDER is not nil."
+  (let* ((contents (plist-get elem :contents))
+         (date (or (plist-get elem :timestamp) "0"))
+         (now (gnus-cloud-timestamp (current-time)))
+         (newer (string-lessp date now))
+         (group-info (gnus-get-info group)))
+    (if (and contents
+             (stringp (nth 0 contents))
+             (integerp (nth 1 contents)))
+        (if group-info
+            (if (equal (format "%S" group-info)
+                       (format "%S" contents))
+                (gnus-message 3 "Skipping cloud update of group %s, the info is the same" group)
+              (if (and newer (not force-older))
+                (gnus-message 3 "Skipping outdated cloud info for group %s, the info is from %s (now is %s)" group date now)
+                (when (or (not gnus-cloud-interactive)
+                          (gnus-y-or-n-p
+                           (format "%s has older different info in the cloud as of %s, update it here? "
+                                   group date))))
+                (gnus-message 2 "Installing cloud update of group %s" group)
+                (gnus-set-info group contents)
+                (gnus-group-update-group group)))
+          (gnus-error 1 "Sorry, group %s is not subscribed" group))
+      (gnus-error 1 "Sorry, could not update newsrc for group %s (invalid data %S)"
+                  group elem))))
 
 (defun gnus-cloud-update-file (elem op)
-  (let ((file-name (plist-get elem :file-name))
-        (date (plist-get elem :timestamp))
-        (contents (plist-get elem :contents)))
+  "Apply Emacs Cloud data ELEM and operation OP to a file."
+  (let* ((file-name (plist-get elem :file-name))
+         (date (plist-get elem :timestamp))
+         (contents (plist-get elem :contents))
+         (exists (file-exists-p file-name)))
     (if (gnus-cloud-file-covered-p file-name)
         (cond
          ((eq op :delete)
-          (if (file-exists-p file-name)
+          (if (and exists
+                   ;; prompt only if the file exists already
+                   (or (not gnus-cloud-interactive)
+                       (gnus-y-or-n-p (format "%s has been deleted as of %s, delete it locally? "
+                                              file-name date))))
               (rename-file file-name (car (find-backup-file-name file-name)))
             (gnus-message 3 "%s was already deleted before the cloud got it" file-name)))
          ((eq op :file)
-          (when (or (not (file-exists-p file-name))
-                    (and (file-exists-p file-name)
+          (when (or (not exists)
+                    (and exists
                          (mm-with-unibyte-buffer
                            (insert-file-contents-literally file-name)
-                           (not (equal (buffer-string) contents)))))
+                           (not (equal (buffer-string) contents)))
+                         ;; prompt only if the file exists already
+                         (or (not gnus-cloud-interactive)
+                             (gnus-y-or-n-p (format "%s has updated contents as of %s, update it? "
+                                                    file-name date)))))
             (gnus-cloud-replace-file file-name date contents))))
       (gnus-message 2 "%s isn't covered by the cloud; ignoring" file-name))))
 
@@ -275,9 +316,12 @@
           (push `(:type :delete :file-name ,file) files))))
     (nreverse files)))
 
+(defun gnus-cloud-timestamp (time)
+  "Return a general timestamp string for TIME."
+  (format-time-string "%FT%T%z" time))
+
 (defun gnus-cloud-file-new-p (file full)
-  (let ((timestamp (format-time-string
-                    "%FT%T%z" (nth 5 (file-attributes file))))
+  (let ((timestamp (gnus-cloud-timestamp (nth 5 (file-attributes file))))
         (old (cadr (assoc file gnus-cloud-file-timestamps))))
     (when (or full
               (null old)
@@ -300,13 +344,23 @@
            (gnus-activate-group gnus-cloud-group-name nil nil gnus-cloud-method)
            (gnus-subscribe-group gnus-cloud-group-name)))))
 
+(defun gnus-cloud-upload-all-data ()
+  "Upload all data (newsrc and files) to the Emacs Cloud."
+  (interactive)
+  (gnus-cloud-upload-data t))
+
 (defun gnus-cloud-upload-data (&optional full)
+  "Upload data (newsrc and files) to the Emacs Cloud.
+When FULL is t, upload everything, not just a difference from the last full."
+  (interactive)
   (gnus-cloud-ensure-cloud-group)
   (with-temp-buffer
-    (let ((elems (gnus-cloud-files-to-upload full))
+    (let ((elems (append
+                  (gnus-cloud-files-to-upload full)
+                  (gnus-cloud-collect-full-newsrc)))
           (group (gnus-group-full-name gnus-cloud-group-name gnus-cloud-method)))
-      (insert (format "Subject: (sequence: %d type: %s storage-method: %s)\n"
-                      gnus-cloud-sequence
+      (insert (format "Subject: (sequence: %s type: %s storage-method: %s)\n"
+                      (or gnus-cloud-sequence "UNKNOWN")
                       (if full :full :partial)
                       gnus-cloud-storage-method))
       (insert "From: nobody@gnus.cloud.invalid\n")
@@ -315,9 +369,10 @@
       (if (gnus-request-accept-article gnus-cloud-group-name gnus-cloud-method
                                        t t)
           (progn
-            (setq gnus-cloud-sequence (1+ gnus-cloud-sequence))
+            (setq gnus-cloud-sequence (1+ (or gnus-cloud-sequence 0)))
             (gnus-cloud-add-timestamps elems)
-            (gnus-message 3 "Uploaded Emacs Cloud data successfully to %s" group))
+            (gnus-message 3 "Uploaded Emacs Cloud data successfully to %s" group)
+            (gnus-group-refresh-group group))
         (gnus-error 2 "Failed to upload Emacs Cloud data to %s" group)))))
 
 (defun gnus-cloud-add-timestamps (elems)
@@ -380,7 +435,7 @@ Otherwise, returns the Gnus Cloud data chunks."
         chunks)
     (dolist (header (gnus-cloud-available-chunks))
       (when (> (gnus-cloud-chunk-sequence (mail-header-subject header))
-               (or sequence-override gnus-cloud-sequence))
+               (or sequence-override gnus-cloud-sequence -1))
 
         (if (string-match (format "storage-method: %s" gnus-cloud-storage-method)
                           (mail-header-subject header))
@@ -398,7 +453,7 @@ Otherwise, returns the Gnus Cloud data chunks."
           (push (gnus-cloud-parse-chunk) chunks)
           (forward-line 1))))
     (if update
-        (gnus-cloud-update-all chunks)
+        (mapcar #'gnus-cloud-update-all chunks)
       chunks)))
 
 (defun gnus-cloud-server-p (server)
@@ -408,13 +463,16 @@ Otherwise, returns the Gnus Cloud data chunks."
   (equal gnus-cloud-method server))
 
 (defun gnus-cloud-collect-full-newsrc ()
+  "Collect all the Gnus newsrc data in a portable format."
   (let ((infos nil))
     (dolist (info (cdr gnus-newsrc-alist))
       (when (gnus-cloud-server-p
              (gnus-method-to-server
               (gnus-find-method-for-group (gnus-info-group info))))
-        (push info infos)))
-    ))
+
+        (push `(:type :newsrc-data :name ,(gnus-info-group info) :contents ,info :timestamp ,(gnus-cloud-timestamp (current-time)))
+              infos)))
+    infos))
 
 (provide 'gnus-cloud)
 
