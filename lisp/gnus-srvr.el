@@ -32,6 +32,7 @@
 (require 'gnus-group)
 (require 'gnus-int)
 (require 'gnus-range)
+(require 'gnus-cloud)
 
 (autoload 'gnus-group-make-nnir-group "nnir")
 
@@ -322,7 +323,7 @@ The following commands are available:
                             "")
                           (if (gnus-cloud-server-p gnus-tmp-name)
 			     " (cloud-sync)"
-			   ""))))
+                            ""))))
     (beginning-of-line)
     (add-text-properties
      (point)
@@ -1152,12 +1153,13 @@ Requesting compaction of %s... (this may take a long time)"
   (let ((server (gnus-server-server-name)))
     (unless server
       (error "No server on the current line"))
-    (unless (eq (car-safe (gnus-server-to-method server)) 'nnimap)
-      (error "The server under point is not IMAP, so it can't host the Emacs Cloud"))
+    (unless (gnus-cloud-host-acceptable-method-p server)
+      (error "The server under point can't host the Emacs Cloud"))
 
-    (setq gnus-cloud-method server)
-    (gnus-message 1 "Uploading all data to Emacs Cloud with %S" gnus-cloud-method)
-    (gnus-cloud-upload-data t)))
+    (custom-set-variables '(gnus-cloud-method server))
+    (when (gnus-yes-or-no-p (format "Upload Cloud data to %S now? " server))
+      (gnus-message 1 "Uploading all data to Emacs Cloud server %S" server)
+      (gnus-cloud-upload-data t))))
 
 (provide 'gnus-srvr)
 

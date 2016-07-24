@@ -52,10 +52,10 @@
 (defcustom gnus-cloud-storage-method (if (featurep 'epg) 'epg 'base64-gzip)
   "Storage method for cloud data, defaults to EPG if that's available."
   :group 'gnus-cloud
-  :type '(choice (const :tag "No encoding" nil)
-                 (const :tag "Base64" base64)
-                 (const :tag "Base64+gzip" base64-gzip)
-                 (const :tag "EPG" epg)))
+  :type '(radio (const :tag "No encoding" nil)
+                (const :tag "Base64" base64)
+                (const :tag "Base64+gzip" base64-gzip)
+                (const :tag "EPG" epg)))
 
 (defcustom gnus-cloud-interactive t
   "Whether Gnus Cloud changes should be confirmed."
@@ -68,8 +68,13 @@
 (defvar gnus-cloud-version 1)
 (defvar gnus-cloud-sequence 1)
 
-(defvar gnus-cloud-method nil
-  "The IMAP select method used to store the cloud data.")
+(defcustom gnus-cloud-method nil
+  "The IMAP select method used to store the cloud data.
+See also `gnus-server-toggle-cloud-method-server' for an
+easy interactive way to set this from the Server buffer."
+  :group 'gnus-cloud
+  :type '(radio (const :tag "Not set" nil)
+                (string :tag "A Gnus server name as a string")))
 
 (defun gnus-cloud-make-chunk (elems)
   (with-temp-buffer
@@ -236,7 +241,7 @@ Use old data if FORCE-OLDER is not nil."
                   group elem))))
 
 (defun gnus-cloud-update-file (elem op)
-  "Apply Emacs Cloud data ELEM and operation OP to a file."
+  "Apply Gnus Cloud data ELEM and operation OP to a file."
   (let* ((file-name (plist-get elem :file-name))
          (date (plist-get elem :timestamp))
          (contents (plist-get elem :contents))
@@ -345,12 +350,12 @@ Use old data if FORCE-OLDER is not nil."
            (gnus-subscribe-group gnus-cloud-group-name)))))
 
 (defun gnus-cloud-upload-all-data ()
-  "Upload all data (newsrc and files) to the Emacs Cloud."
+  "Upload all data (newsrc and files) to the Gnus Cloud."
   (interactive)
   (gnus-cloud-upload-data t))
 
 (defun gnus-cloud-upload-data (&optional full)
-  "Upload data (newsrc and files) to the Emacs Cloud.
+  "Upload data (newsrc and files) to the Gnus Cloud.
 When FULL is t, upload everything, not just a difference from the last full."
   (interactive)
   (gnus-cloud-ensure-cloud-group)
@@ -371,9 +376,9 @@ When FULL is t, upload everything, not just a difference from the last full."
           (progn
             (setq gnus-cloud-sequence (1+ (or gnus-cloud-sequence 0)))
             (gnus-cloud-add-timestamps elems)
-            (gnus-message 3 "Uploaded Emacs Cloud data successfully to %s" group)
+            (gnus-message 3 "Uploaded Gnus Cloud data successfully to %s" group)
             (gnus-group-refresh-group group))
-        (gnus-error 2 "Failed to upload Emacs Cloud data to %s" group)))))
+        (gnus-error 2 "Failed to upload Gnus Cloud data to %s" group)))))
 
 (defun gnus-cloud-add-timestamps (elems)
   (dolist (elem elems)
@@ -424,6 +429,12 @@ When FULL is t, upload everything, not just a difference from the last full."
              (nreverse headers))
      (gnus-group-full-name gnus-cloud-group-name gnus-cloud-method)))))
 
+(defun gnus-cloud-download-all-data ()
+  "Download the Gnus Cloud data and install it.
+Starts at `gnus-cloud-sequence' in the sequence."
+  (interactive)
+  (gnus-cloud-download-data t))
+
 (defun gnus-cloud-download-data (&optional update sequence-override)
   "Download the Gnus Cloud data and install it if UPDATE is t.
 When SEQUENCE-OVERRIDE is given, start at that sequence number
@@ -461,6 +472,9 @@ Otherwise, returns the Gnus Cloud data chunks."
 
 (defun gnus-cloud-host-server-p (server)
   (equal gnus-cloud-method server))
+
+(defun gnus-cloud-host-acceptable-method-p (server)
+  (eq (car-safe (gnus-server-to-method server)) 'nnimap))
 
 (defun gnus-cloud-collect-full-newsrc ()
   "Collect all the Gnus newsrc data in a portable format."
