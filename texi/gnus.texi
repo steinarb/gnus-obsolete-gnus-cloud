@@ -2,7 +2,7 @@
 
 @include gnus-overrides.texi
 
-@setfilename ../../info/gnus.info
+@setfilename ./gnus.info
 @settitle Gnus Manual
 @include docstyle.texi
 @syncodeindex fn cp
